@@ -143,9 +143,7 @@ Contributors should:
 |---|---|---|---|
 | `Tạ Tuấn Khải` | `2452515` | Integration and training pipeline | `TuanKhai1210` |
 | `Nguyễn Anh Khoa` | `2452539` | Data, EDA, and evaluation | `TCL03-HCMUT` |
-| `[Member 3]` | `[Student ID]` | Models and experiments | `[@username]` |
-
-Replace the placeholders above before publishing the project as a portfolio item.
+| `Nguyễn Hạo Thiên` | `2453194` | Models and experiments | `MrzThien1105` |
 
 ## AI usage and research integrity
 
