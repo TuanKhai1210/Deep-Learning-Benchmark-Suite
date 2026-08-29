@@ -19,7 +19,7 @@
 | Member | Student ID | Main role | GitHub |
 |---|---|---|---|
 | Tạ Tuấn Khải | 2452515 | Integration and training pipeline | https://github.com/TuanKhai1210 |
-| [Member 2] | [ID 2] | Data, EDA and evaluation | [Profile link] |
+| Nguyễn Anh Khoa | 2452539 | Data, EDA and evaluation | https://github.com/TCL03-HCMUT |
 | [Member 3] | [ID 3] | Models and experiments | [Profile link] |
 
 ## Assignments
