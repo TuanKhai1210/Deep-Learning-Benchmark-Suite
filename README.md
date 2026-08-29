@@ -141,7 +141,7 @@ Contributors should:
 
 | Member | Student ID | Primary responsibility | GitHub |
 |---|---|---|---|
-| `[Member 1]` | `[Student ID]` | Integration and training pipeline | `[@username]` |
+| `Tạ Tuấn Khải` | `2452515` | Integration and training pipeline | `TuanKhai1210` |
 | `[Member 2]` | `[Student ID]` | Data, EDA, and evaluation | `[@username]` |
 | `[Member 3]` | `[Student ID]` | Models and experiments | `[@username]` |
 
