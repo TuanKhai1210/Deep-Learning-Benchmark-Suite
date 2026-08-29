@@ -159,6 +159,6 @@ This repository is developed as part of **CO3133 - Deep Learning and Its Applica
 
 - Instructor: Lê Thành Sách
 - Team size: 3 students
-- Project website: [Deep Learning Benchmark Suite](https://tuankhai1210.github.io/deep-learning-benchmark-suite/)
+- Project website: [Deep Learning Benchmark Suite](https://tuankhai1210.github.io/Deep-Learning-Benchmark-Suite/)
 
 Course provenance is retained for transparency, while the repository is structured as a maintainable and reproducible machine-learning portfolio project.
