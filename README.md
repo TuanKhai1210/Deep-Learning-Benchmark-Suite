@@ -142,7 +142,7 @@ Contributors should:
 | Member | Student ID | Primary responsibility | GitHub |
 |---|---|---|---|
 | `Tạ Tuấn Khải` | `2452515` | Integration and training pipeline | `TuanKhai1210` |
-| `[Member 2]` | `[Student ID]` | Data, EDA, and evaluation | `[@username]` |
+| `Nguyễn Anh Khoa` | `2452539` | Data, EDA, and evaluation | `TCL03-HCMUT` |
 | `[Member 3]` | `[Student ID]` | Models and experiments | `[@username]` |
 
 Replace the placeholders above before publishing the project as a portfolio item.
