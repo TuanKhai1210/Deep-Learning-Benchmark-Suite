@@ -2,8 +2,8 @@
 
 ## 2026-08-29 - Project planning and repository design
 
-- Tool/model: OpenAI Codex [ghi model hiển thị trong ứng dụng nếu có]
-- Used by: [Tên thành viên]
+- Tool/model: OpenAI Codex 5.6 Sol
+- Used by: Tạ Tuấn Khải
 - Stage: Project planning
 - Purpose: Analyze the handbook and plan repository/GitHub Pages structure
 - Affected sections: Repository structure, project plan, GitHub Pages skeleton
