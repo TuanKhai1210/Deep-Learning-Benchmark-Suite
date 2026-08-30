@@ -4,10 +4,10 @@
 
 **A reproducible PyTorch project for benchmarking neural architectures across image classification, specialized deep learning tasks, and multimodal learning.**
 
-[![Project Status](https://img.shields.io/badge/status-active%20development-2563eb)](https://github.com/TuanKhai1210/deep-learning-benchmark-suite)
+[![Project Status](https://img.shields.io/badge/status-active%20development-2563eb)](https://github.com/TuanKhai1210/Deep-Learning-Benchmark-Suite)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-framework-EE4C2C?logo=pytorch&logoColor=white)](https://pytorch.org/)
-[![Project Site](https://img.shields.io/badge/GitHub%20Pages-project%20site-222222?logo=github)](https://tuankhai1210.github.io/deep-learning-benchmark-suite/)
+[![Project Site](https://img.shields.io/badge/GitHub%20Pages-project%20site-222222?logo=github)](https://github.com/TuanKhai1210/Deep-Learning-Benchmark-Suite)
 
 [Project website](https://tuankhai1210.github.io/deep-learning-benchmark-suite/) ·
 [Assignment 1](docs/a1.md) ·
@@ -127,7 +127,7 @@ Contributors should:
 ## Roadmap
 
 - [x] Initialize the repository and documentation skeleton
-- [ ] Publish and verify the GitHub Pages landing page
+- [x] Publish and verify the GitHub Pages landing page
 - [ ] Complete Fashion-MNIST EDA and freeze the shared split
 - [ ] Implement the Dataset/DataLoader and train-validation-test pipeline
 - [ ] Train reproducible Linear and MLP baselines
@@ -141,9 +141,9 @@ Contributors should:
 
 | Member | Student ID | Primary responsibility | GitHub |
 |---|---|---|---|
-| `Tạ Tuấn Khải` | `2452515` | Integration and training pipeline | `TuanKhai1210` |
-| `Nguyễn Anh Khoa` | `2452539` | Data, EDA, and evaluation | `TCL03-HCMUT` |
-| `Nguyễn Hạo Thiên` | `2453194` | Models and experiments | `MrzThien1105` |
+| `Tạ Tuấn Khải` | `2452515` | Integration and training pipeline | [`TuanKhai1210`](https://github.com/TuanKhai1210) |
+| `Nguyễn Anh Khoa` | `2452539` | Data, EDA, and evaluation | [`TCL03-HCMUT`](https://github.com/TCL03-HCMUT) |
+| `Nguyễn Hạo Thiên` | `2453194` | Models and experiments | [`MrzThien1105`](https://github.com/MrzThien1105) |
 
 ## AI usage and research integrity
 

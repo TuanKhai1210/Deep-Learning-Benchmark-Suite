@@ -18,9 +18,9 @@
 
 | Member | Student ID | Main role | GitHub |
 |---|---|---|---|
-| Tạ Tuấn Khải | 2452515 | Integration and training pipeline | https://github.com/TuanKhai1210 |
-| Nguyễn Anh Khoa | 2452539 | Data, EDA and evaluation | https://github.com/TCL03-HCMUT |
-| Nguyễn Hạo Thiên | 2453194 | Models and experiments | https://github.com/MrzThien1105 |
+| Tạ Tuấn Khải | 2452515 | Integration and training pipeline | [TuanKhai1210](https://github.com/TuanKhai1210) |
+| Nguyễn Anh Khoa | 2452539 | Data, EDA and evaluation | [TCL03-HCMUT](https://github.com/TCL03-HCMUT) |
+| Nguyễn Hạo Thiên | 2453194 | Models and experiments | [MrzThien1105](https://github.com/MrzThien1105) |
 
 ## Assignments
 
@@ -30,11 +30,11 @@
 
 ## Source code
 
-[GitHub repository](https://github.com/[OWNER]/[REPOSITORY])
+[GitHub repository](https://github.com/TuanKhai1210/Deep-Learning-Benchmark-Suite)
 
 ## AI Usage Disclosure
 
 The group uses AI tools only with disclosure and human verification.
 
 Detailed records are maintained in
-[AI_USAGE.md](https://github.com/[OWNER]/[REPOSITORY]/blob/main/AI_USAGE.md).
+[AI_USAGE.md](https://github.com/TuanKhai1210/Deep-Learning-Benchmark-Suite/blob/main/AI_USAGE.md).
