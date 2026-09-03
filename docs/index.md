@@ -30,7 +30,7 @@
 
 ## Source code
 
-[GitHub repository](https://github.com/TuanKhai1210/Deep-Learning-Benchmark-Suite)
+[GitHub repository](https://tuankhai1210.github.io/Deep-Learning-Benchmark-Suite/)
 
 ## AI Usage Disclosure
 
