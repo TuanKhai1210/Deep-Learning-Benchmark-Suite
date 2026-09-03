@@ -9,7 +9,7 @@
 [![PyTorch](https://img.shields.io/badge/PyTorch-framework-EE4C2C?logo=pytorch&logoColor=white)](https://pytorch.org/)
 [![Project Site](https://img.shields.io/badge/GitHub%20Pages-project%20site-222222?logo=github)](https://github.com/TuanKhai1210/Deep-Learning-Benchmark-Suite)
 
-[Project website](https://tuankhai1210.github.io/deep-learning-benchmark-suite/) ·
+[Project website](https://tuankhai1210.github.io/Deep-Learning-Benchmark-Suite/) ·
 [Assignment 1](docs/a1.md) ·
 [AI usage disclosure](AI_USAGE.md)
 
@@ -97,7 +97,7 @@ Datasets, checkpoints, local experiment logs, and credentials are intentionally 
 Clone the repository:
 
 ```bash
-git clone https://github.com/TuanKhai1210/deep-learning-benchmark-suite.git
+git clone https://github.com/TuanKhai1210/Deep-Learning-Benchmark-Suite.git
 cd deep-learning-benchmark-suite
 ```
 
