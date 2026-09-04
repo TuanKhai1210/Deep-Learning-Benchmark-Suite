@@ -1,0 +1,29 @@
+name: Configuration and code checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.11'
+      - name: Install project (no ML dependencies or dataset)
+        run: python -m pip install -e .
+      - name: Syntax check
+        run: python -m compileall -q src configs tests setup.py
+      - name: Configuration and contract tests
+        run: python -m unittest discover -s tests -v
+      - name: Inspect draft configuration
+        run: python -m dlbench.a1.cli validate-config --config configs/a1/models/linear.py

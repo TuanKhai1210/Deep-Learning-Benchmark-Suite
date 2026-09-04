@@ -1,13 +1,17 @@
 # CO3133 - Kế hoạch dự án cho nhóm 3 người
 
 Ngày bắt đầu: **02/09/2026**  
-Nhóm: 
+Thành viên: **A — Nguyễn Hạo Thiên (2453194), B — Nguyễn Anh Khoa (2452539), C — Tạ Tuấn Khải (2452515)**.
+
+Mã nhóm: chờ xác nhận.
+
+Cập nhật phân công và seed: **04/09/2026**. Các mốc dưới đây là kế hoạch, không phải xác nhận đã hoàn thành; thay đổi trên LMS được ưu tiên.
 
 ## 1. Các mốc chính
 
 | Mốc | Hạn chính thức | Hạn nội bộ |
 |---|---:|---:|
-| Group + GitHub Pages skeleton | 09/09/2026 | 08/09/2026 |
+| Đăng ký nhóm + GitHub Pages ban đầu | 09/09/2026 | 08/09/2026 |
 | A1-M1 Draft | 23/09/2026 | 22/09/2026 |
 | A2-M1 Dataset Proposal | 07/10/2026 | 06/10/2026 |
 | A1-M2 Final | 21/10/2026 | 20/10/2026 |
@@ -21,11 +25,13 @@ Nhóm:
 
 | Thành viên | Vai trò chính | Assignment 1 | Reviewer chính |
 |---|---|---|---|
-| A | Data & Vision Lead | EDA, split, preprocessing, Linear, CNN, error analysis | B |
-| B | Training & Evaluation Lead | Trainer/evaluator, MLP, LSTM/GRU, metrics, timing | C |
-| C | Reproducibility & Sequence Lead | Config, tests, logging, Transformer, Pages/report integration | A |
+| A — Thiên | Data & Vision Lead | EDA, split, preprocessing, Linear, CNN, error analysis | B — Khoa |
+| B — Khoa | Training & Evaluation Lead | Trainer/evaluator, MLP, LSTM/GRU, metrics, timing | C — Khải |
+| C — Khải | Reproducibility & Integration Lead | Config, tests, logging, Transformer, Pages/report integration | A — Thiên |
 
 Vai trò là trách nhiệm chính, không phải vùng làm việc độc quyền. Mỗi hạng mục phải có ít nhất một người khác review.
+
+Mỗi người viết phương pháp, kết quả, phân tích và kiểm thử cho phần mình phụ trách. Khải tổng hợp report/Pages, không viết thay toàn bộ nhóm. Phân công theo file được duy trì trong `IMPLEMENTATION_GUIDE.md`.
 
 ## 3. Quy tắc làm việc chung
 
@@ -45,12 +51,14 @@ Review vòng tròn:
 
 ## 4. Experiment contract cần chốt trước khi code
 
-Deadline: **03/09/2026**
+Mốc chốt ban đầu trong kế hoạch: **03/09/2026**. Tại lần cập nhật **04/09/2026**, vai trò và bốn run seed đã được chốt; các quyết định còn lại vẫn ở trạng thái draft, cần duyệt hoặc đo trước main runs.
 
 - Dataset chính: Fashion-MNIST qua `torchvision`.
 - MNIST chỉ dùng cho smoke test/debug; CIFAR-10 chỉ là extension.
 - Split đề xuất: 50.000 train / 10.000 validation / 10.000 official test.
-- Seed đề xuất: `42`.
+- Run seeds đã chốt: `[36, 69420, 67, 69]`; development run mặc định `36`.
+- Split seed riêng vẫn đề xuất `42`; đổi run seed không tạo lại split.
+- Config thí nghiệm dùng `.py`: `configs/a1/protocol.py` và `configs/a1/models/*.py` chứa dictionary `CONFIG`.
 - Lưu split indices hoặc split manifest trong `configs/a1/splits/`.
 - Validation split có stratification; ghi exact sample counts.
 - Augmentation chỉ áp dụng cho train.
@@ -73,18 +81,18 @@ Deadline: **03/09/2026**
 | C | Chốt config schema, seed utilities, folder structure và command interface | Config/reproducibility contract |
 | Cả nhóm | Duyệt experiment contract | Contract được approve bởi 3 người |
 
-Gate: chưa triển khai model riêng trước khi contract được thống nhất.
+Gate: thống nhất input/output trước khi triển khai model song song. Có thể viết interface, chuẩn bị dữ liệu và smoke test khi protocol còn draft; chỉ chạy main comparison sau khi các quyết định cần thiết được duyệt và strict validation thành công.
 
-### 04/09-08/09: Xây nền tảng và Pages skeleton
+### 04/09-08/09: Xây nền tảng và Pages ban đầu
 
 | Người | Công việc | Đầu ra |
 |---|---|---|
 | A | Download bằng `torchvision`; EDA; stratified split; Dataset/DataLoader; Linear model | EDA figures, split manifest, data module, Linear smoke run |
 | B | Train/validation/test loop; CrossEntropyLoss; macro-F1; timing; checkpoint; MLP | Shared engine + MLP smoke run |
-| C | Config loader; deterministic seed; logging; model interface tests; README/Pages skeleton | Repro utilities, tests, site links |
+| C | Config loader; deterministic seed; logging; model interface tests; README/Pages | Repro utilities, tests, site links |
 
 **08/09 internal freeze:** repo, landing page, A1/A2/A3 links, group information và `AI_USAGE.md` hoạt động.  
-**09/09 official gate:** Group + GitHub Pages skeleton.
+**09/09 official gate:** Đăng ký nhóm + GitHub Pages ban đầu.
 
 ### 09/09-14/09: Tích hợp Linear và MLP
 
@@ -92,7 +100,7 @@ Gate: chưa triển khai model riêng trước khi contract được thống nh�
 |---|---|---|
 | A | Hoàn thiện preprocessing/EDA; chạy Linear qua shared engine | Linear config, curves, metrics |
 | B | Hoàn thiện MLP và evaluator; tạo confusion matrix/prediction export | MLP config, curves, metrics |
-| C | Integration tests; clean command; draft report/Pages; bắt đầu CNN nếu nền tảng ổn định | Repro smoke test + report skeleton |
+| C | Integration tests; clean command; draft report/Pages; thiết kế Transformer nếu nền tảng ổn định | Repro smoke test + report outline |
 | Cả nhóm | Review split, sample counts, transforms và test-set policy | Protocol freeze |
 
 ### 15/09-19/09: Chuẩn bị A1 Draft
@@ -118,7 +126,7 @@ A1-M1 Definition of Done:
 - EDA bắt buộc hoàn chỉnh.
 - Dataset/DataLoader và train/validation loop chạy được.
 - Linear và MLP chạy end-to-end.
-- Cùng frozen split và seed.
+- Cùng frozen split và development seed `36`; báo rõ Draft chưa phải bảng so sánh đủ bốn seed của Final.
 - Có preliminary metrics/curves.
 - Có hướng dẫn chạy và Pages draft.
 - CNN là optional ở mốc này.
@@ -137,7 +145,7 @@ Song song tối đa 15-20% effort cho A2 Proposal:
 
 - A audit dataset source, license, size và khả năng truy cập.
 - B đề xuất split/leakage controls, baseline và metrics.
-- C dựng proposal skeleton, compute/risk table và dataset dự phòng.
+- C dựng proposal outline, compute/risk table và dataset dự phòng.
 - **30/09:** chốt task, dataset chính và một dataset dự phòng cho A2.
 
 ### 01/10-07/10: Tích hợp A1 và hoàn thành A2 Proposal
@@ -160,7 +168,8 @@ Phân bổ: **70% A1, 30% A2 Proposal**.
 - Chạy cả 5 model trên cùng benchmark machine.
 - Lưu config, seed, checkpoint, training/inference time, predictions và Git commit.
 - Chỉ tune bằng validation; official test dùng cho báo cáo cuối.
-- Nếu đủ compute, lặp nhiều seed và báo mean +/- standard deviation.
+- Chạy từng model với `[36, 69420, 67, 69]`: tổng 20 main runs, chưa tính debug/tuning. Báo mean +/- standard deviation của cả bốn seed và giữ số liệu từng run; không chọn test seed tốt nhất.
+- Dự trù compute cho đủ 20 runs trước giai đoạn này. Nếu không đủ tài nguyên, cả nhóm phải duyệt thay đổi kế hoạch/protocol; không tự bỏ seed khi đã xem kết quả.
 
 Owner model chịu trách nhiệm debug; B kiểm tra evaluator/timing; reviewer xác minh artifact.
 

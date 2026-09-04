@@ -14,13 +14,14 @@
 
 ## Group information
 
-- Group ID: [GROUP_ID]
+- Project: Deep Learning Benchmark Suite
+- Group ID: Pending confirmation
 
 | Member | Student ID | Main role | GitHub |
 |---|---|---|---|
-| Tạ Tuấn Khải | 2452515 | Integration and training pipeline | [TuanKhai1210](https://github.com/TuanKhai1210) |
-| Nguyễn Anh Khoa | 2452539 | Data, EDA and evaluation | [TCL03-HCMUT](https://github.com/TCL03-HCMUT) |
-| Nguyễn Hạo Thiên | 2453194 | Models and experiments | [MrzThien1105](https://github.com/MrzThien1105) |
+| Nguyễn Hạo Thiên (A) | 2453194 | Data/EDA/preprocessing; Linear and CNN | [MrzThien1105](https://github.com/MrzThien1105) |
+| Nguyễn Anh Khoa (B) | 2452539 | Trainer/evaluation/metrics/timing; MLP and LSTM/GRU | [TCL03-HCMUT](https://github.com/TCL03-HCMUT) |
+| Tạ Tuấn Khải (C) | 2452515 | Config/reproducibility/integration/tests; Transformer; report/Pages integration | [TuanKhai1210](https://github.com/TuanKhai1210) |
 
 ## Assignments
 
@@ -30,11 +31,15 @@
 
 ## Source code
 
-[GitHub repository](https://tuankhai1210.github.io/Deep-Learning-Benchmark-Suite/)
+[GitHub repository](https://github.com/TuanKhai1210/deep-learning-benchmark-suite)
+
+## Current progress
+
+Assignment 1 is under development. The team has agreed on responsibilities and training seeds `36`, `69420`, `67`, and `69`. The remaining experimental decisions are tracked in the [A1 experiment contract](./a1-experiment-contract.md). No trained-model benchmark results are published yet.
 
 ## AI Usage Disclosure
 
-The group uses AI tools only with disclosure and human verification.
+AI tools have assisted with planning, repository structure, experiment configuration, interfaces, and documentation. Suggestions require human review and verification; the latest integration is awaiting team review.
 
 Detailed records are maintained in
 [AI_USAGE.md](https://github.com/TuanKhai1210/Deep-Learning-Benchmark-Suite/blob/main/AI_USAGE.md).

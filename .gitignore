@@ -19,12 +19,13 @@ venv/
 env/
 ENV/
 
-# Environment variables and secrets
+# Credentials and secrets
 .env
 .env.*
 !.env.example
 secrets/
 credentials/
+.streamlit/secrets.toml
 
 # Jupyter
 .ipynb_checkpoints/
@@ -47,12 +48,14 @@ nosetests.xml
 .pytype/
 .ruff_cache/
 
-# Project datasets
-/data/
+# Local data: keep the usage note, ignore actual datasets
+/data/*
+!/data/README.md
 /datasets/
 
-# Model checkpoints and exported models
-/checkpoints/
+# Model checkpoints: keep the usage note, ignore model weights
+/checkpoints/*
+!/checkpoints/README.md
 *.pt
 *.pth
 *.ckpt
@@ -60,8 +63,9 @@ nosetests.xml
 *.h5
 *.safetensors
 
-# Experiment outputs
-/runs/
+# Experiment outputs: keep the run specification, ignore generated artifacts
+/runs/*
+!/runs/README.md
 /logs/
 /wandb/
 /mlruns/
@@ -71,6 +75,8 @@ nosetests.xml
 # Documentation build outputs
 docs/_build/
 /site/
+/docs/_site/
+/docs/.jekyll-cache/
 
 # IDE and editor settings
 .vscode/
@@ -84,6 +90,7 @@ docs/_build/
 .DS_Store
 Thumbs.db
 Desktop.ini
+desktop.ini
 
 # Logs and temporary files
 *.log
