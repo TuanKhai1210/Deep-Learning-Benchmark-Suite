@@ -34,9 +34,9 @@ class ConfigTests(unittest.TestCase):
                 self.assertEqual(config["data"], self.config["data"])
 
     def test_agreed_run_seeds_are_separate_from_split_seed(self):
-        self.assertEqual(self.config["budget"]["run_seeds"], [36, 69420, 67, 69])
-        self.assertEqual(self.config["run"]["seed"], 36)
-        self.assertEqual(self.config["data"]["split_seed"], 42)
+        self.assertEqual(self.config["budget"]["run_seeds"], [69420, 67, 69])
+        self.assertEqual(self.config["run"]["seed"], 69420)
+        self.assertEqual(self.config["data"]["split_seed"], 36)
 
     def test_python_config_does_not_execute_statements(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -127,7 +127,7 @@ class ConfigTests(unittest.TestCase):
         self.assertTrue(Path(self.config["_sources"]["protocol_config"]).is_file())
 
     def test_duplicate_seeds_are_rejected(self):
-        self.config["budget"]["run_seeds"] = [36, 36]
+        self.config["budget"]["run_seeds"] = [69420, 69420]
         with self.assertRaises(ConfigError):
             validate_config(self.config)
 
@@ -152,7 +152,7 @@ class ConfigTests(unittest.TestCase):
     def test_each_load_is_independent(self):
         self.config["budget"]["run_seeds"].append(99)
         fresh = load_config(CONFIGS / "linear.py")
-        self.assertEqual(fresh["budget"]["run_seeds"], [36, 69420, 67, 69])
+        self.assertEqual(fresh["budget"]["run_seeds"], [69420, 67, 69])
 
     def test_registry_matches_config_files(self):
         self.assertEqual(set(MODEL_REGISTRY), {p.stem for p in CONFIGS.glob("*.py")})
@@ -172,20 +172,20 @@ class ConfigTests(unittest.TestCase):
 
 class CLITests(unittest.TestCase):
     def test_each_agreed_seed_overrides_run_without_resplitting(self):
-        for seed in (36, 69420, 67, 69):
+        for seed in (69420, 67, 69):
             with self.subTest(seed=seed), redirect_stdout(io.StringIO()) as output:
                 code = main(["validate-config", "--config", str(CONFIGS / "linear.py"),
                              "--seed", str(seed)])
                 self.assertEqual(code, 0)
                 result = json.loads(output.getvalue())
                 self.assertEqual(result["run_seed"], seed)
-                self.assertEqual(result["split_seed"], 42)
-        self.assertEqual(load_config(CONFIGS / "linear.py")["run"]["seed"], 36)
+                self.assertEqual(result["split_seed"], 36)
+        self.assertEqual(load_config(CONFIGS / "linear.py")["run"]["seed"], 69420)
 
     def test_cli_rejects_unapproved_run_seed(self):
         with redirect_stderr(io.StringIO()) as output:
             with self.assertRaises(SystemExit) as result:
-                main(["validate-config", "--config", str(CONFIGS / "linear.py"), "--seed", "42"])
+                main(["validate-config", "--config", str(CONFIGS / "linear.py"), "--seed", "36"])
         self.assertEqual(result.exception.code, 2)
         self.assertIn("run.seed must belong", output.getvalue())
 

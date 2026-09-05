@@ -13,7 +13,7 @@ Config thí nghiệm dùng Python:
 - `protocol_file` trong model config trỏ tới `../protocol.py`.
 - Loader đọc dữ liệu bằng `ast.literal_eval`, không import hay thực thi file. Cho phép comments/docstrings; không dùng imports, lời gọi hàm, biến tham chiếu hoặc phép tính trong config.
 
-Bốn run seed đã chốt: **36, 69420, 67, 69**. Seed mặc định để phát triển là `36`. Split seed `42` vẫn là đề xuất riêng; không chia lại dữ liệu khi đổi run seed. CLI `--seed` chỉ đổi run seed trong bản config đã load, không ghi lại file hoặc đổi split; seed ngoài bộ đã chốt bị từ chối.
+Split seed đã chốt là **`36`**. Ba run seed là **`69420`, `67`, `69`**; run seed mặc định để phát triển là `69420`. Split chỉ được tạo một lần bằng seed `36`; không chia lại dữ liệu khi đổi run seed. CLI `--seed` chỉ đổi run seed trong bản config đã load, không ghi lại file hoặc đổi split; seed ngoài bộ run seed đã chốt bị từ chối.
 
 ## 2. Phân công theo file
 
@@ -52,8 +52,8 @@ Linear/MLP tự flatten; RNN tự chuyển ảnh thành chuỗi; Transformer t�
 4. **Khải:** kiểm tra config/logging/run metadata và CLI; viết integration tests; chuẩn bị Transformer.
 5. **Cả nhóm:** chạy Linear/MLP end-to-end cho Draft, review độc lập evaluator và split, cập nhật README bằng lệnh thực chạy được.
 6. **Thiên/Khoa/Khải:** lần lượt hoàn thiện CNN/RNN/Transformer qua cùng engine, kèm shape/tiny-batch tests.
-7. **Cả nhóm:** freeze protocol và model configs, xác minh strict validation, rồi chạy 20 main runs (5 model × 4 seed). Mỗi run khởi tạo lại model, dùng cùng split và giữ đủ evidence.
-8. **Cả nhóm:** tổng hợp mean ± std của cả bốn seed, phân tích lỗi/representation/giới hạn và hoàn thành tài liệu nộp.
+7. **Cả nhóm:** freeze protocol và model configs, xác minh strict validation, rồi chạy 15 main runs (5 model × 3 run seed). Mỗi run khởi tạo lại model, dùng cùng split và giữ đủ evidence.
+8. **Cả nhóm:** tổng hợp mean ± std của ba run seed, phân tích lỗi/representation/giới hạn và hoàn thành tài liệu nộp.
 
 ## 5. Lệnh kiểm tra phát triển
 
@@ -61,7 +61,7 @@ Sau khi cài package trong môi trường đang dùng:
 
 ```bash
 python -m dlbench.a1.cli --help
-python -m dlbench.a1.cli validate-config --config configs/a1/models/linear.py --seed 36
+python -m dlbench.a1.cli validate-config --config configs/a1/models/linear.py --seed 69420
 python -m unittest discover -s tests -v
 ```
 

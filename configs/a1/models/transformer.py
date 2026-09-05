@@ -23,8 +23,8 @@ CONFIG = {
         "early_stopping_patience": 0,
     },
     "run": {
-        # Use CLI --seed to repeat with 36, 69420, 67 and 69 on the SAME split.
-        "seed": 36,
+        # Repeat with run seeds 69420, 67 and 69 on the split created with seed 36.
+        "seed": 69420,
         "device": "cpu",
         "output_root": "runs/a1",
     },

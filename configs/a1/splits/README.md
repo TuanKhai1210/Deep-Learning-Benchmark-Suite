@@ -4,7 +4,8 @@ This directory is intentionally empty of actual data indices until preparation
 runs. Commit the real split JSON and small provenance/normalization metadata.
 Do not put these files under ignored `data/`.
 
-The proposed primary manifest is `fashion_mnist_seed42.json`.
+The primary manifest is `fashion_mnist_seed36.json`, created with the agreed
+split seed `36`.
 Its fields follow `src/dlbench/a1/contracts.py:SplitManifest`, plus a schema
 version, class counts, dataset provenance and hash recorded by the implementation.
 

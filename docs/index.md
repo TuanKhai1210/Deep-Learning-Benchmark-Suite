@@ -35,7 +35,7 @@
 
 ## Current progress
 
-Assignment 1 is under development. The team has agreed on responsibilities and training seeds `36`, `69420`, `67`, and `69`. The remaining experimental decisions are tracked in the [A1 experiment contract](./a1-experiment-contract.md). No trained-model benchmark results are published yet.
+Assignment 1 is under development. The team has agreed on responsibilities, split seed `36`, and run seeds `69420`, `67`, and `69`. The remaining experimental decisions are tracked in the [A1 experiment contract](./a1-experiment-contract.md). No trained-model benchmark results are published yet.
 
 ## AI Usage Disclosure
 

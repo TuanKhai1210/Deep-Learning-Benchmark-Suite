@@ -30,7 +30,7 @@ Ownership coordinates implementation, not exclusive access. Each member writes t
 - Inspect the diff for unrelated changes, secrets, large artifacts, broken links, and unsupported claims.
 - Keep source configs as literal Python `CONFIG` dictionaries with no imports or side effects.
 - Update the experiment contract when changing shared rules. Do not mark the protocol frozen while required choices are unresolved.
-- Preserve the agreed run seeds `[36, 69420, 67, 69]` and one common saved split unless the team explicitly approves a versioned change.
+- Preserve split seed `36`, run seeds `[69420, 67, 69]`, and one common saved split unless the team explicitly approves a versioned change.
 - Record AI assistance and verification in `AI_USAGE.md` when applicable.
 
 Passing development tests does not imply ML training is complete. Tests for pending implementations must remain visibly pending until implemented and verified.

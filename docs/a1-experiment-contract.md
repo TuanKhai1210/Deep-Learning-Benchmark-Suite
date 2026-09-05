@@ -1,6 +1,6 @@
 # A1 experiment contract
 
-Status: **draft for team review**. This document explains the shared protocol in `configs/a1/protocol.py`. Team responsibilities and the four training seeds are agreed; the remaining proposed defaults are not instructor-mandated values and have not yet been approved or measured.
+Status: **draft for team review**. This document explains the shared protocol in `configs/a1/protocol.py`. Team responsibilities, split seed `36`, and run seeds `69420`, `67`, `69` are agreed; the remaining proposed defaults are not instructor-mandated values and have not yet been approved or measured.
 
 ## Approval record
 
@@ -8,7 +8,8 @@ Status: **draft for team review**. This document explains the shared protocol in
 |---|---|
 | Protocol ID | `a1-v0` (draft) |
 | Owners / reviewers | A: Nguyễn Hạo Thiên — data + Linear/CNN, reviewed by B; B: Nguyễn Anh Khoa — engine + MLP/RNN, reviewed by C; C: Tạ Tuấn Khải — common tools + Transformer/integration, reviewed by A |
-| Agreed training seeds | `[36, 69420, 67, 69]`; default development run seed `36` |
+| Agreed split seed | `36`; creates the one shared train/validation split |
+| Agreed run seeds | `[69420, 67, 69]`; default development run seed `69420` |
 | Approved by / date | TODO |
 | Measured environment | TODO |
 | Change history | 2026-09-04: record agreed roles/seeds and Python configuration; no approved experiment runs |
@@ -25,7 +26,7 @@ Prioritize EDA, Dataset/DataLoader, train/validation, Linear and MLP for the Dra
 |---|---|
 | Source | Fashion-MNIST through torchvision; record provenance and dependency versions |
 | Split | Official training set → stratified 50,000 train / 10,000 validation; official 10,000 test unchanged |
-| Split seed | Proposed `42`, independent from the agreed model run seeds |
+| Split seed | Agreed `36`, independent from model run seeds |
 | Persistence | Generate indices once, commit them under `configs/a1/splits/`, record identity/checksum |
 | Input | Grayscale 28 × 28; normalized float32 `[B, 1, 28, 28]` |
 | Targets | int64 `[B]`, class indices 0–9 with one recorded class order |
@@ -51,7 +52,7 @@ Architecture parameters in model configs are starting proposals. Tune with valid
 
 - Record Python/PyTorch/torchvision/CUDA versions, hardware, precision, determinism settings, code revision, split ID, and effective config.
 - Seed Python, NumPy, PyTorch and DataLoader workers/generators as applicable. Seeds do not promise bitwise identity across all machines/versions.
-- Agreed run seeds: `[36, 69420, 67, 69]`. Default development seed: `36`. The main comparison plans five model families × four seeds = 20 runs, excluding tuning/debugging. Reinitialize each model for every seed and keep the same saved split. If resources require changing this commitment, obtain team agreement and version the change before publishing results.
+- Agreed split seed: `36`. Generate the shared split once and keep it unchanged. Agreed run seeds: `[69420, 67, 69]`; default development run seed: `69420`. The main comparison plans five model families × three run seeds = 15 runs, excluding tuning/debugging. Reinitialize each model for every run seed. If resources require changing this commitment, obtain team agreement and version the change before publishing results.
 - Train loader shuffles; validation/test loaders do not shuffle or drop samples.
 - Fix batch size, epoch cap, early-stopping semantics, tuning trials/search space and scheduler policy after smoke tests, before full runs.
 - Different optimizers/LRs may be appropriate. Fairness requires a transparent tuning budget and common evaluation, not blindly identical hyperparameters.
@@ -73,7 +74,7 @@ Each run has a unique ID and stores effective config, metadata, history, metrics
 
 ## Required before a frozen main comparison
 
-- [x] Owners/reviewers and four run seeds recorded.
+- [x] Owners/reviewers, split seed and three run seeds recorded.
 - [ ] Environment and hardware selected.
 - [ ] Split created and independently checked for counts, class balance and overlap.
 - [ ] Mean/std measured and recorded from the correct subset.

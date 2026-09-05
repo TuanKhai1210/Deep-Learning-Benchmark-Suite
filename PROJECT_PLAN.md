@@ -51,13 +51,13 @@ Review vòng tròn:
 
 ## 4. Experiment contract cần chốt trước khi code
 
-Mốc chốt ban đầu trong kế hoạch: **03/09/2026**. Tại lần cập nhật **04/09/2026**, vai trò và bốn run seed đã được chốt; các quyết định còn lại vẫn ở trạng thái draft, cần duyệt hoặc đo trước main runs.
+Mốc chốt ban đầu trong kế hoạch: **03/09/2026**. Theo xác nhận ngày **05/09/2026**, split seed là `36` và ba run seed là `69420`, `67`, `69`; các quyết định còn lại vẫn ở trạng thái draft, cần duyệt hoặc đo trước main runs.
 
 - Dataset chính: Fashion-MNIST qua `torchvision`.
 - MNIST chỉ dùng cho smoke test/debug; CIFAR-10 chỉ là extension.
 - Split đề xuất: 50.000 train / 10.000 validation / 10.000 official test.
-- Run seeds đã chốt: `[36, 69420, 67, 69]`; development run mặc định `36`.
-- Split seed riêng vẫn đề xuất `42`; đổi run seed không tạo lại split.
+- Split seed đã chốt: `36`; chỉ tạo một split dùng chung.
+- Run seeds đã chốt: `[69420, 67, 69]`; development run mặc định `69420`. Đổi run seed không tạo lại split.
 - Config thí nghiệm dùng `.py`: `configs/a1/protocol.py` và `configs/a1/models/*.py` chứa dictionary `CONFIG`.
 - Lưu split indices hoặc split manifest trong `configs/a1/splits/`.
 - Validation split có stratification; ghi exact sample counts.
@@ -126,7 +126,7 @@ A1-M1 Definition of Done:
 - EDA bắt buộc hoàn chỉnh.
 - Dataset/DataLoader và train/validation loop chạy được.
 - Linear và MLP chạy end-to-end.
-- Cùng frozen split và development seed `36`; báo rõ Draft chưa phải bảng so sánh đủ bốn seed của Final.
+- Cùng frozen split (split seed `36`) và development run seed `69420`; báo rõ Draft chưa phải bảng so sánh đủ ba run seed của Final.
 - Có preliminary metrics/curves.
 - Có hướng dẫn chạy và Pages draft.
 - CNN là optional ở mốc này.
@@ -168,8 +168,8 @@ Phân bổ: **70% A1, 30% A2 Proposal**.
 - Chạy cả 5 model trên cùng benchmark machine.
 - Lưu config, seed, checkpoint, training/inference time, predictions và Git commit.
 - Chỉ tune bằng validation; official test dùng cho báo cáo cuối.
-- Chạy từng model với `[36, 69420, 67, 69]`: tổng 20 main runs, chưa tính debug/tuning. Báo mean +/- standard deviation của cả bốn seed và giữ số liệu từng run; không chọn test seed tốt nhất.
-- Dự trù compute cho đủ 20 runs trước giai đoạn này. Nếu không đủ tài nguyên, cả nhóm phải duyệt thay đổi kế hoạch/protocol; không tự bỏ seed khi đã xem kết quả.
+- Tạo một split bằng seed `36`; chạy từng model với run seeds `[69420, 67, 69]`: tổng 15 main runs, chưa tính debug/tuning. Báo mean +/- standard deviation của ba run seed và giữ số liệu từng run; không chọn test seed tốt nhất.
+- Dự trù compute cho đủ 15 runs trước giai đoạn này. Nếu không đủ tài nguyên, cả nhóm phải duyệt thay đổi kế hoạch/protocol; không tự bỏ seed khi đã xem kết quả.
 
 Owner model chịu trách nhiệm debug; B kiểm tra evaluator/timing; reviewer xác minh artifact.
 

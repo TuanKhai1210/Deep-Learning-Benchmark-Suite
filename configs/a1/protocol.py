@@ -1,4 +1,4 @@
-"""Shared A1 policy. Thiên/Khoa/Khải agreed the four run seeds below.
+"""Shared A1 policy. The team agreed on one split seed and three run seeds.
 
 Other experimental choices remain proposals until reviewed and measured.
 Use one literal CONFIG dictionary: no imports, functions or computations.
@@ -13,13 +13,13 @@ CONFIG = {
     "data": {
         "dataset": "fashion_mnist",
         "root": "data",
-        # Separate split seed, retained as a proposal; never resplit per run.
-        "split_seed": 42,
+        # Fixed split seed; never resplit when the model run seed changes.
+        "split_seed": 36,
         "train_size": 50000,
         "validation_size": 10000,
         "test_size": 10000,
         "stratified": True,
-        "split_file": "configs/a1/splits/fashion_mnist_seed42.json",
+        "split_file": "configs/a1/splits/fashion_mnist_seed36.json",
     },
     "preprocessing": {
         "image_size": [28, 28],
@@ -44,7 +44,7 @@ CONFIG = {
         # TODO team: 0 means UNDECIDED, never a completed zero-epoch run.
         "max_epochs": 0,
         "tuning_trials_per_model": 0,
-        "run_seeds": [36, 69420, 67, 69],
+        "run_seeds": [69420, 67, 69],
     },
     "timing": {
         "device": "TBD",

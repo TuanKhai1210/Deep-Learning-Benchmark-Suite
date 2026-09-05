@@ -1,9 +1,10 @@
 # Generated runs — not committed
 
 Each experiment gets one unique directory, e.g.:
-`a1/a1_fashion_mnist_cnn_v1_seed36_run01/`.
+`a1/a1_fashion_mnist_cnn_v1_seed69420_run01/`.
 
-Run each main model with seeds `36, 69420, 67, 69` on the same saved split.
+Create the data split once with seed `36`. Run each main model with training
+seeds `69420`, `67` and `69` on that same saved split.
 
 Required artifacts:
 

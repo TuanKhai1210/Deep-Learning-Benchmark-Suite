@@ -28,11 +28,11 @@ class PipelineContractTests(unittest.TestCase):
     def test_split_overlap_is_rejected(self):
         from dlbench.a1.contracts import SplitManifest
         from dlbench.a1.data.split import validate_split
-        manifest = SplitManifest("fashion_mnist", 42, list(range(50000)),
+        manifest = SplitManifest("fashion_mnist", 36, list(range(50000)),
                                  list(range(50000, 60000)), list(range(10000)))
         validate_split(manifest)
         # Replace one validation index with a training index; must fail.
-        bad = SplitManifest("fashion_mnist", 42, manifest.train_indices,
+        bad = SplitManifest("fashion_mnist", 36, manifest.train_indices,
                             [0] + manifest.validation_indices[1:], manifest.test_indices)
         with self.assertRaises(ValueError):
             validate_split(bad)
