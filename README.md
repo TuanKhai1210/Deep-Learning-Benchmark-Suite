@@ -68,7 +68,7 @@ Every reported result should be traceable to:
 - The hardware and dependency versions used
 - A corresponding Git commit or release tag
 
-The team has agreed on four training seeds: **36, 69420, 67, and 69**. The planned final comparison has five model families × four seeds = **20 main training runs**, excluding debugging and tuning. All runs use one saved split; the separate split seed of `42` remains a proposal. Final results will report mean and standard deviation across all four seeds, without selecting the best test seed.
+The team uses **split seed 36** to create one saved data partition. Model training is repeated with **run seeds 69420, 67, and 69**, giving five model families × three run seeds = **15 main training runs**, excluding debugging and tuning. Final results will report mean and standard deviation across the three run seeds, without selecting the best test seed.
 
 Other experimental choices are still under review in the [A1 experiment contract](docs/a1-experiment-contract.md), including normalization statistics, compute budget, augmentation, and the final timing procedure.
 
@@ -138,7 +138,7 @@ This base installation supports development checks without installing the ML sta
 
 Experiment configs are `.py` files containing a single literal `CONFIG = {...}` dictionary. The shared rules live in `configs/a1/protocol.py`; model-specific settings live in `configs/a1/models/`. The loader parses data without importing or executing the file. Comments/docstrings are allowed; imports, calls, variables and computations are not.
 
-`validate-config` checks development settings. Add `--strict` only after the team has genuinely completed and approved the protocol; unresolved values should fail strict validation. Use `--seed 36` to select one of the four agreed run seeds in memory; it does not change the config file or split. Other seeds are rejected.
+`validate-config` checks development settings. Add `--strict` only after the team has genuinely completed and approved the protocol; unresolved values should fail strict validation. Use `--seed 69420`, `--seed 67`, or `--seed 69` to select a run seed in memory; it does not change the config file or the split created with seed `36`. Other run seeds are rejected.
 
 The `prepare`, `train`, `evaluate`, and `analyze` commands define the intended workflow but currently stop at unimplemented ML functions. They are not evidence of a completed training pipeline. ML-dependent tests remain pending until their implementations and dependencies are ready.
 
