@@ -21,7 +21,7 @@ class TestCheckpoint(unittest.TestCase):
 
     def test_is_better_none_incumbent(self) -> None:
         """Epoch đầu tiên (incumbent is None) luôn được chấp nhận."""
-        candidate = {"macro_f1": 0.82, "loss": 0.50, "epoch": 3}
+        candidate = {"val_macro_f1": 0.82, "val_loss": 0.50, "epoch": 3}
         self.assertTrue(is_better(candidate, None))
 
     def test_is_better_macro_f1_priority(self) -> None:
@@ -39,7 +39,7 @@ class TestCheckpoint(unittest.TestCase):
         candidate = {"val_macro_f1": 0.85, "val_loss": 0.31, "epoch": 3}
         self.assertTrue(is_better(candidate, incumbent))
 
-        worse_loss = {"macro_f1": 0.85, "loss": 0.39, "epoch": 3}
+        worse_loss = {"val_macro_f1": 0.85, "val_loss": 0.39, "epoch": 3}
         self.assertFalse(is_better(worse_loss, incumbent))
 
     def test_is_better_epoch_tie_breaking(self) -> None:
@@ -48,7 +48,7 @@ class TestCheckpoint(unittest.TestCase):
         candidate = {"val_macro_f1": 0.85, "val_loss": 0.35, "epoch": 2}
         self.assertTrue(is_better(candidate, incumbent))
 
-        later_epoch = {"macro_f1": 0.85, "loss": 0.35, "epoch": 6}
+        later_epoch = {"val_macro_f1": 0.85, "val_loss": 0.35, "epoch": 6}
         self.assertFalse(is_better(later_epoch, incumbent))
 
     def test_is_better_rejects_nonfinite(self) -> None:
