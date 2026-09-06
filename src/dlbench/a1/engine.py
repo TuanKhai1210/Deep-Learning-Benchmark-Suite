@@ -94,10 +94,16 @@ def evaluate_epoch(
     with torch.inference_mode():
         batch: Batch
         for batch in loader:
-            inputs, labels, batch_ids = batch['images'], batch['labels'], batch['sample_ids']
+            inputs, labels, batch_ids = batch['images'], batch['labels'], batch.get("sample_ids")
+
+            batch_size = labels.size(0)
+
+            if batch_ids is None:
+                raise ValueError("sample_ids missing from Batch.")
+            if len(batch_ids) != batch_size:
+                raise ValueError(f"sample_ids length ({len(batch_ids)} does not match batch size ({batch_size}))")
 
             inputs, labels = inputs.to(device), labels.to(device)
-            batch_size = labels.size(0)
 
             logits = model(inputs)
             loss = criterion(logits, labels)
