@@ -61,3 +61,18 @@
 - Sources used for verification:
   - Official documentation for `torch.save`, `torch.load`, `sklearn.metrics.accuracy_score`, `sklearn.metrics.f1_score`and `torch.numel`.
   - Course Project Handbook CO3133 (Semester-261).
+
+## 2026-09-06 - Steps to train a DL model
+
+- Tool: Gemini 3.8 Flash
+- Used by: Nguyễn Anh Khoa
+- Stage: Assignment 1 Training logic implementation
+- Purpose: Clarification of canonical deep learning training step sequences inside an epoch loop.
+Affected files/sections:
+- `src/dlbench/a1/engine.py` (`train_one_epoch`)
+- Prompt summary: Inquired about the standard step sequence required to train a deep learning model within a single epoch loop.
+- AI contribution: Outlined the canonical PyTorch execution order: setting `model.train()`, transferring tensors to device, clearing gradients (`optimizer.zero_grad()`), executing forward pass to compute logits, calculating loss with unnormalized logits, running backpropagation (`loss.backward()`), updating weights (`optimizer.step()`), and accumulating sample-weighted loss.
+- Student verification: Implemented the step sequence inside `train_one_epoch`, confirmed logits are passed directly to `CrossEntropyLoss` without softmax, and verified via unit tests that parameter tensors mutate post-update.
+- Responsible member: Nguyễn Anh Khoa
+- Sources used for verification:
+  - Official [PyTorch tutorial](https://docs.pytorch.org/tutorials/beginner/introyt/trainingyt.html) on model training step lifecycle.
