@@ -28,7 +28,7 @@ class TestMetrics(unittest.TestCase):
         targets = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
         preds = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-        res = classification_metrics(targets, preds)
+        res = classification_metrics(targets, preds, num_classes=10)
         self.assertAlmostEqual(res["accuracy"], 1.0)
         self.assertAlmostEqual(res["macro_f1"], 1.0)
 
@@ -42,7 +42,7 @@ class TestMetrics(unittest.TestCase):
         targets = [0, 0, 1, 1]
         preds = [0, 1, 1, 1]
 
-        res = classification_metrics(targets, preds)
+        res = classification_metrics(targets, preds, num_classes=2)
         self.assertAlmostEqual(res["accuracy"], 0.75)
         self.assertAlmostEqual(res["macro_f1"], 11 / 15, places=4)
 
@@ -53,7 +53,7 @@ class TestMetrics(unittest.TestCase):
         # Lớp 0: Precision=2/4=0.5, Recall=2/2=1.0 -> F1 = 2/3
         # Lớp 1: Precision=0, Recall=0 -> F1 = 0.0 (zero_division=0)
         # Macro-F1 = (2/3 + 0) / 2 = 1/3 ≈ 0.3333
-        res = classification_metrics(targets, preds)
+        res = classification_metrics(targets, preds, num_classes=2)
         self.assertAlmostEqual(res["accuracy"], 0.5)
         self.assertAlmostEqual(res["macro_f1"], 1 / 3, places=4)
 

@@ -4,7 +4,6 @@ import unittest
 
 
 class PipelineContractTests(unittest.TestCase):
-    @unittest.skip("TODO B (Khoa): implement metrics.classification_metrics; remove this skip.")
     def test_metrics_use_all_ten_classes(self):
         from dlbench.a1.metrics import classification_metrics
         metrics = classification_metrics(list(range(10)), list(range(10)))
@@ -14,7 +13,6 @@ class PipelineContractTests(unittest.TestCase):
         self.assertAlmostEqual(metrics["accuracy"], 0.1)
         self.assertAlmostEqual(metrics["macro_f1"], (2.0 / 11.0) / 10.0)
 
-    @unittest.skip("TODO B (Khoa): implement checkpoint.is_better; remove this skip.")
     def test_checkpoint_order_ignores_test_metrics(self):
         from dlbench.a1.checkpoint import is_better
         incumbent = {"val_macro_f1": 0.8, "val_loss": 0.5, "epoch": 4}

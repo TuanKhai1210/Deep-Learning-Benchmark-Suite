@@ -21,22 +21,22 @@ class TestCheckpoint(unittest.TestCase):
 
     def test_is_better_none_incumbent(self) -> None:
         """Epoch đầu tiên (incumbent is None) luôn được chấp nhận."""
-        candidate = EpochMetrics(loss=1.0, accuracy=0.8, macro_f1=0.79, num_samples=100)
+        candidate = {"macro_f1": 0.82, "loss": 0.50, "epoch": 3}
         self.assertTrue(is_better(candidate, None))
 
     def test_is_better_macro_f1_priority(self) -> None:
         """Ưu tiên cao nhất là macro_f1 lớn hơn (kể cả khi loss cao hơn)."""
-        incumbent = {"macro_f1": 0.80, "loss": 0.40, "epoch": 2}
-        candidate = {"macro_f1": 0.82, "loss": 0.50, "epoch": 3}
+        incumbent = {"val_macro_f1": 0.80, "val_loss": 0.40, "epoch": 2}
+        candidate = {"val_macro_f1": 0.82, "val_loss": 0.50, "epoch": 3}
         self.assertTrue(is_better(candidate, incumbent))
 
-        worse_f1 = {"macro_f1": 0.79, "loss": 0.30, "epoch": 3}
+        worse_f1 = {"val_macro_f1": 0.79, "val_loss": 0.30, "epoch": 3}
         self.assertFalse(is_better(worse_f1, incumbent))
 
     def test_is_better_loss_tie_breaking(self) -> None:
         """Nếu macro_f1 hòa, ưu tiên loss thấp hơn."""
-        incumbent = {"macro_f1": 0.85, "loss": 0.35, "epoch": 2}
-        candidate = {"macro_f1": 0.85, "loss": 0.31, "epoch": 3}
+        incumbent = {"val_macro_f1": 0.85, "val_loss": 0.35, "epoch": 2}
+        candidate = {"val_macro_f1": 0.85, "val_loss": 0.31, "epoch": 3}
         self.assertTrue(is_better(candidate, incumbent))
 
         worse_loss = {"macro_f1": 0.85, "loss": 0.39, "epoch": 3}
@@ -44,8 +44,8 @@ class TestCheckpoint(unittest.TestCase):
 
     def test_is_better_epoch_tie_breaking(self) -> None:
         """Nếu cả F1 và loss đều hòa, ưu tiên epoch diễn ra sớm hơn."""
-        incumbent = {"macro_f1": 0.85, "loss": 0.35, "epoch": 4}
-        candidate = {"macro_f1": 0.85, "loss": 0.35, "epoch": 2}
+        incumbent = {"val_macro_f1": 0.85, "val_loss": 0.35, "epoch": 4}
+        candidate = {"val_macro_f1": 0.85, "val_loss": 0.35, "epoch": 2}
         self.assertTrue(is_better(candidate, incumbent))
 
         later_epoch = {"macro_f1": 0.85, "loss": 0.35, "epoch": 6}
@@ -53,9 +53,9 @@ class TestCheckpoint(unittest.TestCase):
 
     def test_is_better_rejects_nonfinite(self) -> None:
         """Từ chối candidate nếu F1 hoặc loss là NaN/Inf."""
-        incumbent = {"macro_f1": 0.50, "loss": 1.0, "epoch": 1}
-        nan_f1 = {"macro_f1": float("nan"), "loss": 0.5, "epoch": 2}
-        inf_loss = {"macro_f1": 0.90, "loss": float("inf"), "epoch": 2}
+        incumbent = {"val_macro_f1": 0.50, "val_loss": 1.0, "epoch": 1}
+        nan_f1 = {"val_macro_f1": float("nan"), "val_loss": 0.5, "epoch": 2}
+        inf_loss = {"val_macro_f1": 0.90, "val_loss": float("inf"), "epoch": 2}
 
         self.assertFalse(is_better(nan_f1, incumbent))
         self.assertFalse(is_better(inf_loss, incumbent))
@@ -68,7 +68,7 @@ class TestCheckpoint(unittest.TestCase):
             "epoch": 3,
             "config": {"model": "linear"},
             "val_metrics": {"accuracy": 0.85, "macro_f1": 0.84},
-            "run_seed": 36,
+            "run_seed": 69420,
         }
 
         save_checkpoint(ckpt_path, payload)
@@ -76,7 +76,7 @@ class TestCheckpoint(unittest.TestCase):
 
         loaded_payload = load_checkpoint(ckpt_path, map_location="cpu")
         self.assertEqual(loaded_payload["epoch"], 3)
-        self.assertEqual(loaded_payload["run_seed"], 36)
+        self.assertEqual(loaded_payload["run_seed"], 69420)
         self.assertTrue(
             torch.equal(
                 loaded_payload["model_state_dict"]["weight"],
@@ -99,7 +99,7 @@ class TestCheckpoint(unittest.TestCase):
         """Báo lỗi FileNotFoundError nếu checkpoint không tồn tại."""
         with self.assertRaises(FileNotFoundError):
             load_checkpoint(self.temp_dir / "nonexistent.pt")
-            
+
     def test_resume_model_and_optimizer_state(self) -> None:
         """Verify model weights and optimizer internal momentum restore correctly."""
         # 1. Initialize source model and optimizer with momentum
@@ -120,7 +120,7 @@ class TestCheckpoint(unittest.TestCase):
             "epoch": 3,
             "config": {"model": "linear"},
             "val_metrics": {"accuracy": 0.80, "macro_f1": 0.79},
-            "run_seed": 36,
+            "run_seed": 69420,
         }
         save_checkpoint(ckpt_path, payload)
 
@@ -157,7 +157,7 @@ class TestCheckpoint(unittest.TestCase):
     def test_resume_rng_state_reproducibility(self) -> None:
         """Verify RNG state restoration reproduces the subsequent random sequence."""
         # 1. Seed and generate an initial random stream
-        torch.manual_seed(36)
+        torch.manual_seed(69420)
         _ = torch.rand(10)  # Consume initial random values
 
         # 2. Persist current RNG state in checkpoint
@@ -168,7 +168,7 @@ class TestCheckpoint(unittest.TestCase):
             "epoch": 2,
             "config": {"model": "linear"},
             "val_metrics": {"accuracy": 0.8},
-            "run_seed": 36,
+            "run_seed": 69420,
             "rng_state": {"torch_cpu": saved_rng},
         }
         save_checkpoint(ckpt_path, payload)
@@ -190,7 +190,7 @@ class TestCheckpoint(unittest.TestCase):
             torch.equal(expected_next_numbers, restored_numbers),
             "Random numbers generated after resume do not match the expected sequence.",
         )
-        
+
     def test_load_checkpoint_with_resume_false_ignores_missing_optimizer(self) -> None:
         """When resume=False, checkpoint loading succeeds without optimizer or scheduler states."""
         ckpt_path = self.temp_dir / "eval_ckpt.pt"
@@ -199,7 +199,7 @@ class TestCheckpoint(unittest.TestCase):
             "epoch": 2,
             "config": {"model": "mlp"},
             "val_metrics": {"accuracy": 0.82, "macro_f1": 0.81},
-            "run_seed": 36,
+            "run_seed": 69420,
         }
         save_checkpoint(ckpt_path, minimal_payload)
 
@@ -217,7 +217,7 @@ class TestCheckpoint(unittest.TestCase):
             "epoch": 2,
             "config": {"model": "mlp"},
             "val_metrics": {"accuracy": 0.82, "macro_f1": 0.81},
-            "run_seed": 36,
+            "run_seed": 69420,
             # optimizer_state_dict is intentionally omitted
         }
         save_checkpoint(ckpt_path, payload_without_optimizer)
@@ -249,7 +249,7 @@ class TestCheckpoint(unittest.TestCase):
             "epoch": 3,
             "config": {"model": "linear"},
             "val_metrics": {"accuracy": 0.80, "macro_f1": 0.79},
-            "run_seed": 36,
+            "run_seed": 69420,
             "rng_state": {
                 "torch_cpu": torch.get_rng_state(),
             },
