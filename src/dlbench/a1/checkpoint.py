@@ -8,8 +8,19 @@ import tempfile
 import torch
 from collections.abc import Mapping
 from pathlib import Path
-from typing import Any
+from typing import Any, TYPE_CHECKING
+import tempfile, os
 
+if TYPE_CHECKING:
+    import torch
+
+REQUIRED_CHECKPOINT_KEYS: frozenset[str] = frozenset({
+    "model_state_dict",
+    "epoch",
+    "config",
+    "val_metrics",
+    "run_seed",
+})
 
 
 REQUIRED_CHECKPOINT_KEYS: frozenset[str] = frozenset({
