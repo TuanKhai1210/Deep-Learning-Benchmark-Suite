@@ -16,6 +16,15 @@ class TestCheckpoint(unittest.TestCase):
     def setUp(self) -> None:
         self.temp_dir = Path(tempfile.mkdtemp())
 
+    @staticmethod
+    def _checkpoint_metadata() -> dict[str, object]:
+        return {
+            "schema_version": 1,
+            "split_hash": "split-hash",
+            "statistics_hash": "statistics-hash",
+            "git_revision": "test-revision",
+        }
+
     def tearDown(self) -> None:
         shutil.rmtree(self.temp_dir, ignore_errors=True)
 
@@ -69,6 +78,7 @@ class TestCheckpoint(unittest.TestCase):
             "config": {"model": "linear"},
             "val_metrics": {"accuracy": 0.85, "macro_f1": 0.84},
             "run_seed": 69420,
+            **self._checkpoint_metadata(),
         }
 
         save_checkpoint(ckpt_path, payload)
@@ -121,6 +131,7 @@ class TestCheckpoint(unittest.TestCase):
             "config": {"model": "linear"},
             "val_metrics": {"accuracy": 0.80, "macro_f1": 0.79},
             "run_seed": 69420,
+            **self._checkpoint_metadata(),
         }
         save_checkpoint(ckpt_path, payload)
 
@@ -169,6 +180,7 @@ class TestCheckpoint(unittest.TestCase):
             "config": {"model": "linear"},
             "val_metrics": {"accuracy": 0.8},
             "run_seed": 69420,
+            **self._checkpoint_metadata(),
             "rng_state": {"torch_cpu": saved_rng},
         }
         save_checkpoint(ckpt_path, payload)
@@ -200,6 +212,7 @@ class TestCheckpoint(unittest.TestCase):
             "config": {"model": "mlp"},
             "val_metrics": {"accuracy": 0.82, "macro_f1": 0.81},
             "run_seed": 69420,
+            **self._checkpoint_metadata(),
         }
         save_checkpoint(ckpt_path, minimal_payload)
 
@@ -218,6 +231,7 @@ class TestCheckpoint(unittest.TestCase):
             "config": {"model": "mlp"},
             "val_metrics": {"accuracy": 0.82, "macro_f1": 0.81},
             "run_seed": 69420,
+            **self._checkpoint_metadata(),
             # optimizer_state_dict is intentionally omitted
         }
         save_checkpoint(ckpt_path, payload_without_optimizer)
@@ -250,6 +264,7 @@ class TestCheckpoint(unittest.TestCase):
             "config": {"model": "linear"},
             "val_metrics": {"accuracy": 0.80, "macro_f1": 0.79},
             "run_seed": 69420,
+            **self._checkpoint_metadata(),
             "rng_state": {
                 "torch_cpu": torch.get_rng_state(),
             },

@@ -18,6 +18,10 @@ REQUIRED_CHECKPOINT_KEYS: frozenset[str] = frozenset({
     "config",
     "val_metrics",
     "run_seed",
+    "schema_version",
+    "split_hash",
+    "statistics_hash",
+    "git_revision",
 })
 
 RESUME_KEYS: frozenset[str] = frozenset({
@@ -29,35 +33,32 @@ RESUME_KEYS: frozenset[str] = frozenset({
 def is_better(candidate: Mapping[str, Any], incumbent: Mapping[str, Any] | None) -> bool:
     """Compare val_macro_f1 max, val_loss min, epoch min; reject nonfinite metrics."""
 
-    # Case of first epoch (no incumbent yet)
-    if incumbent is None:
-        return True
-
     c_f1 = candidate.get("val_macro_f1", 0.0)
     c_loss = candidate.get("val_loss", float("inf"))
     c_epoch = candidate.get("epoch", float("inf"))
+
+    if not all(math.isfinite(x) for x in [c_f1, c_loss]):
+        return False
+
+    # Case of first epoch (no incumbent yet)
+    if incumbent is None:
+        return True
 
     i_f1 = incumbent.get("val_macro_f1", 0.0)
     i_loss = incumbent.get("val_loss", float("inf"))
     i_epoch = incumbent.get("epoch", float("inf"))
 
-    # Nonfinite metrics handling
-    if not all(math.isfinite(x) for x in [c_f1, c_loss, i_f1, i_loss]):
-        return False
-
-    # Due to floating point accuracy, we need eps
-    eps = 1e-6
 
     # Priority 1: Macro F1 (higher is better)
-    if c_f1 > i_f1 + eps:
+    if c_f1 > i_f1:
         return True
-    if c_f1 < i_f1 - eps:
+    if c_f1 < i_f1:
         return False
 
     # Priority 2: Validation loss (lower is better)
-    if c_loss < i_loss - eps:
+    if c_loss < i_loss:
         return True
-    if c_loss > i_loss + eps:
+    if c_loss > i_loss:
         return False
 
     # Priority 3: Epochs (lower is better)

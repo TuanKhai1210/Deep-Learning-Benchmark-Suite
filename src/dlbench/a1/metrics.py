@@ -15,10 +15,19 @@ def classification_metrics(targets: Sequence[int], predicted_labels: Sequence[in
     Reject length mismatches/empty input. Use the full split, not mean batch F1.
     """
 
+
     if not targets or not predicted_labels:
         raise ValueError("Input lists cannot be empty!")
     if len(targets) != len(predicted_labels):
         raise ValueError("Lengths of targets and predicted labels must match")
+
+    valid_labels = range(num_classes)
+    target_invalid =  next((x for x in targets if x not in valid_labels), None)
+    if target_invalid is not None:
+        raise ValueError(f"Target label {target_invalid} outside of permitted range")
+    predicted_invalid = next((x for x in predicted_labels if x not in valid_labels), None)
+    if predicted_invalid is not None:
+        raise ValueError(f"Predicted label {predicted_invalid} outside of permitted range")
 
     accuracy = accuracy_score(targets, predicted_labels)
     macro_f1 = f1_score(targets, predicted_labels, average='macro', labels=range(num_classes), zero_division=0)
