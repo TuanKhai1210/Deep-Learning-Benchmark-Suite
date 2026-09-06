@@ -46,7 +46,7 @@ def train_one_epoch(model: nn.Module, loader: DataLoader, optimizer: Optimizer,
         optimizer.step()
         
         
-        # Output tensor is size (B, 10)
+        # Output tensor is size (B, num_class)
         preds = torch.argmax(logits, dim=1)
         
         total_loss += loss.item() * batch_size

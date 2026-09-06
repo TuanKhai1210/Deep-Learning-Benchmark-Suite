@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "deep-learning-benchmark-suite"
+version = "0.1.0"
+description = "Reproducible deep learning architecture comparisons for CO3133."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/TuanKhai1210/deep-learning-benchmark-suite"
+
+[project.optional-dependencies]
+ml = [
+    "torch",
+    "torchvision",
+    "numpy",
+    "scikit-learn",
+    "matplotlib",
+]
+notebooks = [
+    "jupyterlab",
+    "ipykernel",
+]
+
+[project.scripts]
+dlbench-a1 = "dlbench.a1.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
