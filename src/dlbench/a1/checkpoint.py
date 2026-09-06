@@ -69,29 +69,6 @@ def is_better(candidate: Mapping[str, Any], incumbent: Mapping[str, Any] | None)
     # Default: returns False
     return False
 
-def collect_rng_state() -> dict[str, Any]:
-    """Collect all RNG state for training resumption"""
-    state = {
-        "python": random.getstate(),
-        "numpy": np.random.get_state(),
-        "torch_cpu": torch.get_rng_state(),
-    }
-    if torch.cuda.is_available():
-        state["torch_cuda"] = torch.cuda.get_rng_state_all()
-    return state
-
-
-def restore_rng_state(state: dict[str, Any]) -> None:
-    """Restore RNG states."""
-    if "python" in state:
-        random.setstate(state["python"])
-    if "numpy" in state:
-        np.random.set_state(state["numpy"])
-    if "torch_cpu" in state:
-        torch.set_rng_state(state["torch_cpu"])
-    if "torch_cuda" in state and torch.cuda.is_available():
-        torch.cuda.set_rng_state_all(state["torch_cuda"])
-
 def save_checkpoint(path: Path, payload: Mapping[str, Any], *, resume=False) -> None:
     """Atomic save; weights, epoch, config, split/stats hashes, seed, val metrics.
 
