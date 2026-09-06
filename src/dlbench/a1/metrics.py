@@ -14,8 +14,7 @@ def classification_metrics(targets: Sequence[int], predicted_labels: Sequence[in
 
     Reject length mismatches/empty input. Use the full split, not mean batch F1.
     """
-
-
+    
     if not targets or not predicted_labels:
         raise ValueError("Input lists cannot be empty!")
     if len(targets) != len(predicted_labels):
