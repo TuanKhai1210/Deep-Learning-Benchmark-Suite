@@ -28,7 +28,7 @@
 - Verification sources: Existing repository history and member/course details, user-confirmed roles and seeds, and the course handbook retained for requirement checks
 - Experimental status: No dataset preparation, model training, or benchmark measurements are claimed from this assistance
 
-## 2026-09-06 - Test generation for metrics and checkpointing logic
+## 2026-09-06 - State saving requirements for training resumption
 
 - Tool: Gemini 3.8 Flash
 - Used by: Nguyễn Anh Khoa
@@ -42,6 +42,7 @@
 - Student verification: Reviewed PyTorch state persistence mechanics (`optimizer.state_dict()` and `torch.get_rng_state()`), designed optional empty payload support (`{}`) for runs without learning rate schedulers to pass schema validation safely.
 - Responsible member: Nguyễn Anh Khoa
 - Sources used for verification: Official [PyTorch documentation](https://docs.pytorch.org/tutorials/beginner/saving_loading_models.html#saving-loading-a-general-checkpoint-for-inference-and-or-resuming-training) on saving and loading models across general checkpoints.
+
 ## 2026-09-06 - Test generation for metrics and checkpointing logic
 
 - Tool: Gemini 3.8 Flash
@@ -56,7 +57,7 @@
 - Prompt summary: Requested test suites for classification metrics and checkpoint functions.
 - AI contribution: Provided unit test templates covering edge cases (`zero_division=0`, non-finite metric handling, tie-breaking hierarchies, atomic temporary file replacement).
 - Student verification: Verified mathematical formulations for hand-calculated Macro-F1 scores, verified required dictionary keys against `contracts.py`, and confirmed all test cases pass cleanly with `python -m unittest discover -s tests -v` on Python.
-- Responsible member: Nguyễn Anh Khoa 
+- Responsible member: Nguyễn Anh Khoa
 - Sources used for verification:
   - Official documentation for `torch.save`, `torch.load`, `sklearn.metrics.accuracy_score`, `sklearn.metrics.f1_score`and `torch.numel`.
   - Course Project Handbook CO3133 (Semester-261).
