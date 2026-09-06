@@ -20,9 +20,9 @@ CONFIG = {
         "early_stopping_patience": 0,
     },
     "run": {
-        # Repeat with run seeds 69420, 67 and 69 on the split created with seed 36.
-        "seed": 69420,
-        "device": "cpu",
+        # Use CLI --seed to repeat with 36, 69420, 67 and 69 on the SAME split.
+        "seed": 36,
+        "device": "cpu", # can use "cuda" if gpu is available
         "output_root": "runs/a1",
     },
 }
