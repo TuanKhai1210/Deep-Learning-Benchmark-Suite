@@ -64,11 +64,14 @@ def build_transforms(preprocessing: Mapping[str, Any], *, training: bool) -> Cal
     transform_list: list[Any] = []
 
     if training:
-        if preprocessing.get("random_horizontal_flip", False):
+        aug = preprocessing.get("augmentation")
+    
+        if aug == "random_horizontal_flip":
             transform_list.append(transforms.RandomHorizontalFlip(p=0.5))
-        if preprocessing.get("random_crop", False):
+        elif aug == "random_crop":
             padding = preprocessing.get("crop_padding", 2)
-            transform_list.append(transforms.RandomCrop(28, padding=padding))
+            crop_size = tuple(preprocessing.get("image_size", [28, 28]))
+            transform_list.append(transforms.RandomCrop(crop_size, padding=padding))
 
     transform_list.append(transforms.ToTensor())
     transform_list.append(transforms.Normalize(mean=mean, std=std))

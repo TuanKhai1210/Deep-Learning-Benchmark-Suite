@@ -15,12 +15,7 @@ from dlbench.a1.contracts import Batch, DataLoaders
 from dlbench.a1.data.dataset import FashionMNISTSubset, load_official_dataset
 from dlbench.a1.data.split import load_split
 from dlbench.a1.data.transforms import build_transforms
-
-def seed_worker(worker_id: int) -> None:
-    """Set Python, NumPy, and PyTorch seeds for dataloader worker processes."""
-    worker_seed = torch.initial_seed() % (2**32)
-    np.random.seed(worker_seed)
-    random.seed(worker_seed)
+from dlbench.common.reproducibility import seed_worker
 
 def collate_samples(samples: Sequence[Mapping[str, Any]]) -> Batch:
     """Stack image/label tensors; preserve sample_ids as list[str]."""
@@ -38,8 +33,12 @@ def build_dataloaders(config: Mapping[str, Any], *, smoke: bool = False) -> Data
     A smoke subset must be explicitly tagged as smoke, not a benchmark result.
     A/B/C must agree how its small positive batch size is chosen from draft config.
     """
-    data_root = str(config.get("data_root", "./data"))
-    split_path = Path(config.get("split_path", "configs/a1/splits/fashion_mnist_split.json"))
+    # Extract nested data section if present, else fall back to root config
+    data_cfg = config.get("data", {})
+    data_root = str(data_cfg.get("root", config.get("data_root", "./data")))
+    split_path = Path(
+        data_cfg.get("split_file", config.get("split_path", "configs/a1/splits/fashion_mnist_seed36.json"))
+    )
     manifest = load_split(split_path)
 
     # Load raw official datasets without transforms attached to base instances
@@ -73,6 +72,7 @@ def build_dataloaders(config: Mapping[str, Any], *, smoke: bool = False) -> Data
     pin_memory = bool(config.get("pin_memory", False))
 
     # Dedicated generator for reproducible shuffling in training
+    # Default development run seed is 69420 per experiment contract
     run_seed = int(config.get("run_seed", 69420))
     train_generator = torch.Generator()
     train_generator.manual_seed(run_seed)
