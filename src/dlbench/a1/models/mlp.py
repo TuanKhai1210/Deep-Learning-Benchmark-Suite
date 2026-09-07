@@ -29,8 +29,6 @@ class MLPClassifier(nn.Module):
             raise ValueError("MLP must have at least one hidden layer")
         if type(parameters["hidden_dims"]) is not list:
             raise TypeError("Hidden layers parameters must be specified as list[int]")
-        if "hidden_activation" not in parameters:
-            raise ValueError("Hidden activation layer type not specified")
 
         input_dim = parameters['input_dim']
         num_classes = parameters['num_classes']
@@ -62,4 +60,8 @@ class MLPClassifier(nn.Module):
         Flatten internally; explain activation and regularization in the method note.
         Acceptance: batch sizes 1 and 7, finite outputs, backward updates weights.
         """
+        if images.ndim < 2:
+            raise ValueError("Input must include a batch dimension")
+        if images.size(0) == 0:
+            raise ValueError("Batch size cannot be zero")
         return self.network(images)
