@@ -5,9 +5,11 @@ CONFIG = {
     "model": {
         "name": "mlp",
         "parameters": {
+            "input_dim": 784,
             "num_classes": 10,
             "hidden_dims": [256,128],
             "dropout": 0.1,
+            "hidden_activation": "relu" # choose between tanh, sigmoid, relu, leakyrelu, gelu (default: relu)
         },
     },
     "training": {
