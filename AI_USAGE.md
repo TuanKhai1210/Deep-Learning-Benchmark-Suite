@@ -76,6 +76,7 @@
 - Sources used for verification:
   - Official [PyTorch tutorial](https://docs.pytorch.org/tutorials/beginner/introyt/trainingyt.html) on model training step lifecycle.
 
+<<<<<<< HEAD
 ## 2026-09-07 - MLP test creation and coverage expansion
 
 - Tool/model: GitHub Copilot; exact model identifier for this interaction not recorded
@@ -143,6 +144,8 @@
 - Experiment impact: No training runs or benchmark measurements were performed as part of this work
 =======
 
+=======
+>>>>>>> 2d5ffeb (feat(data): implement dataset, loaders, and EDA artifacts)
 ## 2026-09-06 - Exploratory Data Analysis requirements and leakage constraints
 
 - Tool: Gemini 3.8 Flash
@@ -190,5 +193,9 @@
 - Responsible member: Nguyễn Hạo Thiên
 - Sources used for verification:
   - `dlbench/a1/contracts.py` (`Batch`, `DataLoaders`)
+<<<<<<< HEAD
   - PyTorch documentation for `torch.utils.data.DataLoader` (worker initialization, generators, and collation mechanics)
 >>>>>>> 32f287b (feat(data): implement dataset, loaders, and EDA artifacts)
+=======
+  - PyTorch documentation for `torch.utils.data.DataLoader` (worker initialization, generators, and collation mechanics)
+>>>>>>> 2d5ffeb (feat(data): implement dataset, loaders, and EDA artifacts)
