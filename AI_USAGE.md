@@ -67,8 +67,7 @@
 - Tool: Gemini 3.8 Flash
 - Used by: Nguyễn Anh Khoa
 - Stage: Assignment 1 Training logic implementation
-- Purpose: Clarification of canonical deep learning training step sequences inside an epoch loop.
-Affected files/sections:
+- Purpose: Clarification of canonical deep learning training step sequences inside an epoch loop. Affected files/sections:
 - `src/dlbench/a1/engine.py` (`train_one_epoch`)
 - Prompt summary: Inquired about the standard step sequence required to train a deep learning model within a single epoch loop.
 - AI contribution: Outlined the canonical PyTorch execution order: setting `model.train()`, transferring tensors to device, clearing gradients (`optimizer.zero_grad()`), executing forward pass to compute logits, calculating loss with unnormalized logits, running backpropagation (`loss.backward()`), updating weights (`optimizer.step()`), and accumulating sample-weighted loss.
@@ -76,6 +75,23 @@ Affected files/sections:
 - Responsible member: Nguyễn Anh Khoa
 - Sources used for verification:
   - Official [PyTorch tutorial](https://docs.pytorch.org/tutorials/beginner/introyt/trainingyt.html) on model training step lifecycle.
+
+## 2026-09-07 - MLP test creation and coverage expansion
+
+- Tool/model: GitHub Copilot; exact model identifier for this interaction not recorded
+- Used by: Nguyễn Anh Khoa
+- Stage: Assignment 1 MLP implementation
+- Purpose: Create and expand unit tests for the MLP classifier, including output dimensions, flattening behavior, dropout, parameter counts, supported activations, training updates, and missing or invalid parameters.
+- Affected files/sections:
+  - `src/dlbench/a1/models/mlp.py`
+  - `src/dlbench/a1/metrics.py`
+  - `tests/test_mlp.py`
+- Prompt summary: Requested additional tests for the MLP, with emphasis on dimensions, dropout logic, parameter counts, and missing parameters.
+- AI contribution: Added focused `unittest` cases for image and flattened inputs, exact linear-layer dimensions, dropout behavior in training and evaluation modes, parameter-count consistency, supported activations, gradient updates, and constructor validation.
+- Student verification: Reviewed the tests against the current MLP implementation and ran `venv/Scripts/python.exe -m unittest -v tests.test_mlp`; all tests passed.
+- Responsible member: Nguyễn Anh Khoa
+- Sources used for verification: Existing MLP implementation, parameter-count helper, repository test conventions, and PyTorch module behavior.
+
 
 ## 2026-09-06 - Exploratory Data Analysis requirements and leakage constraints
 
