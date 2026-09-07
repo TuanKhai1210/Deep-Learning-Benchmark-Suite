@@ -29,11 +29,17 @@ class MLPClassifier(nn.Module):
             raise ValueError("MLP must have at least one hidden layer")
         if type(parameters["hidden_dims"]) is not list:
             raise TypeError("Hidden layers parameters must be specified as list[int]")
+        if len(parameters['hidden_dims']) == 0:
+            raise ValueError("MLP must have at least one hidden layer")
 
         input_dim = parameters['input_dim']
         num_classes = parameters['num_classes']
         hidden_dims = parameters['hidden_dims']
+        if any(x <= 0 for x in hidden_dims):
+            raise ValueError("Exists hidden layer with empty dimension")
         dropout_rate = parameters.get('dropout', 0.0)
+        if dropout_rate < 0.0 or dropout_rate > 1.0:
+            raise ValueError(f"Invalid dropout rate: {dropout_rate}")
         hidden_activation = parameters.get('hidden_activation', 'relu')
         try:
             activation_class = ACTIVATION_MAP[hidden_activation]

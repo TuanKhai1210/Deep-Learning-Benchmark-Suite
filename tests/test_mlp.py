@@ -122,6 +122,24 @@ class TestMLPClassifier(unittest.TestCase):
             count_parameters(without_dropout), count_parameters(with_dropout)
         )
 
+    def test_dropout_boundary_values_are_valid(self) -> None:
+        for dropout_rate in (0.0, 1.0):
+            with self.subTest(dropout_rate=dropout_rate):
+                model = MLPClassifier(self._parameters(dropout=dropout_rate))
+                self.assertEqual(tuple(model(torch.randn(2, 1, 28, 28)).shape), (2, 10))
+
+    def test_invalid_dropout_rates_raise(self) -> None:
+        for dropout_rate in (-0.01, 1.01, 2.0):
+            with self.subTest(dropout_rate=dropout_rate):
+                with self.assertRaises(ValueError):
+                    MLPClassifier(self._parameters(dropout=dropout_rate))
+
+    def test_invalid_hidden_dimensions_raise(self) -> None:
+        for hidden_dims in ([], [0, 8], [16, -1]):
+            with self.subTest(hidden_dims=hidden_dims):
+                with self.assertRaises(ValueError):
+                    MLPClassifier(self._parameters(hidden_dims=hidden_dims))
+
     def test_single_hidden_layer_builds_without_dropout_by_default(self) -> None:
         model = MLPClassifier(
             {"input_dim": 4, "num_classes": 2, "hidden_dims": [3], "hidden_activation": "gelu"}
@@ -200,6 +218,9 @@ class TestMLPClassifier(unittest.TestCase):
     def test_invalid_configuration_raises(self) -> None:
         with self.assertRaises(TypeError):
             MLPClassifier(self._parameters(hidden_dims=(16, 8)))
+
+        with self.assertRaises(TypeError):
+            MLPClassifier(self._parameters(hidden_dims=16))
 
         with self.assertRaises(ValueError):
             MLPClassifier(self._parameters(hidden_activation="unknown"))
