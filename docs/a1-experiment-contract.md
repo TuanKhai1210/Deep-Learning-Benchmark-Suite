@@ -1,3 +1,8 @@
+---
+layout: article
+title: A1 experiment contract
+---
+
 # A1 experiment contract
 
 Status: **draft for team review**. This document explains the shared protocol in `configs/a1/protocol.py`. Team responsibilities, split seed `36`, and run seeds `69420`, `67`, `69` are agreed; the remaining proposed defaults are not instructor-mandated values and have not yet been approved or measured.
@@ -64,7 +69,7 @@ Accuracy is total correct divided by total samples. Macro-F1 is computed from pr
 
 Checkpoint selection proposal: highest validation macro-F1; ties resolved by lower validation loss, then earlier epoch. `best.pt` is for final evaluation; `last.pt` is separate if resume is supported. Record the config, epoch, split, seeds, preprocessing, code revision and validation score with the checkpoint. Save optimizer/scheduler/RNG state when exact training continuation is supported.
 
-Report total/trainable parameters, training time, inference time, actual epochs, train/validation curves, confusion matrix, correct/incorrect examples, and qualitative analysis. Report accuracy and macro-F1 as mean and standard deviation across all four agreed seeds without cherry-picking; retain the per-seed results and state the standard-deviation convention.
+Report total/trainable parameters, training time, inference time, actual epochs, train/validation curves, confusion matrix, correct/incorrect examples, and qualitative analysis. Report accuracy and macro-F1 as mean and standard deviation across all three agreed run seeds without cherry-picking; retain the per-seed results and state the standard-deviation convention.
 
 Before timing, approve the hardware, batch size, precision, warm-up/repetition counts and aggregation. The proposed inference scope is forward-only; exclude or separately measure loading and transfers. Use evaluation/no-gradient inference and appropriate CUDA synchronization. Amortized time per image in a batch is not batch-one latency. Define whether training timing includes validation/checkpoint/logging; exclude download and EDA, and report tuning cost separately.
 
@@ -80,7 +85,7 @@ Each run has a unique ID and stores effective config, metadata, history, metrics
 - [ ] Mean/std measured and recorded from the correct subset.
 - [ ] Augmentation reviewed and fixed.
 - [ ] Shared interfaces, evaluator and checkpoint behavior tested.
-- [ ] Budgets for the four-seed plan, early stopping and per-model tuning policy approved.
+- [ ] Budgets for the three-run-seed plan, early stopping and per-model tuning policy approved.
 - [ ] Timing procedure and hardware confirmed.
 - [ ] Artifact tracing and checkpoint reload checked.
 - [ ] Config strict validation succeeds after genuine decisions, not dummy values.
