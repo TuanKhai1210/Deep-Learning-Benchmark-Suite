@@ -91,3 +91,18 @@
 - Student verification: Reviewed the tests against the current MLP implementation and ran `venv/Scripts/python.exe -m unittest -v tests.test_mlp`; all tests passed.
 - Responsible member: Nguyễn Anh Khoa
 - Sources used for verification: Existing MLP implementation, parameter-count helper, repository test conventions, and PyTorch module behavior.
+
+## 2026-09-08 - Trainer test generation and training-loop coverage
+
+- Tool/model: GitHub Copilot; OpenAI ChatGPT 5.6 Luna
+- Used by: Nguyễn Anh Khoa
+- Stage: Assignment 1 trainer implementation
+- Purpose: Generate tests for trainer calculations, actual loss reduction, checkpoint evaluation, early stopping, and periodic checkpoint saving.
+- Affected files/sections:
+  - `src/dlbench/a1/trainer.py`
+  - `tests/test_trainer.py`
+- Prompt summary: Requested trainer tests that verify calculations using real training loss, evaluate checkpoint behavior, and early stopping/checkpoint frequency logic.
+- AI contribution: Added tests for real two-epoch loss reduction using a deterministic model and DataLoader, validation/test checkpoint loader selection, checkpoint configuration and split-hash mismatch rejection, optimizer settings, validation metric calculations, early stopping monitors, patience, and save frequency.
+- Student verification: Reviewed the tests against the trainer and checkpoint contracts and ran `venv/Scripts/python.exe -m unittest -v tests.test_trainer`; all 16 tests passed with no diagnostics.
+- Responsible member: Nguyễn Anh Khoa
+- Sources used for verification: Existing trainer, engine, checkpoint, contract, and artifact interfaces; PyTorch optimizer and loss behavior.
