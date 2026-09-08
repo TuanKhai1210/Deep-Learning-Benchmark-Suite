@@ -1,0 +1,12 @@
+title: Deep Learning Benchmark Suite
+description: A comparative study of neural architectures, reproducible experiments, and the representations behind them.
+url: "https://tuankhai1210.github.io"
+baseurl: "/Deep-Learning-Benchmark-Suite"
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - vendor

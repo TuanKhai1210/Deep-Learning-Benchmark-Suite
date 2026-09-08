@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f6ff">
+  <title>{{ page.title | escape }} · DL Benchmark Suite</title>
+  <meta name="description" content="{{ page.description | default: site.description | escape }}">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{ page.title | escape }} · Deep Learning Benchmark Suite">
+  <meta property="og:description" content="{{ page.description | default: site.description | escape }}">
+  <link rel="icon" type="image/svg+xml" href="{{ '/assets/site/favicon.svg' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/site/styles.css' | relative_url }}">
+  <script src="{{ '/assets/site/app.js' | relative_url }}" defer></script>
+</head>
+<body class="{{ page.body_class | default: 'article-page' }}">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="container nav-row">
+      <a class="brand" href="{{ '/' | relative_url }}" aria-label="Deep Learning Benchmark Suite home">
+        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M4 6h9v9H4zM19 6h9v9h-9zM4 21h9v5H4zM19 21h9v5h-9z"/><path d="M8.5 15v6m15-6v6M13 10.5h6M13 23.5h6" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+        <span>DL BENCHMARK<span class="brand-sub">SUITE / CO3133</span></span>
+      </a>
+      <nav class="desktop-nav" aria-label="Main navigation">
+        <a href="{{ '/#research' | relative_url }}">Research</a>
+        <a href="{{ '/#protocol' | relative_url }}">Protocol</a>
+        <a href="{{ '/#team' | relative_url }}">Team</a>
+      </nav>
+      <a class="repo-link" href="https://github.com/TuanKhai1210/deep-learning-benchmark-suite">GitHub <span aria-hidden="true">↗</span></a>
+      <button class="menu-toggle" type="button" aria-label="Open navigation" aria-controls="mobile-nav" aria-expanded="false" hidden><span></span><span></span></button>
+    </div>
+    <nav id="mobile-nav" class="mobile-nav container" aria-label="Mobile navigation" hidden>
+      <a href="{{ '/#research' | relative_url }}">Research</a>
+      <a href="{{ '/#protocol' | relative_url }}">Protocol</a>
+      <a href="{{ '/#team' | relative_url }}">Team</a>
+      <a href="{{ '/a1.html' | relative_url }}">Assignment 1</a>
+    </nav>
+  </header>
+  <main id="main" tabindex="-1">
+    {{ content }}
+  </main>
+  <footer class="site-footer">
+    <div class="container footer-top">
+      <div><a class="footer-brand" href="{{ '/' | relative_url }}">DEEP LEARNING<br>BENCHMARK SUITE<span class="accent">.</span></a><p>Built to question. Designed to reproduce.</p></div>
+      <div class="footer-course"><span class="eyebrow">ACADEMIC CONTEXT</span><p>Ho Chi Minh City University of Technology<br>VNU-HCM · Faculty of Computer Science and Engineering</p><p>CO3133 · Semester 261<br>Instructor: Lê Thành Sách</p></div>
+      <div class="footer-links"><span class="eyebrow">EXPLORE</span><a href="{{ '/a1.html' | relative_url }}">Assignment 1 ↗</a><a href="{{ '/a1-experiment-contract.html' | relative_url }}">Experiment contract ↗</a><a href="https://github.com/TuanKhai1210/deep-learning-benchmark-suite/blob/main/AI_USAGE.md">AI disclosure ↗</a><a href="https://github.com/TuanKhai1210/deep-learning-benchmark-suite">Source repository ↗</a></div>
+    </div>
+    <div class="container footer-bottom"><span>© 2026 · A student research project</span><span>Transparent methods. Traceable results.</span><a href="#main">Back to top ↑</a></div>
+  </footer>
+</body>
+</html>
