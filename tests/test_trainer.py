@@ -57,7 +57,7 @@ class TestTrainerHelpers(unittest.TestCase):
             smoke=True,
         )
 
-        self.assertRegex(run_id, r"^a1_mlp_smoke_seed67_\d{8}-\d{6}$")
+        self.assertRegex(run_id, r"^a1_mlp_smoke_seed67_\d{8}-\d{6}_[0-9a-f]{6}$")
 
 
 class TestFitCalculations(unittest.TestCase):
@@ -242,6 +242,41 @@ class TestFitCalculations(unittest.TestCase):
 
         self.assertEqual(append_history.call_count, 3)
 
+    def test_fit_uses_smoke_budget_and_skips_main_run_strict_validation(self) -> None:
+        config = self._config("runs")
+        config["protocol"] = {"status": "draft", "id": "draft", "approved_by": ["A", "B", "C"]}
+        config["budget"]["max_epochs"] = 25
+        config["training"]["batch_size"] = 256
+        config["training"]["save_frequency"] = 10
+        train_metrics = EpochMetrics(1.0, 0.5, 0.4, 2)
+        validation = EvaluationResult(
+            EpochMetrics(1.0, 0.5, 0.4, 2),
+            Predictions(["a"], [0], [0], [[1.0, 0.0]]),
+        )
+
+        with patch("dlbench.a1.trainer.validate_config") as validate_config, \
+                patch("dlbench.a1.trainer.seed_everything"), \
+                patch("dlbench.a1.trainer.create_run_dir", return_value=Path("runs/test")), \
+                patch("dlbench.a1.trainer.save_run_metadata"), \
+                patch("dlbench.a1.trainer.build_dataloaders", return_value=SimpleNamespace(train=[], validation=[])) as build_dataloaders, \
+                patch("dlbench.a1.trainer.build_model", return_value=torch.nn.Linear(1, 2)), \
+                patch("dlbench.a1.trainer.train_one_epoch", return_value=train_metrics), \
+                patch("dlbench.a1.trainer.evaluate_epoch", return_value=validation), \
+                patch("dlbench.a1.trainer.append_history"), \
+                patch("dlbench.a1.trainer.save_metrics"), \
+                patch("dlbench.a1.trainer.save_checkpoint"), \
+                patch("dlbench.a1.trainer._checkpoint_metadata", return_value={
+                    "split_hash": "split", "statistics_hash": "stats", "git_revision": "git"
+                }):
+            fit(config, smoke=True)
+
+        validate_config.assert_called_once()
+        self.assertFalse(validate_config.call_args.kwargs["strict"])
+        self.assertEqual(validate_config.call_args.args[0]["budget"]["max_epochs"], 2)
+        self.assertEqual(validate_config.call_args.args[0]["training"]["batch_size"], 32)
+        self.assertEqual(build_dataloaders.call_args.args[0]["budget"]["max_epochs"], 2)
+        self.assertEqual(build_dataloaders.call_args.args[0]["training"]["batch_size"], 32)
+
     def test_fit_supports_validation_loss_as_early_stopping_monitor(self) -> None:
         config = self._config("runs")
         config["budget"]["max_epochs"] = 5
@@ -274,6 +309,42 @@ class TestFitCalculations(unittest.TestCase):
             fit(config)
 
         self.assertEqual(append_history.call_count, 3)
+
+    def test_fit_saves_last_checkpoint_when_early_stopping_interrupts_early(self) -> None:
+        config = self._config("runs")
+        config["budget"]["max_epochs"] = 5
+        config["training"]["early_stopping_patience"] = 2
+        config["training"]["save_frequency"] = 5
+        train_metrics = EpochMetrics(1.0, 0.5, 0.4, 2)
+        validation = EvaluationResult(
+            EpochMetrics(1.0, 0.5, 0.4, 2),
+            Predictions(["a"], [0], [0], [[1.0, 0.0]]),
+        )
+        saved_paths: list[tuple[Path, bool, int]] = []
+
+        def record_checkpoint(path, payload, *, resume=False):
+            saved_paths.append((path, resume, payload["epoch"]))
+
+        with patch("dlbench.a1.trainer.validate_config"), \
+                patch("dlbench.a1.trainer.seed_everything"), \
+                patch("dlbench.a1.trainer.create_run_dir", return_value=Path("runs/test")), \
+                patch("dlbench.a1.trainer.save_run_metadata"), \
+                patch("dlbench.a1.trainer.build_dataloaders", return_value=SimpleNamespace(train=[], validation=[])), \
+                patch("dlbench.a1.trainer.build_model", return_value=torch.nn.Linear(1, 2)), \
+                patch("dlbench.a1.trainer.train_one_epoch", return_value=train_metrics), \
+                patch("dlbench.a1.trainer.evaluate_epoch", return_value=validation), \
+                patch("dlbench.a1.trainer.append_history"), \
+                patch("dlbench.a1.trainer.save_metrics"), \
+                patch("dlbench.a1.trainer.save_checkpoint", side_effect=record_checkpoint), \
+                patch("dlbench.a1.trainer._checkpoint_metadata", return_value={
+                    "split_hash": "split", "statistics_hash": "stats", "git_revision": "git"
+                }):
+            fit(config)
+
+        last_saves = [item for item in saved_paths if item[0].name == "last.pt"]
+        self.assertTrue(last_saves)
+        self.assertTrue(any(item[1] for item in last_saves))
+        self.assertIn(2, [item[2] for item in last_saves])
 
     def test_fit_rejects_unknown_early_stopping_monitor(self) -> None:
         config = self._config("runs")
@@ -321,9 +392,46 @@ class TestFitCalculations(unittest.TestCase):
         last_epochs = [epoch for path, resume, epoch in saved_paths if resume]
         self.assertEqual(last_epochs, [1, 3, 4])
 
-    def test_fit_rejects_unsupported_optimizer(self) -> None:
+    def test_fit_supports_rmsprop_optimizer(self) -> None:
         config = self._config("runs")
         config["training"]["optimizer"] = "rmsprop"
+        captured_optimizers: list[torch.optim.Optimizer] = []
+        train_metrics = EpochMetrics(1.0, 0.5, 0.4, 2)
+        validation = EvaluationResult(
+            EpochMetrics(0.9, 0.5, 0.4, 2),
+            Predictions(["a"], [0], [0], [[1.0, 0.0]]),
+        )
+
+        def capture_optimizer(model, loader, optimizer, criterion, device):
+            captured_optimizers.append(optimizer)
+            return train_metrics
+
+        with patch("dlbench.a1.trainer.validate_config"), \
+                patch("dlbench.a1.trainer.seed_everything"), \
+                patch("dlbench.a1.trainer.create_run_dir", return_value=Path("runs/test")), \
+                patch("dlbench.a1.trainer.save_run_metadata"), \
+                patch("dlbench.a1.trainer.build_dataloaders", return_value=SimpleNamespace(train=[], validation=[])), \
+                patch("dlbench.a1.trainer.build_model", return_value=torch.nn.Linear(1, 2)), \
+                patch("dlbench.a1.trainer.train_one_epoch", side_effect=capture_optimizer), \
+                patch("dlbench.a1.trainer.evaluate_epoch", return_value=validation), \
+                patch("dlbench.a1.trainer.append_history"), \
+                patch("dlbench.a1.trainer.save_metrics"), \
+                patch("dlbench.a1.trainer.save_checkpoint"), \
+                patch("dlbench.a1.trainer._checkpoint_metadata", return_value={
+                    "split_hash": "split", "statistics_hash": "stats", "git_revision": "git"
+                }):
+            fit(config)
+
+        self.assertEqual(len(captured_optimizers), 2)
+        optimizer = captured_optimizers[0]
+        self.assertIsInstance(optimizer, torch.optim.RMSprop)
+        self.assertEqual(optimizer.defaults["lr"], 0.1)
+        self.assertEqual(optimizer.defaults["weight_decay"], 0.01)
+        self.assertEqual(optimizer.defaults["momentum"], 0.8)
+
+    def test_fit_rejects_unknown_optimizer(self) -> None:
+        config = self._config("runs")
+        config["training"]["optimizer"] = "madeup"
 
         with patch("dlbench.a1.trainer.validate_config"), \
                 patch("dlbench.a1.trainer.seed_everything"), \
@@ -331,7 +439,10 @@ class TestFitCalculations(unittest.TestCase):
                 patch("dlbench.a1.trainer.save_run_metadata"), \
                 patch("dlbench.a1.trainer.build_dataloaders", return_value=SimpleNamespace(train=[], validation=[])), \
                 patch("dlbench.a1.trainer.build_model", return_value=torch.nn.Linear(1, 2)):
-            with self.assertRaises(ValueError):
+            with self.assertRaisesRegex(
+                ValueError,
+                "Unsupported optimizer: madeup. Supported optimizers are adam, adamw, sgd, rmsprop, adagrad, adadelta, adamax, nadam.",
+            ):
                 fit(config)
 
 

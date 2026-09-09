@@ -103,6 +103,22 @@
   - `tests/test_trainer.py`
 - Prompt summary: Requested trainer tests that verify calculations using real training loss, evaluate checkpoint behavior, and early stopping/checkpoint frequency logic.
 - AI contribution: Added tests for real two-epoch loss reduction using a deterministic model and DataLoader, validation/test checkpoint loader selection, checkpoint configuration and split-hash mismatch rejection, optimizer settings, validation metric calculations, early stopping monitors, patience, and save frequency.
-- Student verification: Reviewed the tests against the trainer and checkpoint contracts and ran `venv/Scripts/python.exe -m unittest -v tests.test_trainer`; all 16 tests passed with no diagnostics.
+- Student verification: Reviewed the tests against the trainer and checkpoint contracts and ran `python -m unittest -v tests.test_trainer`.
 - Responsible member: Nguyễn Anh Khoa
 - Sources used for verification: Existing trainer, engine, checkpoint, contract, and artifact interfaces; PyTorch optimizer and loss behavior.
+
+## 2026-09-09 - Optimizer support expansion and RMSprop validation
+
+- Tool/model: GitHub Copilot
+- Used by: Nguyễn Anh Khoa
+- Stage: Assignment 1 trainer and configuration validation
+- Purpose: Expand optimizer support beyond the initially allowed set and reconcile the trainer with the configuration validator, including re-checking RMSprop handling.
+- Affected files/sections:
+  - `src/dlbench/a1/trainer.py`
+  - `src/dlbench/common/config.py`
+  - `tests/test_trainer.py`
+- Prompt summary: Requested support for `rmsprop` plus several common optimizers, then re-checked the RMSprop behavior to ensure validator and implementation stay aligned.
+- AI contribution: Updated trainer optimizer creation to support `rmsprop`, `adagrad`, `adadelta`, `adamax`, and `nadam`, while preserving existing Adam/AdamW/SGD behavior and consistent error messages for unsupported values. Added/updated unit tests to verify `rmsprop` is accepted and unknown optimizers are rejected with the proper error text.
+- Student verification: Reviewed the validator and trainer together to ensure the supported set matches the implementation, then ran `python -m unittest tests.test_trainer tests.test_config tests.test_checkpoint` and confirmed all tests passed.
+- Responsible member: Nguyễn Anh Khoa
+- Sources used for verification: PyTorch optimizer APIs for supported optimizers, the project’s validator contract, and the repository test suite.
