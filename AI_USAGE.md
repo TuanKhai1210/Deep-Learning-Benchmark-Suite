@@ -199,6 +199,7 @@
 - Responsible member: Nguyễn Hạo Thiên
 - Sources used for verification:
   - `dlbench/a1/contracts.py` (`Batch`, `DataLoaders`)
+<<<<<<< HEAD
   - PyTorch documentation for `torch.utils.data.DataLoader` (worker initialization, generators, and collation mechanics)
 >>>>>>> 0d70a0f (docs: add AI usage)
 
@@ -244,3 +245,6 @@
 =======
   - PyTorch documentation for `torch.utils.data.DataLoader` (worker initialization, generators, and collation mechanics)
 >>>>>>> 0d70a0f (docs: add AI usage)
+=======
+  - PyTorch documentation for `torch.utils.data.DataLoader` (worker initialization, generators, and collation mechanics)
+>>>>>>> 376d553 (docs: fix AI usage)
