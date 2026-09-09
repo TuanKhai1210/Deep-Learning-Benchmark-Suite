@@ -167,7 +167,7 @@
   - `tests/test_trainer.py`
 - Prompt summary: Requested trainer tests that verify calculations using real training loss, evaluate checkpoint behavior, and early stopping/checkpoint frequency logic.
 - AI contribution: Added tests for real two-epoch loss reduction using a deterministic model and DataLoader, validation/test checkpoint loader selection, checkpoint configuration and split-hash mismatch rejection, optimizer settings, validation metric calculations, early stopping monitors, patience, and save frequency.
-- Student verification: Reviewed the tests against the trainer and checkpoint contracts and ran `venv/Scripts/python.exe -m unittest -v tests.test_trainer`; all 16 tests passed with no diagnostics.
+- Student verification: Reviewed the tests against the trainer and checkpoint contracts and ran `python -m unittest -v tests.test_trainer`.
 - Responsible member: Nguyễn Anh Khoa
 - Sources used for verification: Existing trainer, engine, checkpoint, contract, and artifact interfaces; PyTorch optimizer and loss behavior.
 
