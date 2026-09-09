@@ -148,8 +148,9 @@ def validate_config(config: dict[str, Any], *, strict: bool = False) -> list[str
                        (timing, "batch_size"), (timing, "warmup_steps"),
                        (timing, "measurement_steps")):
         require(nonnegative_int(table.get(key)), f"{key} must be a nonnegative integer.")
-    require(training.get("optimizer") in ("adam", "adamw", "sgd"),
-            "Implement/review optimizer support before adding a new optimizer.")
+    supported_optimizers = {"adam", "adamw", "sgd", "rmsprop", "adagrad", "adadelta", "adamax", "nadam"}
+    require(training.get("optimizer") in supported_optimizers,
+            f"Unsupported optimizer: {training.get('optimizer')}. Supported optimizers are {', '.join(sorted(supported_optimizers))}.")
     require(finite_number(training.get("learning_rate")) and training["learning_rate"] > 0,
             "learning_rate must be finite and positive.")
     require(finite_number(training.get("weight_decay")) and training["weight_decay"] >= 0,
