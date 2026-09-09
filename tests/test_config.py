@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from unittest.mock import patch, MagicMock
 from contextlib import redirect_stdout, redirect_stderr
 from copy import deepcopy
 import io
@@ -216,7 +217,8 @@ class CLITests(unittest.TestCase):
         self.assertIn("Not ready", output.getvalue())
 
     def test_prepare_success_path_mocked(self):
-        from unittest.mock import patch
+        import sys
+        mock_dataset_mod = MagicMock()
         mock_metadata = {
             "dataset": "FashionMNIST",
             "split_seed": 36,
@@ -228,7 +230,9 @@ class CLITests(unittest.TestCase):
             "measured_std": [0.3527],
             "classes": ["T-shirt/top", "Trouser", "Pullover", "Dress", "Coat", "Sandal", "Shirt", "Sneaker", "Bag", "Ankle boot"]
         }
-        with patch("dlbench.a1.data.dataset.prepare_data", return_value=mock_metadata):
+        mock_dataset_mod.prepare_data.return_value = mock_metadata
+        
+        with patch.dict(sys.modules, {"dlbench.a1.data.dataset": mock_dataset_mod}):
             with redirect_stdout(io.StringIO()) as output:
                 code = main(["prepare", "--config", str(CONFIGS / "linear.py")])
                 self.assertEqual(code, 0)
