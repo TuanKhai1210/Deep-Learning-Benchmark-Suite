@@ -141,39 +141,6 @@
 - Sources used for verification:
   - `dlbench/a1/contracts.py` (`Batch`, `DataLoaders`)
   - PyTorch documentation for `torch.utils.data.DataLoader` (worker initialization, generators, and collation mechanics)
-## 2026-09-08 - GitHub Pages visual redesign
-
-- Tool/model: OpenAI Codex; exact model identifier not recorded
-- Used by / responsible member: Tạ Tuấn Khải
-- Purpose: Redesign the research portfolio and assignment pages while preserving confirmed team roles, split seed 36 and run seeds 69420, 67, 69
-- Affected sections: docs site configuration, layouts, styles, interactive conceptual architecture diagrams, assignment pages and experiment-contract presentation
-- AI contribution: Authored site design and frontend code; reorganized existing content; corrected two stale four-seed references in the contract to three run seeds
-- Human verification: Pending team review of content, accessibility, course alignment and the deployed GitHub Pages build
-- Verification scope: Local preview checks are documented with the delivered update; they do not verify the hosted Jekyll build or ML implementations
-- Experimental status: No model training, evaluation or measured benchmark results were generated or claimed
-
-### Readability revision requested on 2026-09-08
-
-- User feedback: Enlarge small text, make interactive controls obvious, brighten backgrounds and emphasize important figures and labels.
-- Changes: Stronger typography and contrast; visible link/button treatments; highlighted counts and seeds; clearer member cards; model tags now navigate to and open the corresponding A1 model details.
-- Scope: Presentation and navigation only. Experiment choices and measured-results status are unchanged.
-- Verification: Local responsive, navigation, keyboard and readability checks; human review and hosted GitHub Pages verification remain pending.
-
-
-## 2026-09-06 - Exploratory Data Analysis requirements and leakage constraints
-
-- Tool: Gemini 3.8 Flash
-- Used by: Nguyễn Hạo Thiên
-- Stage: Assignment 1 data exploration and protocol design
-- Purpose: Technical clarification of EDA scope for Fashion-MNIST and guidelines for data leakage prevention.
-- Affected files/sections:
-  - `src/dlbench/a1/data/eda.py`
-  - Report Part 1 (Problem and Data Description, EDA narrative)
-- Prompt summary: Inquired what EDA means within the assignment context, what specific checks are required for Fashion-MNIST, and why it must be performed before model training.
-- AI contribution: Clarified required analytical components (class balance, shape/dtype verification, pixel range bounds, and representative grid visualizations) and emphasized that normalization statistics must be computed strictly on the training partition to prevent leakage.
-- Student verification: Audited Fashion-MNIST class labels against Zalando's official specifications, confirmed all 10 classes are evenly represented, and reviewed the handbook Section 3.1 and 13 data requirements.
-- Responsible member: Nguyễn Hạo Thiên
-- Sources used for verification: Course Project Handbook CO3133 (Semester-261) Section 3.1, 10, and 13.
 
 ## 2026-09-07 - Stratified dataset splitting and manifest persistence
 
