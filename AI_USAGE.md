@@ -93,6 +93,7 @@
 - Responsible member: Nguyễn Anh Khoa
 - Sources used for verification: Existing MLP implementation, parameter-count helper, repository test conventions, and PyTorch module behavior.
 
+<<<<<<< HEAD
 ## 2026-09-08 - GitHub Pages visual redesign
 
 - Tool/model: OpenAI Codex; exact model identifier not recorded
@@ -146,6 +147,9 @@
 
 =======
 >>>>>>> 2d5ffeb (feat(data): implement dataset, loaders, and EDA artifacts)
+=======
+
+>>>>>>> 0d70a0f (docs: add AI usage)
 ## 2026-09-06 - Exploratory Data Analysis requirements and leakage constraints
 
 - Tool: Gemini 3.8 Flash
@@ -160,6 +164,43 @@
 - Student verification: Audited Fashion-MNIST class labels against Zalando's official specifications, confirmed all 10 classes are evenly represented, and reviewed the handbook Section 3.1 and 13 data requirements.
 - Responsible member: Nguyễn Hạo Thiên
 - Sources used for verification: Course Project Handbook CO3133 (Semester-261) Section 3.1, 10, and 13.
+<<<<<<< HEAD
+=======
+
+## 2026-09-07 - Stratified dataset splitting and manifest persistence
+
+- Tool: Gemini 3.8 Flash
+- Used by: Nguyễn Hạo Thiên
+- Stage: Assignment 1 data pipeline implementation
+- Purpose: Design and verification of deterministic stratified splitting logic adhering to the `SplitManifest` contract.
+- Affected files/sections:
+  - `src/dlbench/a1/data/split.py`
+  - `configs/a1/splits/fashion_mnist_split.json`
+- Prompt summary: Requested implementation checking for `create_split`, `validate_split`, `save_split`, and `load_split` using a fixed split seed.
+- AI contribution: Finished class-proportional stratified partitioning over official training indices using `numpy.random.default_rng(split_seed=36)`, added assertions to verify index disjointness and full partition coverage, and structured atomic JSON serialization that refuses silent overwriting of existing split files.
+- Student verification: Executed `split.py` via `test_pipeline.py`, confirmed the generation of `configs/a1/splits/fashion_mnist_split.json`, verified that official test indices ($0\dots9{,}999$) are strictly isolated in a separate namespace, and validated index counts against `SplitManifest` attributes in `contracts.py`.
+- Responsible member: Nguyễn Hạo Thiên
+- Sources used for verification:
+  - `dlbench/a1/contracts.py` (`SplitManifest` definition)
+  - Official NumPy documentation on `Generator.shuffle` and random sampling reproducibility.
+
+## 2026-09-07 - DataLoader construction and batch contract implementation
+
+- Tool: Gemini 3.8 Flash
+- Used by: Nguyễn Hạo Thiên
+- Stage: Assignment 1 data pipeline implementation and verification
+- Purpose: Build reproducible PyTorch DataLoaders adhering to the shared Batch and DataLoaders contract.
+- Affected files/sections:
+  - `src/dlbench/a1/data/loaders.py`
+  - `test_pipeline.py`
+- Prompt summary: Requested implementation check for `collate_samples` and `build_dataloaders`.
+- AI contribution: Successfully fixed `collate_samples` to stack images and labels while preserving sample IDs, set up `build_dataloaders` with a dedicated run-seeded `torch.Generator` and `seed_worker` for training, configured deterministic evaluation loaders without shuffling, added safe smoke subset handling.
+- Student verification: Created `test_pipeline.py` to check the code. Verified `loaders.py` imports and interfaces against `contracts.py`; executed `test_pipeline.py` to confirm batch collation outputs match expected dimensions (`[16, 1, 28, 28]` float32 tensors, `int64` labels, and aligned `sample_ids` string lists) for train, validation, and test loaders.
+- Responsible member: Nguyễn Hạo Thiên
+- Sources used for verification:
+  - `dlbench/a1/contracts.py` (`Batch`, `DataLoaders`)
+  - PyTorch documentation for `torch.utils.data.DataLoader` (worker initialization, generators, and collation mechanics)
+>>>>>>> 0d70a0f (docs: add AI usage)
 
 ## 2026-09-07 - Stratified dataset splitting and manifest persistence
 
@@ -194,8 +235,12 @@
 - Sources used for verification:
   - `dlbench/a1/contracts.py` (`Batch`, `DataLoaders`)
 <<<<<<< HEAD
+<<<<<<< HEAD
   - PyTorch documentation for `torch.utils.data.DataLoader` (worker initialization, generators, and collation mechanics)
 >>>>>>> 32f287b (feat(data): implement dataset, loaders, and EDA artifacts)
 =======
   - PyTorch documentation for `torch.utils.data.DataLoader` (worker initialization, generators, and collation mechanics)
 >>>>>>> 2d5ffeb (feat(data): implement dataset, loaders, and EDA artifacts)
+=======
+  - PyTorch documentation for `torch.utils.data.DataLoader` (worker initialization, generators, and collation mechanics)
+>>>>>>> 0d70a0f (docs: add AI usage)
