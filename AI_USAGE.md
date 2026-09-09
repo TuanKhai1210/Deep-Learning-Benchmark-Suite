@@ -107,6 +107,24 @@
 - Responsible member: Nguyễn Anh Khoa
 - Sources used for verification: Existing trainer, engine, checkpoint, contract, and artifact interfaces; PyTorch optimizer and loss behavior.
 
+## 2026-09-08 - GitHub Pages visual redesign
+
+- Tool/model: OpenAI Codex; exact model identifier not recorded
+- Used by / responsible member: Tạ Tuấn Khải
+- Purpose: Redesign the research portfolio and assignment pages while preserving confirmed team roles, split seed 36 and run seeds 69420, 67, 69
+- Affected sections: docs site configuration, layouts, styles, interactive conceptual architecture diagrams, assignment pages and experiment-contract presentation
+- AI contribution: Authored site design and frontend code; reorganized existing content; corrected two stale four-seed references in the contract to three run seeds
+- Human verification: Pending team review of content, accessibility, course alignment and the deployed GitHub Pages build
+- Verification scope: Local preview checks are documented with the delivered update; they do not verify the hosted Jekyll build or ML implementations
+- Experimental status: No model training, evaluation or measured benchmark results were generated or claimed
+
+### Readability revision requested on 2026-09-08
+
+- User feedback: Enlarge small text, make interactive controls obvious, brighten backgrounds and emphasize important figures and labels.
+- Changes: Stronger typography and contrast; visible link/button treatments; highlighted counts and seeds; clearer member cards; model tags now navigate to and open the corresponding A1 model details.
+- Scope: Presentation and navigation only. Experiment choices and measured-results status are unchanged.
+- Verification: Local responsive, navigation, keyboard and readability checks; human review and hosted GitHub Pages verification remain pending.
+
 ## 2026-09-09 - Optimizer support expansion and RMSprop validation
 
 - Tool/model: GitHub Copilot
