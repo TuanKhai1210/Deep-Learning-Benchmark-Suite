@@ -215,12 +215,25 @@ class CLITests(unittest.TestCase):
         self.assertEqual(result.exception.code, 2)
         self.assertIn("Not ready", output.getvalue())
 
-    def test_prepare_fails_honestly_until_implemented(self):
-        with redirect_stderr(io.StringIO()) as output:
-            with self.assertRaises(SystemExit) as result:
-                main(["prepare", "--config", str(CONFIGS / "linear.py")])
-        self.assertEqual(result.exception.code, 2)
-        self.assertIn("TODO A", output.getvalue())
+    def test_prepare_success_path_mocked(self):
+        from unittest.mock import patch
+        mock_metadata = {
+            "dataset": "FashionMNIST",
+            "split_seed": 36,
+            "split_file": "configs/a1/splits/fashion_mnist_split.json",
+            "num_train": 50000,
+            "num_val": 10000,
+            "num_test": 10000,
+            "measured_mean": [0.2858],
+            "measured_std": [0.3527],
+            "classes": ["T-shirt/top", "Trouser", "Pullover", "Dress", "Coat", "Sandal", "Shirt", "Sneaker", "Bag", "Ankle boot"]
+        }
+        with patch("dlbench.a1.data.dataset.prepare_data", return_value=mock_metadata):
+            with redirect_stdout(io.StringIO()) as output:
+                code = main(["prepare", "--config", str(CONFIGS / "linear.py")])
+                self.assertEqual(code, 0)
+                result = json.loads(output.getvalue())
+                self.assertEqual(result["dataset"], "FashionMNIST")
 
 
 if __name__ == "__main__":

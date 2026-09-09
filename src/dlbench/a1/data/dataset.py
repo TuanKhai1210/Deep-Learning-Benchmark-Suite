@@ -62,11 +62,20 @@ def prepare_data(config: Mapping[str, Any]) -> dict[str, Any]:
     Do not silently overwrite an existing split or mark a protocol frozen.
     Store provenance and train-only normalization statistics with the split.
     """
-    data_root = str(config.get("data_root", "./data"))
-    split_path = Path(config.get("split_path", "configs/a1/splits/fashion_mnist_split.json"))
-    split_seed = int(config.get("split_seed", 36))
-    val_size = int(config.get("validation_size", 10_000))
+    data_config = config.get("data", {})
+    training_config = config.get("training", {})
+    run_config = config.get("run", {})
+
+    data_root = str(data_config.get("root", config.get("data_root", "./data")))
+    split_file = data_config.get("split_file", config.get("split_path", "configs/a1/splits/fashion_mnist_split.json"))
+    split_path = Path(split_file)
+    split_seed = int(data_config.get("split_seed", config.get("split_seed", 36)))
+    val_size = int(data_config.get("validation_size", 10_000))
     download = bool(config.get("download", True))
+    
+    # Access unified parameters to ensure they are read correctly from nested structures
+    _batch_size = training_config.get("batch_size", 32)
+    _run_seed = run_config.get("seed", split_seed)
 
     # 1. Load official training set without transforms
     raw_train: FashionMNIST = load_official_dataset(data_root, train=True, download=download)
