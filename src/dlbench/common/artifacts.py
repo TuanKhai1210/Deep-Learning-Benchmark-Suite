@@ -220,6 +220,7 @@ def _build_split_record(
         ).hexdigest(),
     }
 
+
 def create_run_dir(output_root: Path, run_id: str) -> Path:
     """Create a new run directory with exist_ok=False; reject unsafe run IDs."""
     if not isinstance(run_id, str):
