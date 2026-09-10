@@ -7,6 +7,8 @@ import json
 
 from dlbench.common.config import load_config
 from dlbench.common.artifacts import (
+    CHECKPOINT_PROVENANCE_KEYS,
+    checkpoint_provenance,
     create_run_dir,
     save_run_metadata,
 )
@@ -103,7 +105,10 @@ class ArtifactTests(unittest.TestCase):
                 "mlp_seed69420_smoke",
             )
 
-            save_run_metadata(run_dir, resolved_config)
+            returned_metadata = save_run_metadata(
+                run_dir,
+                resolved_config,
+            )
 
             expected_files = {
                 "config.json",
@@ -132,6 +137,7 @@ class ArtifactTests(unittest.TestCase):
             )
 
             self.assertEqual(saved_config, resolved_config)
+            self.assertEqual(returned_metadata, metadata)
             self.assertEqual(metadata["schema_version"], 1)
             self.assertEqual(metadata["run_mode"], "smoke")
             self.assertEqual(metadata["run_seed"], 69420)
@@ -139,6 +145,20 @@ class ArtifactTests(unittest.TestCase):
             self.assertEqual(
                 len(metadata["normalization"]["sha256"]),
                 64,
+            )
+
+            provenance = checkpoint_provenance(returned_metadata)
+            self.assertEqual(
+                set(provenance),
+                CHECKPOINT_PROVENANCE_KEYS,
+            )
+            self.assertEqual(
+                provenance["split_hash"],
+                metadata["split"]["sha256"],
+            )
+            self.assertEqual(
+                provenance["statistics_hash"],
+                metadata["normalization"]["sha256"],
             )
 
             for name, source_location in config["_sources"].items():

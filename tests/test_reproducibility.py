@@ -6,13 +6,58 @@ import numpy as np
 import torch
 
 from dlbench.common.reproducibility import (
+    RNG_STATE_KEYS,
+    capture_rng_state,
     collect_environment,
+    restore_rng_state,
     seed_everything,
     seed_worker,
 )
 
 
 class ReproducibilityTests(unittest.TestCase):
+    def test_rng_state_roundtrip_restores_all_generators(self):
+        previous_state = capture_rng_state()
+        previous_deterministic = (
+            torch.are_deterministic_algorithms_enabled()
+        )
+
+        try:
+            seed_everything(69, deterministic=False)
+            saved_state = capture_rng_state()
+
+            expected_python = random.random()
+            expected_numpy = np.random.rand(3)
+            expected_torch = torch.rand(3)
+            expected_cuda = [
+                torch.rand(3, device=f"cuda:{index}")
+                for index in range(torch.cuda.device_count())
+            ]
+
+            seed_everything(999, deterministic=False)
+            restore_rng_state(saved_state)
+
+            self.assertEqual(random.random(), expected_python)
+            self.assertTrue(
+                np.array_equal(np.random.rand(3), expected_numpy)
+            )
+            self.assertTrue(torch.equal(torch.rand(3), expected_torch))
+            for index, expected in enumerate(expected_cuda):
+                self.assertTrue(
+                    torch.equal(
+                        torch.rand(3, device=f"cuda:{index}"),
+                        expected,
+                    )
+                )
+            self.assertEqual(set(saved_state), RNG_STATE_KEYS)
+        finally:
+            restore_rng_state(previous_state)
+            torch.use_deterministic_algorithms(previous_deterministic)
+
+    def test_restore_rng_state_rejects_missing_keys(self):
+        with self.assertRaises(ValueError):
+            restore_rng_state({})
+
     def test_seed_everything_uses_requested_seed(self):
         # 1. Gọi hàm cần kiểm tra với seed
         seed = 67
