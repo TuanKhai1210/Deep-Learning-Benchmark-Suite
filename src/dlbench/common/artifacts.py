@@ -5,11 +5,20 @@ import json
 import math
 import re
 import subprocess
-
-from dlbench.common.reproducibility import collect_environment
 from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
+
+from dlbench.common.reproducibility import collect_environment
+
+
+CHECKPOINT_PROVENANCE_KEYS: frozenset[str] = frozenset({
+    "schema_version",
+    "split_hash",
+    "statistics_hash",
+    "git_revision",
+})
+
 
 def _encode_json(payload: Any) -> str:
     return json.dumps(
@@ -88,13 +97,17 @@ def _build_split_record(
         ).hexdigest(),
     }
 
+
 def create_run_dir(output_root: Path, run_id: str) -> Path:
     """Create a new run directory with exist_ok=False; reject unsafe run IDs."""
     if not isinstance(run_id, str):
         raise TypeError("run_id must be a string")
 
     if re.fullmatch(r"[A-Za-z0-9_-]+", run_id) is None:
-        raise ValueError("run_id may contain only ASCII letters, digits, underscores, and hyphens")
+        raise ValueError(
+            "run_id may contain only ASCII letters, digits, "
+            "underscores, and hyphens"
+        )
 
     reserved_names = {"CON", "PRN", "AUX", "NUL"}
     reserved_names.update(f"COM{i}" for i in range(1, 10))
@@ -108,7 +121,37 @@ def create_run_dir(output_root: Path, run_id: str) -> Path:
     return run_dir
 
 
-def save_run_metadata(run_dir: Path, config: Mapping[str, Any]) -> None:
+def checkpoint_provenance(metadata: Mapping[str, Any]) -> dict[str, Any]:
+    """Map run metadata to the exact provenance keys required by checkpoints."""
+    split = metadata.get("split")
+    normalization = metadata.get("normalization")
+
+    if not isinstance(split, Mapping):
+        raise KeyError("Missing metadata field: split")
+    if not isinstance(normalization, Mapping):
+        raise KeyError("Missing metadata field: normalization")
+
+    field_paths = {
+        "schema_version": (metadata, "schema_version"),
+        "split_hash": (split, "sha256"),
+        "statistics_hash": (normalization, "sha256"),
+        "git_revision": (metadata, "git_revision"),
+    }
+    provenance: dict[str, Any] = {}
+
+    for output_key, (record, source_key) in field_paths.items():
+        if source_key not in record:
+            raise KeyError(f"Missing metadata field for {output_key}")
+        provenance[output_key] = record[source_key]
+
+    return provenance
+
+
+def save_run_metadata(
+    run_dir: Path,
+    config: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Persist run provenance and return the exact metadata written to disk."""
     sources = config.get("_sources")
     if not isinstance(sources, Mapping):
         raise TypeError("config['_sources'] must be a mapping")
@@ -194,6 +237,8 @@ def save_run_metadata(run_dir: Path, config: Mapping[str, Any]) -> None:
 
     for filename, text in texts.items():
         _write_text_new(run_dir / filename, text)
+
+    return metadata
 
 
 def append_history(run_dir: Path, row: Mapping[str, Any]) -> None:
