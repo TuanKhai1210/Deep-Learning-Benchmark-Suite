@@ -109,3 +109,34 @@
 - Changes: Stronger typography and contrast; visible link/button treatments; highlighted counts and seeds; clearer member cards; model tags now navigate to and open the corresponding A1 model details.
 - Scope: Presentation and navigation only. Experiment choices and measured-results status are unchanged.
 - Verification: Local responsive, navigation, keyboard and readability checks; human review and hosted GitHub Pages verification remain pending.
+
+## 2026-09-09 - Artifact and provenance design
+
+- Tool/model: OpenAI Codex 5.6 Sol
+- Used by: Tạ Tuấn Khải
+- Stage: C03 notebook exploration
+- Purpose: Design safe run directories and reproducibility artifacts before source implementation
+- Affected sections: Run ID validation, JSON writing, source snapshots, Git metadata, split provenance, normalization provenance, and SHA-256 hashing
+- Prompt summary: Requested step-by-step explanations and notebook experiments for artifact persistence
+- AI contribution: Explained non-overwriting file operations, safe run identifiers, canonical JSON hashing, file hashing, source snapshots, and metadata validation order
+- Human verification: Executed each notebook experiment and confirmed the expected success or rejection behavior
+- Responsible member: Tạ Tuấn Khải
+- Verification sources: Python standard library behavior, temporary-directory experiments, and project configuration files
+
+## 2026-09-10 - Artifact implementation and testing
+
+- Tool/model: OpenAI Codex 5.6 Sol
+- Used by: Tạ Tuấn Khải
+- Stage: C03 implementation
+- Purpose: Implement run-directory creation and reproducibility metadata persistence
+- Affected sections: `src/dlbench/common/artifacts.py` and `tests/test_artifacts.py`
+- Prompt summary: Requested implementation guidance based on the completed notebook experiments and help diagnosing failing tests
+- AI contribution: Reviewed helper functions, identified incomplete metadata writing, suggested validation and serialization order, and explained test and dependency failures
+- Human verification: Wrote the implementation, ran the artifact tests and complete unit-test suite, and inspected the Git diff
+- Verification results:
+  - `python -m unittest discover -s tests -v` — 89 tests run: 86 passed and 3 skipped; no failures or errors
+  - The three skips correspond to existing model/split TODOs unrelated to C03
+  - `git diff --check` — passed
+- Responsible member: Tạ Tuấn Khải
+- Verification sources: `tests/test_artifacts.py`, local unit-test output, project configuration files, and Git diff inspection
+- Experiment impact: No training runs or benchmark measurements were performed as part of this work
