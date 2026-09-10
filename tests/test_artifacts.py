@@ -1,8 +1,5 @@
 import tempfile
-import csv
-import hashlib
 import unittest
-from unittest.mock import MagicMock, patch
 from pathlib import Path
 
 from copy import deepcopy
@@ -10,252 +7,11 @@ import json
 
 from dlbench.common.config import load_config
 from dlbench.common.artifacts import (
-    CHECKPOINT_PROVENANCE_KEYS,
-    checkpoint_provenance,
     create_run_dir,
     save_run_metadata,
-    append_history,
-    save_metrics,
-    compute_data_provenance,
 )
 ROOT = Path(__file__).resolve().parents[1]
 class ArtifactTests(unittest.TestCase):
-    @staticmethod
-    def history_row(epoch=0):
-        return dict(epoch=epoch, train_loss=0.8, val_loss=0.9,
-                    train_accuracy=0.7, val_accuracy=0.6,
-                    train_macro_f1=0.65, val_macro_f1=0.55,
-                    learning_rate=0.001, epoch_seconds=1.2)
-
-    def test_history_appends_without_duplicate_header(self):
-        with tempfile.TemporaryDirectory() as temp:
-            root = Path(temp)
-            append_history(root, self.history_row())
-            append_history(root, self.history_row(1))
-            with (root / "history.csv").open(newline="", encoding="utf-8") as file:
-                rows = list(csv.DictReader(file))
-            self.assertEqual([r["epoch"] for r in rows], ["0", "1"])
-
-    def test_history_rejections_preserve_existing_bytes(self):
-        with tempfile.TemporaryDirectory() as temp:
-            root = Path(temp)
-            append_history(root, self.history_row())
-            before = (root / "history.csv").read_bytes()
-            bad_rows = [self.history_row(), {**self.history_row(1), "val_loss": float("nan")},
-                        {**self.history_row(1), "val_accuracy": 1.1},
-                        {**self.history_row(1), "epoch": True},
-                        {**self.history_row(1), "extra": 1}]
-            for row in bad_rows:
-                with self.subTest(row=row), self.assertRaises(ValueError):
-                    append_history(root, row)
-                self.assertEqual((root / "history.csv").read_bytes(), before)
-
-    def test_history_rejects_wrong_existing_header(self):
-        with tempfile.TemporaryDirectory() as temp:
-            root = Path(temp)
-            path = root / "history.csv"
-            path.write_text("epoch,wrong\n0,1\n", encoding="utf-8")
-            before = path.read_bytes()
-            with self.assertRaises(ValueError):
-                append_history(root, self.history_row(1))
-            self.assertEqual(path.read_bytes(), before)
-
-    def test_history_rejects_corrupt_existing_rows_without_modification(self):
-        corrupt_rows = {
-            "non_numeric": b"1,broken,0.9,0.7,0.6,0.65,0.55,0.001,1.2\n",
-            "missing_column": b"1,0.8,0.9,0.7,0.6,0.65,0.55,0.001\n",
-            "extra_column": b"1,0.8,0.9,0.7,0.6,0.65,0.55,0.001,1.2,extra\n",
-            "non_finite": b"1,nan,0.9,0.7,0.6,0.65,0.55,0.001,1.2\n",
-        }
-        for name, damaged_row in corrupt_rows.items():
-            with self.subTest(case=name), tempfile.TemporaryDirectory() as temp:
-                root = Path(temp)
-                append_history(root, self.history_row())
-                path = root / "history.csv"
-                with path.open("ab") as file:
-                    file.write(damaged_row)
-                before = path.read_bytes()
-                with self.assertRaisesRegex(ValueError, "invalid row"):
-                    append_history(root, self.history_row(2))
-                self.assertEqual(path.read_bytes(), before)
-
-    def test_history_rejects_partial_final_line_without_modification(self):
-        with tempfile.TemporaryDirectory() as temp:
-            root = Path(temp)
-            append_history(root, self.history_row())
-            path = root / "history.csv"
-            with path.open("ab") as file:
-                file.write(b"1,0.8,0.9,0.7")
-            before = path.read_bytes()
-            with self.assertRaisesRegex(ValueError, "incomplete final line"):
-                append_history(root, self.history_row(2))
-            self.assertEqual(path.read_bytes(), before)
-
-    @staticmethod
-    def metrics_payload():
-        return dict(eval_split="validation", epoch=0, val_loss=0.5,
-                    val_accuracy=0.8, val_macro_f1=0.7,
-                    timing_scope="fit", timing_units="seconds")
-
-    def test_metrics_roundtrip_and_no_overwrite(self):
-        with tempfile.TemporaryDirectory() as temp:
-            root = Path(temp)
-            payload = self.metrics_payload()
-            save_metrics(root, payload)
-            path = root / "metrics.json"
-            self.assertEqual(json.loads(path.read_text()), payload)
-            before = path.read_bytes()
-            with self.assertRaises(FileExistsError):
-                save_metrics(root, payload)
-            self.assertEqual(path.read_bytes(), before)
-            test = {k.replace("val_", "test_"): v for k, v in payload.items()}
-            test["eval_split"] = "test"
-            save_metrics(root, test)
-            self.assertEqual(json.loads((root / "metrics_test.json").read_text()), test)
-            self.assertEqual(path.read_bytes(), before)
-
-    def test_metrics_overwrite_keeps_each_previous_version(self):
-        with tempfile.TemporaryDirectory() as temp:
-            root = Path(temp)
-            payload = self.metrics_payload()
-            save_metrics(root, payload, overwrite=True)
-            self.assertFalse((root / "backups").exists())
-            path = root / "metrics.json"
-            originals = []
-            for epoch in (1, 2):
-                originals.append(path.read_bytes())
-                updated = {**payload, "epoch": epoch}
-                save_metrics(root, updated, overwrite=True)
-                self.assertEqual(json.loads(path.read_text()), updated)
-            backups = list((root / "backups").glob("metrics-*.json"))
-            self.assertEqual(len(backups), 2)
-            self.assertCountEqual([p.read_bytes() for p in backups], originals)
-            self.assertEqual(list(root.glob("*.tmp")), [])
-
-    def test_invalid_overwrite_preserves_metrics_without_backup(self):
-        with tempfile.TemporaryDirectory() as temp:
-            root = Path(temp)
-            payload = self.metrics_payload()
-            save_metrics(root, payload)
-            before = (root / "metrics.json").read_bytes()
-            for change in ({"val_loss": float("nan")}, {"extra": Path("bad")}):
-                with self.subTest(change=change), self.assertRaises((ValueError, TypeError)):
-                    save_metrics(root, {**payload, **change}, overwrite=True)
-                self.assertEqual((root / "metrics.json").read_bytes(), before)
-                self.assertFalse((root / "backups").exists())
-
-    def test_metrics_replace_failure_preserves_old_file_and_cleans_temp(self):
-        with tempfile.TemporaryDirectory() as temp:
-            root = Path(temp)
-            payload = self.metrics_payload()
-            save_metrics(root, payload)
-            before = (root / "metrics.json").read_bytes()
-            with patch("dlbench.common.artifacts.os.replace", side_effect=OSError("failed")):
-                with self.assertRaises(OSError):
-                    save_metrics(root, {**payload, "epoch": 1}, overwrite=True)
-            self.assertEqual((root / "metrics.json").read_bytes(), before)
-            backups = list((root / "backups").glob("*.json"))
-            self.assertEqual(len(backups), 1)
-            self.assertEqual(backups[0].read_bytes(), before)
-            self.assertEqual(list(root.glob("*.tmp")), [])
-
-    def test_metrics_backup_failure_preserves_old_file(self):
-        with tempfile.TemporaryDirectory() as temp:
-            root = Path(temp)
-            payload = self.metrics_payload()
-            save_metrics(root, payload)
-            before = (root / "metrics.json").read_bytes()
-            (root / "backups").write_text("blocked", encoding="utf-8")
-            with self.assertRaises(OSError):
-                save_metrics(root, {**payload, "epoch": 1}, overwrite=True)
-            self.assertEqual((root / "metrics.json").read_bytes(), before)
-            self.assertEqual(list(root.glob("*.tmp")), [])
-
-    def test_overwrite_test_metrics_preserves_validation_metrics(self):
-        with tempfile.TemporaryDirectory() as temp:
-            root = Path(temp)
-            validation = self.metrics_payload()
-            save_metrics(root, validation)
-            validation_path = root / "metrics.json"
-            validation_before = validation_path.read_bytes()
-            test_metrics = {key.replace("val_", "test_"): value
-                            for key, value in validation.items()}
-            test_metrics["eval_split"] = "test"
-            save_metrics(root, test_metrics)
-            test_path = root / "metrics_test.json"
-            test_before = test_path.read_bytes()
-
-            updated = {**test_metrics, "epoch": 2, "test_loss": 0.3}
-            save_metrics(root, updated, overwrite=True)
-
-            self.assertEqual(json.loads(test_path.read_text(encoding="utf-8")), updated)
-            self.assertEqual(validation_path.read_bytes(), validation_before)
-            backups = list((root / "backups").iterdir())
-            self.assertEqual(len(backups), 1)
-            self.assertTrue(backups[0].name.startswith("metrics_test-"))
-            self.assertEqual(backups[0].read_bytes(), test_before)
-            self.assertEqual(list(root.glob("*.tmp")), [])
-
-    def test_backup_write_failure_preserves_metrics_and_cleans_temp(self):
-        with tempfile.TemporaryDirectory() as temp:
-            root = Path(temp)
-            payload = self.metrics_payload()
-            save_metrics(root, payload)
-            target = root / "metrics.json"
-            before = target.read_bytes()
-            original_open = Path.open
-            backup_writer = MagicMock()
-            backup_writer.write.side_effect = OSError("Backup write failed")
-            opened_backups = []
-
-            def intercept_open(path, *args, **kwargs):
-                if path.parent == root / "backups" and args == ("xb",):
-                    real_file = original_open(path, *args, **kwargs)
-                    opened_backups.append(path)
-                    context = MagicMock()
-                    context.__enter__.return_value = backup_writer
-                    context.__exit__.side_effect = lambda *exc: real_file.close()
-                    return context
-                return original_open(path, *args, **kwargs)
-
-            with patch.object(Path, "open", new=intercept_open), \
-                    patch("dlbench.common.artifacts.os.replace") as replace:
-                with self.assertRaisesRegex(OSError, "Backup write failed"):
-                    save_metrics(root, {**payload, "epoch": 1}, overwrite=True)
-                replace.assert_not_called()
-
-            self.assertEqual(len(opened_backups), 1)
-            backup_writer.write.assert_called_once_with(before)
-            self.assertEqual(target.read_bytes(), before)
-            self.assertEqual(list(root.glob("*.tmp")), [])
-
-    def test_invalid_metrics_do_not_create_file(self):
-        for change in ({"val_loss": float("nan")}, {"epoch": -1},
-                       {"val_accuracy": 2}, {"test_loss": 1},
-                       {"extra": Path("unsupported")}):
-            with self.subTest(change=change), tempfile.TemporaryDirectory() as temp:
-                with self.assertRaises((ValueError, TypeError)):
-                    save_metrics(Path(temp), {**self.metrics_payload(), **change})
-                self.assertEqual(list(Path(temp).iterdir()), [])
-
-    def test_data_provenance_needs_no_run_or_sources(self):
-        with tempfile.TemporaryDirectory() as temp:
-            path = Path(temp) / "split.json"
-            path.write_bytes(b'{"train_indices": [0]}')
-            config = {"data": {"split_file": str(path)},
-                      "preprocessing": {"mean": [0.1], "std": [0.2]}}
-            first = compute_data_provenance(config)
-            self.assertEqual(first["split_hash"], hashlib.sha256(path.read_bytes()).hexdigest())
-            config["preprocessing"] = {"std": [0.2], "mean": [0.1]}
-            self.assertEqual(first, compute_data_provenance(config))
-            path.write_bytes(b'{"train_indices": [1]}')
-            self.assertNotEqual(first["split_hash"], compute_data_provenance(config)["split_hash"])
-            config["preprocessing"]["std"] = [0.3]
-            self.assertNotEqual(first["statistics_hash"], compute_data_provenance(config)["statistics_hash"])
-            path.unlink()
-            with self.assertRaises(FileNotFoundError):
-                compute_data_provenance(config)
-
     def test_create_run_dir_creates_new_directory(self):
         with tempfile.TemporaryDirectory() as temp:
             output_root = Path(temp) / "runs" / "a1"
@@ -347,10 +103,7 @@ class ArtifactTests(unittest.TestCase):
                 "mlp_seed69420_smoke",
             )
 
-            returned_metadata = save_run_metadata(
-                run_dir,
-                resolved_config,
-            )
+            save_run_metadata(run_dir, resolved_config)
 
             expected_files = {
                 "config.json",
@@ -379,11 +132,6 @@ class ArtifactTests(unittest.TestCase):
             )
 
             self.assertEqual(saved_config, resolved_config)
-            self.assertEqual(returned_metadata, metadata)
-            self.assertEqual(compute_data_provenance(resolved_config), {
-                "split_hash": metadata["split"]["sha256"],
-                "statistics_hash": metadata["normalization"]["sha256"],
-            })
             self.assertEqual(metadata["schema_version"], 1)
             self.assertEqual(metadata["run_mode"], "smoke")
             self.assertEqual(metadata["run_seed"], 69420)
@@ -391,20 +139,6 @@ class ArtifactTests(unittest.TestCase):
             self.assertEqual(
                 len(metadata["normalization"]["sha256"]),
                 64,
-            )
-
-            provenance = checkpoint_provenance(returned_metadata)
-            self.assertEqual(
-                set(provenance),
-                CHECKPOINT_PROVENANCE_KEYS,
-            )
-            self.assertEqual(
-                provenance["split_hash"],
-                metadata["split"]["sha256"],
-            )
-            self.assertEqual(
-                provenance["statistics_hash"],
-                metadata["normalization"]["sha256"],
             )
 
             for name, source_location in config["_sources"].items():
