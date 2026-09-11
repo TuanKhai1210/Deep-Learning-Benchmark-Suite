@@ -33,8 +33,12 @@ def build_dataloaders(config: Mapping[str, Any], *, smoke: bool = False) -> Data
     A smoke subset must be explicitly tagged as smoke, not a benchmark result.
     A/B/C must agree how its small positive batch size is chosen from draft config.
     """
-    # Extract nested data section if present, else fall back to root config
+    # Extract nested configuration sections used across the project contract.
     data_cfg = config.get("data", {})
+    preprocessing = config.get("preprocessing", {})
+    training_cfg = config.get("training", {})
+    run_cfg = config.get("run", {})
+
     data_root = str(data_cfg.get("root", config.get("data_root", "./data")))
     split_path = Path(
         data_cfg.get("split_file", config.get("split_path", "configs/a1/splits/fashion_mnist_seed36.json"))
@@ -46,7 +50,6 @@ def build_dataloaders(config: Mapping[str, Any], *, smoke: bool = False) -> Data
     raw_test = load_official_dataset(data_root, train=False, download=False)
 
     # Preprocessing and augmentation specs
-    preprocessing = config.get("preprocessing", {})
     train_transform = build_transforms(preprocessing, training=True)
     eval_transform = build_transforms(preprocessing, training=False)
 
@@ -67,13 +70,15 @@ def build_dataloaders(config: Mapping[str, Any], *, smoke: bool = False) -> Data
     test_dataset = FashionMNISTSubset(raw_test, test_indices, split_name="test", transform=eval_transform)
 
     # Hardware & performance settings
-    batch_size = int(config.get("batch_size", 64)) if not smoke else min(16, len(train_indices))
+    batch_size = int(training_cfg.get("batch_size", config.get("batch_size", 64)))
+    if smoke:
+        batch_size = min(batch_size, len(train_indices), 16)
     num_workers = int(config.get("num_workers", 0))
     pin_memory = bool(config.get("pin_memory", False))
 
     # Dedicated generator for reproducible shuffling in training
     # Default development run seed is 69420 per experiment contract
-    run_seed = int(config.get("run_seed", 69420))
+    run_seed = int(run_cfg.get("seed", config.get("run_seed", 69420)))
     train_generator = torch.Generator()
     train_generator.manual_seed(run_seed)
 
