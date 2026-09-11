@@ -22,8 +22,11 @@ def generate_eda(config: Mapping[str, Any], output_dir: Path) -> None:
     Include imbalance and leakage checks, plus dataset source/license.
     Raw preparation outputs go to runs; curated images go to docs/assets/a1.
     """
-    data_root = str(config.get("data_root", "./data"))
-    split_path = Path(config.get("split_path", "configs/a1/splits/fashion_mnist_split.json"))
+    data_cfg = config.get("data", {})
+    data_root = str(data_cfg.get("root", config.get("data_root", "./data")))
+    split_path = Path(
+        data_cfg.get("split_file", config.get("split_path", "configs/a1/splits/fashion_mnist_seed36.json"))
+    )
 
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -53,6 +56,13 @@ def generate_eda(config: Mapping[str, Any], output_dir: Path) -> None:
         "dataset_name": "Fashion-MNIST",
         "source": "torchvision.datasets.FashionMNIST",
         "license": "MIT License",
+        "split": {
+            "seed": int(data_cfg.get("split_seed", 36)),
+            "file": str(split_path),
+            "train_size": len(manifest.train_indices),
+            "validation_size": len(manifest.validation_indices),
+            "test_size": len(manifest.test_indices),
+        },
         "image_shape": list(first_tensor.shape),
         "channels": 1,
         "raw_pixel_min": int(first_tensor.min()),

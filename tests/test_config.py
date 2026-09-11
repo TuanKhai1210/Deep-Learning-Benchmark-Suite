@@ -11,8 +11,12 @@ from pathlib import Path
 import tempfile
 import unittest
 
+import numpy as np
+
 from dlbench.a1.cli import main
 from dlbench.a1.contracts import EpochMetrics, Predictions
+from dlbench.a1.data.eda import generate_eda
+from dlbench.a1.data.loaders import build_dataloaders
 from dlbench.a1.models.registry import MODEL_REGISTRY, build_model
 from dlbench.common.config import ConfigError, load_config, validate_config
 
@@ -122,6 +126,63 @@ class ConfigTests(unittest.TestCase):
         self.config["data"]["stratified"] = False
         with self.assertRaises(ConfigError):
             validate_config(self.config)
+
+    def test_loader_uses_nested_training_and_run_config(self):
+        config = {
+            "data": {"root": "./data", "split_file": "configs/a1/splits/fashion_mnist_seed36.json"},
+            "training": {"batch_size": 32},
+            "run": {"seed": 123},
+            "preprocessing": {"image_size": [28, 28], "channels": 1},
+        }
+
+        class FakeManifest:
+            train_indices = list(range(10))
+            validation_indices = list(range(10, 20))
+            test_indices = list(range(20, 30))
+
+        with patch("dlbench.a1.data.loaders.load_split", return_value=FakeManifest()), \
+             patch("dlbench.a1.data.loaders.load_official_dataset", return_value=object()), \
+             patch("dlbench.a1.data.loaders.build_transforms", return_value="transform"), \
+             patch("dlbench.a1.data.loaders.FashionMNISTSubset", return_value=object()), \
+             patch("dlbench.a1.data.loaders.DataLoader") as mock_loader:
+            build_dataloaders(config)
+
+        train_call = mock_loader.call_args_list[0].kwargs
+        self.assertEqual(train_call["batch_size"], 32)
+        self.assertEqual(train_call["generator"].initial_seed(), 123)
+
+    def test_eda_summary_tracks_split_metadata(self):
+        config = {
+            "data": {"root": "./data", "split_seed": 36, "split_file": "configs/a1/splits/fashion_mnist_seed36.json"},
+            "preprocessing": {"image_size": [28, 28], "channels": 1},
+        }
+
+        class FakeDataset:
+            classes = ["T-shirt/top", "Trouser", "Pullover", "Dress", "Coat",
+                       "Sandal", "Shirt", "Sneaker", "Bag", "Ankle boot"]
+            targets = list(range(10))
+
+            def __getitem__(self, index):
+                return (np.zeros((28, 28), dtype=np.uint8), self.targets[index])
+
+            def __len__(self):
+                return len(self.targets)
+
+        manifest = type("Manifest", (), {
+            "train_indices": [0, 1, 2],
+            "validation_indices": [3, 4],
+            "test_indices": [5, 6],
+        })()
+
+        with patch("dlbench.a1.data.eda.load_official_dataset", side_effect=[FakeDataset(), FakeDataset()]), \
+             patch("dlbench.a1.data.eda.load_split", return_value=manifest), \
+             tempfile.TemporaryDirectory() as tempdir:
+            generate_eda(config, Path(tempdir))
+            summary = json.loads(Path(tempdir, "eda_summary.json").read_text(encoding="utf-8"))
+
+        self.assertIn("split", summary)
+        self.assertEqual(summary["split"]["seed"], 36)
+        self.assertEqual(summary["split"]["file"], "configs/a1/splits/fashion_mnist_seed36.json")
 
     def test_source_paths_are_retained_for_run_metadata(self):
         self.assertEqual(Path(self.config["_sources"]["model_config"]), CONFIGS / "linear.py")
