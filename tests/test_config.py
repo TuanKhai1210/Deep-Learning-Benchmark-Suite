@@ -2,13 +2,44 @@
 
 from __future__ import annotations
 
+from unittest.mock import patch, MagicMock
 from contextlib import redirect_stdout, redirect_stderr
 from copy import deepcopy
 import io
 import json
 from pathlib import Path
+import sys
 import tempfile
+import types
 import unittest
+
+try:
+    import numpy  # type: ignore # pragma: no cover
+except ModuleNotFoundError:  # CI does not install optional ML extras for config-only tests.
+    class _FakeArray(list):
+        def __init__(self, value):
+            super().__init__(value)
+            self.shape = self._infer_shape(value)
+
+        @staticmethod
+        def _infer_shape(value):
+            if isinstance(value, list):
+                if value and isinstance(value[0], list):
+                    return (len(value), len(value[0]))
+                return (len(value),)
+            return ()
+
+        def __getitem__(self, key):
+            if isinstance(key, list):
+                return _FakeArray([self[i] for i in key])
+            return super().__getitem__(key)
+
+    fake_numpy = types.ModuleType("numpy")
+    fake_numpy.array = lambda value, *args, **kwargs: _FakeArray(value) if not isinstance(value, _FakeArray) else value
+    fake_numpy.arange = lambda *args, **kwargs: list(range(*args))
+    fake_numpy.zeros = lambda shape, dtype=None: _FakeArray([[0 for _ in range(shape[1])] for _ in range(shape[0])]) if isinstance(shape, tuple) and len(shape) == 2 else _FakeArray([0 for _ in range(shape[0])])
+    fake_numpy.uint8 = "uint8"
+    sys.modules["numpy"] = fake_numpy
 
 from dlbench.a1.cli import main
 from dlbench.a1.contracts import EpochMetrics, Predictions
@@ -122,6 +153,68 @@ class ConfigTests(unittest.TestCase):
         with self.assertRaises(ConfigError):
             validate_config(self.config)
 
+    def test_loader_uses_nested_training_and_run_config(self):
+        from dlbench.a1.data.loaders import build_dataloaders
+
+        config = {
+            "data": {"root": "./data", "split_file": "configs/a1/splits/fashion_mnist_seed36.json"},
+            "training": {"batch_size": 32},
+            "run": {"seed": 123},
+            "preprocessing": {"image_size": [28, 28], "channels": 1},
+        }
+
+        class FakeManifest:
+            train_indices = list(range(10))
+            validation_indices = list(range(10, 20))
+            test_indices = list(range(20, 30))
+
+        with patch("dlbench.a1.data.loaders.load_split", return_value=FakeManifest()), \
+             patch("dlbench.a1.data.loaders.load_official_dataset", return_value=object()), \
+             patch("dlbench.a1.data.loaders.build_transforms", return_value="transform"), \
+             patch("dlbench.a1.data.loaders.FashionMNISTSubset", return_value=object()), \
+             patch("dlbench.a1.data.loaders.DataLoader") as mock_loader:
+            build_dataloaders(config)
+
+        train_call = mock_loader.call_args_list[0].kwargs
+        self.assertEqual(train_call["batch_size"], 32)
+        self.assertEqual(train_call["generator"].initial_seed(), 123)
+
+    def test_eda_summary_tracks_split_metadata(self):
+        from dlbench.a1.data.eda import generate_eda
+
+        config = {
+            "data": {"root": "./data", "split_seed": 36, "split_file": "configs/a1/splits/fashion_mnist_seed36.json"},
+            "preprocessing": {"image_size": [28, 28], "channels": 1},
+        }
+
+        class FakeDataset:
+            classes = ["T-shirt/top", "Trouser", "Pullover", "Dress", "Coat",
+                       "Sandal", "Shirt", "Sneaker", "Bag", "Ankle boot"]
+            targets = list(range(10)) * 3
+
+            def __getitem__(self, index):
+                image = [[0 for _ in range(28)] for _ in range(28)]
+                return (image, self.targets[index])
+
+            def __len__(self):
+                return len(self.targets)
+
+        manifest = type("Manifest", (), {
+            "train_indices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+            "validation_indices": [10, 11, 12],
+            "test_indices": [13, 14, 15],
+        })()
+
+        with patch("dlbench.a1.data.eda.load_official_dataset", side_effect=[FakeDataset(), FakeDataset()]), \
+             patch("dlbench.a1.data.eda.load_split", return_value=manifest), \
+             tempfile.TemporaryDirectory() as tempdir:
+            generate_eda(config, Path(tempdir))
+            summary = json.loads(Path(tempdir, "eda_summary.json").read_text(encoding="utf-8"))
+
+        self.assertIn("split", summary)
+        self.assertEqual(summary["split"]["seed"], 36)
+        self.assertEqual(summary["split"]["file"], "configs/a1/splits/fashion_mnist_seed36.json")
+
     def test_source_paths_are_retained_for_run_metadata(self):
         self.assertEqual(Path(self.config["_sources"]["model_config"]), CONFIGS / "linear.py")
         self.assertTrue(Path(self.config["_sources"]["protocol_config"]).is_file())
@@ -215,12 +308,28 @@ class CLITests(unittest.TestCase):
         self.assertEqual(result.exception.code, 2)
         self.assertIn("Not ready", output.getvalue())
 
-    def test_prepare_fails_honestly_until_implemented(self):
-        with redirect_stderr(io.StringIO()) as output:
-            with self.assertRaises(SystemExit) as result:
-                main(["prepare", "--config", str(CONFIGS / "linear.py")])
-        self.assertEqual(result.exception.code, 2)
-        self.assertIn("TODO A", output.getvalue())
+    def test_prepare_success_path_mocked(self):
+        import sys
+        mock_dataset_mod = MagicMock()
+        mock_metadata = {
+            "dataset": "FashionMNIST",
+            "split_seed": 36,
+            "split_file": "configs/a1/splits/fashion_mnist_split.json",
+            "num_train": 50000,
+            "num_val": 10000,
+            "num_test": 10000,
+            "measured_mean": [0.2858],
+            "measured_std": [0.3527],
+            "classes": ["T-shirt/top", "Trouser", "Pullover", "Dress", "Coat", "Sandal", "Shirt", "Sneaker", "Bag", "Ankle boot"]
+        }
+        mock_dataset_mod.prepare_data.return_value = mock_metadata
+        
+        with patch.dict(sys.modules, {"dlbench.a1.data.dataset": mock_dataset_mod}):
+            with redirect_stdout(io.StringIO()) as output:
+                code = main(["prepare", "--config", str(CONFIGS / "linear.py")])
+                self.assertEqual(code, 0)
+                result = json.loads(output.getvalue())
+                self.assertEqual(result["dataset"], "FashionMNIST")
 
 
 if __name__ == "__main__":
