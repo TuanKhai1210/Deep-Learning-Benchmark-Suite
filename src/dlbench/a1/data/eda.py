@@ -52,13 +52,15 @@ def generate_eda(config: Mapping[str, Any], output_dir: Path) -> None:
     first_img, _ = raw_train[0]
     first_tensor = torch.tensor(np.array(first_img))
     
+    split_path_str = str(split_path).replace("\\", "/")
+
     eda_stats = {
         "dataset_name": "Fashion-MNIST",
         "source": "torchvision.datasets.FashionMNIST",
         "license": "MIT License",
         "split": {
             "seed": int(data_cfg.get("split_seed", 36)),
-            "file": str(split_path),
+            "file": split_path_str,
             "train_size": len(manifest.train_indices),
             "validation_size": len(manifest.validation_indices),
             "test_size": len(manifest.test_indices),

@@ -95,7 +95,7 @@ def prepare_data(config: Mapping[str, Any]) -> dict[str, Any]:
     metadata = {
         "dataset": "FashionMNIST",
         "split_seed": manifest.split_seed,
-        "split_file": str(split_path),
+        "split_file": str(split_path).replace("\\", "/"),
         "num_train": len(manifest.train_indices),
         "num_val": len(manifest.validation_indices),
         "num_test": len(manifest.test_indices),

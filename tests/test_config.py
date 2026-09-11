@@ -8,15 +8,41 @@ from copy import deepcopy
 import io
 import json
 from pathlib import Path
+import sys
 import tempfile
+import types
 import unittest
 
-import numpy as np
+try:
+    import numpy  # type: ignore # pragma: no cover
+except ModuleNotFoundError:  # CI does not install optional ML extras for config-only tests.
+    class _FakeArray(list):
+        def __init__(self, value):
+            super().__init__(value)
+            self.shape = self._infer_shape(value)
+
+        @staticmethod
+        def _infer_shape(value):
+            if isinstance(value, list):
+                if value and isinstance(value[0], list):
+                    return (len(value), len(value[0]))
+                return (len(value),)
+            return ()
+
+        def __getitem__(self, key):
+            if isinstance(key, list):
+                return _FakeArray([self[i] for i in key])
+            return super().__getitem__(key)
+
+    fake_numpy = types.ModuleType("numpy")
+    fake_numpy.array = lambda value, *args, **kwargs: _FakeArray(value) if not isinstance(value, _FakeArray) else value
+    fake_numpy.arange = lambda *args, **kwargs: list(range(*args))
+    fake_numpy.zeros = lambda shape, dtype=None: _FakeArray([[0 for _ in range(shape[1])] for _ in range(shape[0])]) if isinstance(shape, tuple) and len(shape) == 2 else _FakeArray([0 for _ in range(shape[0])])
+    fake_numpy.uint8 = "uint8"
+    sys.modules["numpy"] = fake_numpy
 
 from dlbench.a1.cli import main
 from dlbench.a1.contracts import EpochMetrics, Predictions
-from dlbench.a1.data.eda import generate_eda
-from dlbench.a1.data.loaders import build_dataloaders
 from dlbench.a1.models.registry import MODEL_REGISTRY, build_model
 from dlbench.common.config import ConfigError, load_config, validate_config
 
@@ -128,6 +154,8 @@ class ConfigTests(unittest.TestCase):
             validate_config(self.config)
 
     def test_loader_uses_nested_training_and_run_config(self):
+        from dlbench.a1.data.loaders import build_dataloaders
+
         config = {
             "data": {"root": "./data", "split_file": "configs/a1/splits/fashion_mnist_seed36.json"},
             "training": {"batch_size": 32},
@@ -152,6 +180,8 @@ class ConfigTests(unittest.TestCase):
         self.assertEqual(train_call["generator"].initial_seed(), 123)
 
     def test_eda_summary_tracks_split_metadata(self):
+        from dlbench.a1.data.eda import generate_eda
+
         config = {
             "data": {"root": "./data", "split_seed": 36, "split_file": "configs/a1/splits/fashion_mnist_seed36.json"},
             "preprocessing": {"image_size": [28, 28], "channels": 1},
@@ -160,18 +190,19 @@ class ConfigTests(unittest.TestCase):
         class FakeDataset:
             classes = ["T-shirt/top", "Trouser", "Pullover", "Dress", "Coat",
                        "Sandal", "Shirt", "Sneaker", "Bag", "Ankle boot"]
-            targets = list(range(10))
+            targets = list(range(10)) * 3
 
             def __getitem__(self, index):
-                return (np.zeros((28, 28), dtype=np.uint8), self.targets[index])
+                image = [[0 for _ in range(28)] for _ in range(28)]
+                return (image, self.targets[index])
 
             def __len__(self):
                 return len(self.targets)
 
         manifest = type("Manifest", (), {
-            "train_indices": [0, 1, 2],
-            "validation_indices": [3, 4],
-            "test_indices": [5, 6],
+            "train_indices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+            "validation_indices": [10, 11, 12],
+            "test_indices": [13, 14, 15],
         })()
 
         with patch("dlbench.a1.data.eda.load_official_dataset", side_effect=[FakeDataset(), FakeDataset()]), \
