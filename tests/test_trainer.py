@@ -500,3 +500,137 @@ class TestTrainerMLPIntegration(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+
+class TestFitResume(unittest.TestCase):
+    def setUp(self) -> None:
+        self.output_root = tempfile.mkdtemp()
+        self.config = {
+            'model': {
+                'name': 'mlp',
+                'parameters': {'input_dim': 10, 'num_classes': 2, 'hidden_dims': [16]}
+            },
+            'training': {
+                'batch_size': 2,
+                'optimizer': 'sgd',
+                'learning_rate': 0.1,
+                'weight_decay': 0.0,
+                'epochs': 3,
+                'early_stopping_patience': 0,
+                'early_stopping_monitor': 'loss',
+                'save_frequency': 1,
+                'scheduler': {
+                    'name': 'step',
+                    'parameters': {
+                        'step_size': 1,
+                        'gamma': 0.5
+                    }
+                }
+            },
+            'run': {
+                'seed': 42,
+                'device': 'cpu',
+                'output_root': self.output_root,
+            },
+            'data': {'split_file': str(Path(self.output_root) / 'unused.json')},
+            'preprocessing': {'mean': [0.1], 'std': [0.2]},
+            'budget': {'max_epochs': 5},
+            'checkpoint': {},
+            'protocol': {'id': 'test'},
+            'evaluation': {},
+            'timing': {'precision': 'float32', 'scope': 'forward_only', 'device': 'cpu'},
+            '_sources': {}
+        }
+        
+        with open(Path(self.output_root) / 'unused.json', 'w') as f:
+            f.write('{}')
+        
+        # Create a dummy dataloader
+        import torch
+        from torch.utils.data import DataLoader, TensorDataset
+        class DummyDataset(torch.utils.data.Dataset):
+            def __len__(self): return 10
+            def __getitem__(self, idx): return {'images': torch.randn(10), 'labels': torch.randint(0, 2, (1,)).item(), 'sample_ids': f'id_{idx}'}
+        dataset = DummyDataset()
+        self.loader = DataLoader(dataset, batch_size=2)
+        
+        # Mock build_dataloaders
+        from types import SimpleNamespace
+        self.mock_build_dataloaders = patch(
+            'dlbench.a1.trainer.build_dataloaders',
+            return_value=SimpleNamespace(train=self.loader, validation=self.loader)
+        ).start()
+        
+        # We also need to patch checkpoint_provenance to avoid hash/schema errors
+        # if we aren't creating a real dataset and splitting it properly.
+        patch('dlbench.a1.trainer.validate_config').start()
+        patch('dlbench.a1.trainer.append_history').start()
+        patch('dlbench.a1.trainer.save_metrics').start()
+        self.mock_provenance = patch('dlbench.a1.trainer.checkpoint_provenance', return_value={
+            'schema_version': 1,
+            'split_hash': 'fake_split',
+            'statistics_hash': 'fake_stats',
+            'git_revision': 'fake_git'
+        }).start()
+
+    def tearDown(self) -> None:
+        import shutil
+        shutil.rmtree(self.output_root)
+        patch.stopall()
+
+    def test_fit_saves_real_metadata(self) -> None:
+        from dlbench.a1.trainer import fit
+        import json
+        res = fit(self.config, smoke=True)
+        run_dir = res.run_dir
+        
+        # Verify metadata
+        with open(run_dir / 'metadata.json', 'r') as f:
+            metadata = json.load(f)
+        
+        self.assertIn('run_mode', metadata)
+        self.assertEqual(metadata['run_mode'], 'smoke')
+        self.assertEqual(metadata['run_seed'], 42)
+
+    def test_fit_resumes_training_identically(self) -> None:
+        from dlbench.a1.trainer import fit
+        import torch
+        import copy
+        
+        # Run 1: Continuous training for 2 epochs
+        config1 = copy.deepcopy(self.config)
+        config1['budget']['max_epochs'] = 2
+        res1 = fit(config1, smoke=True)
+        run_dir1 = res1.run_dir
+        
+        last_pt1 = run_dir1 / 'last.pt'
+        payload1 = torch.load(last_pt1, map_location='cpu', weights_only=False)
+        self.assertEqual(payload1['epoch'], 1)
+        model_weights1 = payload1['model_state_dict']
+        
+        # Run 2: Train for 1 epoch
+        config2 = copy.deepcopy(self.config)
+        config2['budget']['max_epochs'] = 1
+        res2 = fit(config2, smoke=True)
+        run_dir2 = res2.run_dir
+        
+        last_pt2 = run_dir2 / 'last.pt'
+        payload2 = torch.load(last_pt2, map_location='cpu', weights_only=False)
+        self.assertEqual(payload2['epoch'], 0)
+        
+        # Resume Run 2 to epoch 2
+        config3 = copy.deepcopy(self.config)
+        config3['budget']['max_epochs'] = 1
+        res3 = fit(config3, smoke=True, resume_from=last_pt2)
+        run_dir3 = res3.run_dir
+        self.assertEqual(run_dir2, run_dir3)
+        
+        last_pt3 = run_dir3 / 'last.pt'
+        payload3 = torch.load(last_pt3, map_location='cpu', weights_only=False)
+        self.assertEqual(payload3['epoch'], 1)
+        model_weights3 = payload3['model_state_dict']
+        
+        # The weights should be exactly the same
+        for k in model_weights1:
+            self.assertTrue(torch.equal(model_weights1[k], model_weights3[k]))
