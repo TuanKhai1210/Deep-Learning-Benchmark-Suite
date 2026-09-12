@@ -29,7 +29,7 @@ from dlbench.common.artifacts import (
 )
 from dlbench.common.config import validate_config
 from dlbench.a1.checkpoint import save_checkpoint, is_better, load_checkpoint
-from dlbench.common.reproducibility import seed_everything
+from dlbench.common.reproducibility import seed_everything, capture_rng_state, restore_rng_state
 
 
 
@@ -210,7 +210,7 @@ def get_scheduler(optimizer: torch.optim.Optimizer, training_config: Mapping[str
         raise ValueError(f"Unsupported scheduler: {name}")
 
 
-def fit(config: Mapping[str, Any], *, smoke: bool = False) -> FitResult:
+def fit(config: Mapping[str, Any], *, smoke: bool = False, resume_from: Path | None = None) -> FitResult:
     """Seed -> loaders -> model -> optimizer -> train/val epochs -> artifacts.
 
     Main runs require strict config validation AND valid existing split/stats.
@@ -226,18 +226,29 @@ def fit(config: Mapping[str, Any], *, smoke: bool = False) -> FitResult:
     run_seed = run_config["seed"]
     seed_everything(run_seed)
 
-    # Create run directory
-    output_root = Path(run_config.get('output_root', 'runs/a1'))
-    run_id = generate_run_id(resolved_config, smoke=smoke)
-    run_dir = create_run_dir(output_root, run_id)
+    # Resume or create run
+    if resume_from is None:
+        output_root = Path(run_config.get('output_root', 'runs/a1'))
+        run_id = generate_run_id(resolved_config, smoke=smoke)
+        run_dir = create_run_dir(output_root, run_id)
+        resolved_config["run"]["mode"] = "smoke" if smoke else "main"
+        metadata = save_run_metadata(run_dir, resolved_config)
+        metadata_provenance = checkpoint_provenance(metadata)
+        start_epoch = 0
+    else:
+        payload = load_checkpoint(resume_from, resume=True)
+        run_dir = resume_from.parent
+        metadata_provenance = {
+            "schema_version": payload["schema_version"],
+            "split_hash": payload["split_hash"],
+            "statistics_hash": payload["statistics_hash"],
+            "git_revision": payload["git_revision"],
+        }
+        start_epoch = payload["epoch"] + 1
 
     # Use device from config when provided; otherwise auto-detect.
     device = resolve_device(resolved_config)
 
-    # Save run metadata and reuse the reproducibility-generated provenance when
-    # the metadata payload includes the split/normalization records.
-    metadata = save_run_metadata(run_dir, resolved_config)
-    metadata_provenance = checkpoint_provenance(metadata)
     # Build data loaders
     dataloaders = build_dataloaders(resolved_config, smoke=smoke)
 
@@ -251,14 +262,23 @@ def fit(config: Mapping[str, Any], *, smoke: bool = False) -> FitResult:
     optimizer = get_optimizer(model, training_config)
     scheduler = get_scheduler(optimizer, training_config)
 
+    if resume_from is not None:
+        model.load_state_dict(payload["model_state_dict"])
+        optimizer.load_state_dict(payload["optimizer_state_dict"])
+        if scheduler and payload.get("scheduler_state_dict"):
+            scheduler.load_state_dict(payload["scheduler_state_dict"])
+        restore_rng_state(payload["rng_state"])
+
     # Setup loss function
     criterion = torch.nn.CrossEntropyLoss()
 
     # Get training parameters
-    epochs = int(resolved_config["budget"]["max_epochs"])
+    epochs_to_train = int(resolved_config["budget"]["max_epochs"])
     if smoke:
         # For smoke tests, use minimal epochs
-        epochs = min(epochs, 10)
+        epochs_to_train = min(epochs_to_train, 10)
+    
+    epochs = start_epoch + epochs_to_train
 
     # Track best model
     best_val_metrics = None
@@ -281,7 +301,7 @@ def fit(config: Mapping[str, Any], *, smoke: bool = False) -> FitResult:
     best_checkpoint_path = run_dir / "best.pt"
 
     # Training loop
-    for epoch in range(epochs):
+    for epoch in range(start_epoch, epochs):
         start_time = time.time()
 
         # Train
@@ -319,17 +339,21 @@ def fit(config: Mapping[str, Any], *, smoke: bool = False) -> FitResult:
         # Append to history
         append_history(run_dir, history_row)
 
+        if scheduler is not None:
+            if isinstance(scheduler, torch.optim.lr_scheduler.ReduceLROnPlateau):
+                mode = training_config.get("scheduler", {}).get("parameters", {}).get("mode", "min")
+                metric = val_metrics.metrics.macro_f1 if mode == "max" else val_metrics.metrics.loss
+                scheduler.step(metric)
+            else:
+                scheduler.step()
+
         # Check if this is the best model so far
         checkpoint_payload = {
             "epoch": epoch,
             "model_state_dict": model.state_dict(),
             "optimizer_state_dict": optimizer.state_dict(),
             "scheduler_state_dict": scheduler.state_dict() if scheduler else None,
-            "rng_state": {
-                "torch_cpu": torch.get_rng_state(),
-                "random_python": random.getstate(),
-                "numpy": np.random.get_state(),
-            },
+            "rng_state": capture_rng_state(),
             "config": dict(resolved_config),
             "val_metrics": asdict(val_metrics.metrics),
             "run_seed": run_seed,
@@ -375,12 +399,6 @@ def fit(config: Mapping[str, Any], *, smoke: bool = False) -> FitResult:
 
         if should_save_last:
             save_checkpoint(last_checkpoint_path, checkpoint_payload, resume=True)
-
-        if scheduler is not None:
-            if isinstance(scheduler, torch.optim.lr_scheduler.ReduceLROnPlateau):
-                scheduler.step(val_metrics.metrics.loss)
-            else:
-                scheduler.step()
 
     # Save final metrics
     final_metrics = {
