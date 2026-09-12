@@ -155,6 +155,15 @@ def validate_config(config: dict[str, Any], *, strict: bool = False) -> list[str
             "learning_rate must be finite and positive.")
     require(finite_number(training.get("weight_decay")) and training["weight_decay"] >= 0,
             "weight_decay must be finite and nonnegative.")
+    
+    scheduler = training.get("scheduler")
+    if scheduler is not None:
+        require(isinstance(scheduler, dict), "scheduler must be a dictionary if provided.")
+        require(isinstance(scheduler.get("name"), str), "scheduler.name must be a string.")
+        require(isinstance(scheduler.get("parameters", {}), dict), "scheduler.parameters must be a dictionary.")
+        supported_schedulers = {"step", "exponential", "cosine", "reduce_on_plateau", "polynomial"}
+        require(scheduler["name"].lower() in supported_schedulers,
+                f"Unsupported scheduler: {scheduler['name']}. Supported schedulers are {', '.join(sorted(supported_schedulers))}.")
     require(timing.get("precision") == "float32", "Current timing protocol uses float32.")
     require(timing.get("scope") == "forward_only", "Current timing protocol is forward_only.")
     require(isinstance(timing.get("device"), str) and bool(timing["device"]), "timing.device is required.")

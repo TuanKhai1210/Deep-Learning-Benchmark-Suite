@@ -21,6 +21,7 @@ from dlbench.a1.data.loaders import build_dataloaders
 from dlbench.a1.engine import train_one_epoch, evaluate_epoch
 from dlbench.a1.models.registry import build_model
 from dlbench.common.artifacts import (
+    checkpoint_provenance,
     create_run_dir,
     save_run_metadata,
     append_history,
@@ -31,22 +32,6 @@ from dlbench.a1.checkpoint import save_checkpoint, is_better, load_checkpoint
 from dlbench.common.reproducibility import seed_everything
 
 
-
-def _sha256_json(value: Any) -> str:
-    encoded = json.dumps(value, sort_keys=True, separators=(",", ":")).encode("utf-8")
-    return hashlib.sha256(encoded).hexdigest()
-
-
-def _checkpoint_metadata(config: Mapping[str, Any]) -> dict[str, str]:
-    data_config = config["data"]
-    split_file = Path(data_config["split_file"])
-    split_hash = hashlib.sha256(split_file.read_bytes()).hexdigest() if split_file.is_file() else "missing"
-    statistics_hash = _sha256_json(config["preprocessing"])
-    return {
-        "split_hash": split_hash,
-        "statistics_hash": statistics_hash,
-        "git_revision": str(config.get("git_revision", "unknown")), # TODO: check the config
-    }
 
 
 def generate_run_id(config: Mapping[str, Any], *, smoke: bool = False) -> str:
@@ -182,6 +167,49 @@ def _resolve_smoke_config(config: Mapping[str, Any]) -> dict[str, Any]:
     return resolved
 
 
+def get_scheduler(optimizer: torch.optim.Optimizer, training_config: Mapping[str, Any]) -> Any:
+    scheduler_config = training_config.get("scheduler")
+    if not scheduler_config:
+        return None
+    
+    name = scheduler_config.get("name", "").lower()
+    params = scheduler_config.get("parameters", {})
+    
+    if name == "step":
+        return torch.optim.lr_scheduler.StepLR(
+            optimizer, 
+            step_size=params.get("step_size", 10), 
+            gamma=params.get("gamma", 0.1)
+        )
+    elif name == "exponential":
+        return torch.optim.lr_scheduler.ExponentialLR(
+            optimizer, 
+            gamma=params.get("gamma", 0.9)
+        )
+    elif name == "cosine":
+        return torch.optim.lr_scheduler.CosineAnnealingLR(
+            optimizer, 
+            T_max=params.get("T_max", 50), 
+            eta_min=params.get("eta_min", 0.0)
+        )
+    elif name == "reduce_on_plateau":
+        return torch.optim.lr_scheduler.ReduceLROnPlateau(
+            optimizer, 
+            mode=params.get("mode", "min"), 
+            factor=params.get("factor", 0.1), 
+            patience=params.get("patience", 10),
+            min_lr=params.get("min_lr", 0.0)
+        )
+    elif name == "polynomial":
+        return torch.optim.lr_scheduler.PolynomialLR(
+            optimizer, 
+            total_iters=params.get("total_iters", 100), 
+            power=params.get("power", 1.0)
+        )
+    else:
+        raise ValueError(f"Unsupported scheduler: {name}")
+
+
 def fit(config: Mapping[str, Any], *, smoke: bool = False) -> FitResult:
     """Seed -> loaders -> model -> optimizer -> train/val epochs -> artifacts.
 
@@ -206,9 +234,10 @@ def fit(config: Mapping[str, Any], *, smoke: bool = False) -> FitResult:
     # Use device from config when provided; otherwise auto-detect.
     device = resolve_device(resolved_config)
 
-    # Save run metadata
-    save_run_metadata(run_dir, resolved_config)
-
+    # Save run metadata and reuse the reproducibility-generated provenance when
+    # the metadata payload includes the split/normalization records.
+    metadata = save_run_metadata(run_dir, resolved_config)
+    metadata_provenance = checkpoint_provenance(metadata)
     # Build data loaders
     dataloaders = build_dataloaders(resolved_config, smoke=smoke)
 
@@ -220,6 +249,7 @@ def fit(config: Mapping[str, Any], *, smoke: bool = False) -> FitResult:
     # Setup optimizer
     training_config = resolved_config.get("training", {})
     optimizer = get_optimizer(model, training_config)
+    scheduler = get_scheduler(optimizer, training_config)
 
     # Setup loss function
     criterion = torch.nn.CrossEntropyLoss()
@@ -282,7 +312,7 @@ def fit(config: Mapping[str, Any], *, smoke: bool = False) -> FitResult:
             "val_accuracy": val_metrics.metrics.accuracy,
             "train_macro_f1": train_metrics.macro_f1,
             "val_macro_f1": val_metrics.metrics.macro_f1,
-            "learning_rate": float(training_config.get("learning_rate", 0.001)),
+            "learning_rate": float(optimizer.param_groups[0]["lr"]),
             "epoch_seconds": epoch_time,
         }
 
@@ -294,7 +324,7 @@ def fit(config: Mapping[str, Any], *, smoke: bool = False) -> FitResult:
             "epoch": epoch,
             "model_state_dict": model.state_dict(),
             "optimizer_state_dict": optimizer.state_dict(),
-            "scheduler_state_dict": None,
+            "scheduler_state_dict": scheduler.state_dict() if scheduler else None,
             "rng_state": {
                 "torch_cpu": torch.get_rng_state(),
                 "random_python": random.getstate(),
@@ -304,7 +334,7 @@ def fit(config: Mapping[str, Any], *, smoke: bool = False) -> FitResult:
             "val_metrics": asdict(val_metrics.metrics),
             "run_seed": run_seed,
             "schema_version": 1,
-            **_checkpoint_metadata(resolved_config),
+            **metadata_provenance,
         }
 
         selection_metrics = {
@@ -340,12 +370,17 @@ def fit(config: Mapping[str, Any], *, smoke: bool = False) -> FitResult:
             epochs_without_improvement += 1
 
         if early_stopping_patience > 0 and epochs_without_improvement >= early_stopping_patience:
-            if not should_save_last:
-                save_checkpoint(last_checkpoint_path, checkpoint_payload, resume=True)
+            save_checkpoint(last_checkpoint_path, checkpoint_payload, resume=True)
             break
 
         if should_save_last:
             save_checkpoint(last_checkpoint_path, checkpoint_payload, resume=True)
+
+        if scheduler is not None:
+            if isinstance(scheduler, torch.optim.lr_scheduler.ReduceLROnPlateau):
+                scheduler.step(val_metrics.metrics.loss)
+            else:
+                scheduler.step()
 
     # Save final metrics
     final_metrics = {
@@ -398,7 +433,9 @@ def evaluate_checkpoint(config: Mapping[str, Any], checkpoint_path: Path, *,
         if payload["config"].get(section) != config.get(section):
             raise ValueError(f"Configuration mismatch in section: {section}")
         
-    current_metadata = _checkpoint_metadata(config)
+    import tempfile
+    with tempfile.TemporaryDirectory() as temp_dir:
+        current_metadata = checkpoint_provenance(save_run_metadata(Path(temp_dir), config))
 
     if payload["split_hash"] != current_metadata["split_hash"]:
         raise ValueError("Checkpoint split does not match the supplied configuration.")
