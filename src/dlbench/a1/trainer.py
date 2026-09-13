@@ -16,7 +16,7 @@ import random
 import time
 import torch
 
-from dlbench.a1.contracts import EvaluationResult, FitResult
+from dlbench.a1.contracts import EpochMetrics, EvaluationResult, FitResult
 from dlbench.a1.data.loaders import build_dataloaders
 from dlbench.a1.engine import train_one_epoch, evaluate_epoch
 from dlbench.a1.models.registry import build_model
@@ -281,9 +281,6 @@ def fit(config: Mapping[str, Any], *, smoke: bool = False, resume_from: Path | N
     epochs = start_epoch + epochs_to_train
 
     # Track best model
-    best_val_metrics = None
-    best_selection_metrics: dict[str, float | int] | None = None
-    best_epoch = -1
     early_stopping_patience = int(training_config.get("early_stopping_patience", 0))
     min_delta = float(training_config.get("min_delta", 0.0))
     save_frequency = int(training_config.get("save_frequency", 1))
@@ -296,9 +293,38 @@ def fit(config: Mapping[str, Any], *, smoke: bool = False, resume_from: Path | N
         raise ValueError("save_frequency must be positive")
     if early_stopping_monitor not in ("macro_f1", "loss"):
         raise ValueError("early_stopping_monitor must be 'macro_f1' or 'loss'")
-    best_monitor_value: float | None = None
-    epochs_without_improvement = 0
+
+    # Track best model — on resume, load best.pt for the historical best
+    # threshold so we never overwrite it with a worse model.
     best_checkpoint_path = run_dir / "best.pt"
+    if resume_from is not None and best_checkpoint_path.is_file():
+        best_payload = load_checkpoint(best_checkpoint_path)
+        best_val_metrics = EpochMetrics(**best_payload["val_metrics"])
+        best_selection_metrics = {
+            "epoch": best_payload["epoch"],
+            "val_macro_f1": best_payload["val_metrics"]["macro_f1"],
+            "val_loss": best_payload["val_metrics"]["loss"],
+        }
+        best_epoch = best_payload["epoch"]
+    elif resume_from is not None:
+        # No best.pt yet (e.g. interrupted before first epoch finished);
+        # fall back to last epoch's metrics as the initial threshold.
+        best_val_metrics = None
+        best_selection_metrics = {
+            "epoch": payload["epoch"],
+            "val_macro_f1": payload["val_metrics"]["macro_f1"],
+            "val_loss": payload["val_metrics"]["loss"],
+        }
+        best_epoch = -1
+    else:
+        best_val_metrics = None
+        best_selection_metrics = None
+        best_epoch = -1
+
+    # Early stopping counters — these can't be derived from best.pt,
+    # so they are persisted in last.pt.
+    best_monitor_value = payload.get("best_monitor_value") if resume_from is not None else None
+    epochs_without_improvement = payload.get("epochs_without_improvement", 0) if resume_from is not None else 0
 
     # Training loop
     for epoch in range(start_epoch, epochs):
@@ -393,12 +419,17 @@ def fit(config: Mapping[str, Any], *, smoke: bool = False, resume_from: Path | N
         else:
             epochs_without_improvement += 1
 
-        if early_stopping_patience > 0 and epochs_without_improvement >= early_stopping_patience:
+        def save_last():
+            checkpoint_payload["best_monitor_value"] = best_monitor_value
+            checkpoint_payload["epochs_without_improvement"] = epochs_without_improvement
             save_checkpoint(last_checkpoint_path, checkpoint_payload, resume=True)
+
+        if early_stopping_patience > 0 and epochs_without_improvement >= early_stopping_patience:
+            save_last()
             break
 
         if should_save_last:
-            save_checkpoint(last_checkpoint_path, checkpoint_payload, resume=True)
+            save_last()
 
     # Save final metrics
     final_metrics = {
@@ -423,7 +454,8 @@ def fit(config: Mapping[str, Any], *, smoke: bool = False, resume_from: Path | N
 
 
 def evaluate_checkpoint(config: Mapping[str, Any], checkpoint_path: Path, *,
-                        split: Literal["validation", "test"] = "validation") -> EvaluationResult:
+                        split: Literal["validation", "test"] = "validation",
+                        smoke: bool = False) -> EvaluationResult:
     """Reconstruct from saved config; verify split hash, normalization and class order.
 
     Refuse incompatible supplied config. Evaluate the requested split with
@@ -450,10 +482,14 @@ def evaluate_checkpoint(config: Mapping[str, Any], checkpoint_path: Path, *,
     ):
         if payload["config"].get(section) != config.get(section):
             raise ValueError(f"Configuration mismatch in section: {section}")
-        
+    
     import tempfile
+    from copy import deepcopy
+    resolved_config = _resolve_smoke_config(config) if smoke else deepcopy(dict(config))
+    resolved_config["run"]["mode"] = "smoke" if smoke else "main"
+    
     with tempfile.TemporaryDirectory() as temp_dir:
-        current_metadata = checkpoint_provenance(save_run_metadata(Path(temp_dir), config))
+        current_metadata = checkpoint_provenance(save_run_metadata(Path(temp_dir), resolved_config))
 
     if payload["split_hash"] != current_metadata["split_hash"]:
         raise ValueError("Checkpoint split does not match the supplied configuration.")

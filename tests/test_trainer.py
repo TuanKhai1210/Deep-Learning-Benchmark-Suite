@@ -292,6 +292,7 @@ class TestEvaluateCheckpoint(unittest.TestCase):
             "evaluation": {"labels": list(range(10))},
             "checkpoint": {"monitor": "val_macro_f1"},
             "model": {"name": "linear", "parameters": {"input_dim": 1, "num_classes": 2}},
+            "run": {"seed": 42},
         }
 
     def test_invalid_split_is_rejected_before_loading(self) -> None:
@@ -331,7 +332,74 @@ class TestEvaluateCheckpoint(unittest.TestCase):
         mock_save.assert_called_once()
         args, kwargs = mock_save.call_args
         self.assertIsInstance(args[0], Path)
-        self.assertIs(args[1], config)
+        expected_config = dict(config)
+        expected_config["run"] = dict(expected_config.get("run", {}))
+        expected_config["run"]["mode"] = "main"
+        self.assertEqual(args[1], expected_config)
+
+    def test_evaluate_checkpoint_real_hashes(self) -> None:
+        import tempfile
+        import json
+        import hashlib
+        from dlbench.a1.checkpoint import save_checkpoint
+        import subprocess
+
+        config = self._config()
+        
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_path = Path(temp_dir)
+            split_file = temp_path / "split.json"
+            split_file.write_text("{}")
+            
+            source_file = temp_path / "source.py"
+            source_file.write_text("dummy")
+            
+            config["data"]["split_file"] = str(split_file)
+            config["_sources"] = {"model": str(source_file)}
+            
+            split_hash = hashlib.sha256(b"{}").hexdigest()
+            stats_json = json.dumps({"mean": [0.1], "std": [0.2]}, sort_keys=True, separators=(",", ":"))
+            stats_hash = hashlib.sha256(stats_json.encode("utf-8")).hexdigest()
+            
+            repository_root = Path(__file__).resolve().parents[1]
+            git_revision = subprocess.run(
+                ["git", "rev-parse", "HEAD"],
+                cwd=repository_root,
+                check=True,
+                capture_output=True,
+                text=True,
+            ).stdout.strip()
+            
+            model = torch.nn.Linear(1, 2)
+            loaders = SimpleNamespace(validation=object(), test=object())
+            expected = EvaluationResult(
+                EpochMetrics(0.25, 0.9, 0.85, 4),
+                Predictions(["v1"], [1], [1], [[0.1, 0.9]]),
+            )
+            payload = {
+                "config": config,
+                "model_state_dict": model.state_dict(),
+                "split_hash": split_hash,
+                "statistics_hash": stats_hash,
+                "schema_version": 1,
+                "git_revision": git_revision,
+                "run_seed": 42,
+                "val_metrics": {"loss": 0.2, "macro_f1": 0.9, "accuracy": 0.8, "epoch_seconds": 1.0},
+                "epoch": 1,
+            }
+            
+            ckpt_path = temp_path / "checkpoint.pt"
+            save_checkpoint(ckpt_path, payload)
+            
+            with patch("dlbench.a1.trainer.validate_config"), \
+                    patch("dlbench.a1.trainer.get_device", return_value=torch.device("cpu")), \
+                    patch("dlbench.a1.trainer.build_model", return_value=model), \
+                    patch("dlbench.a1.trainer.build_dataloaders", return_value=loaders), \
+                    patch("dlbench.a1.trainer.evaluate_epoch", return_value=expected):
+                
+                result = evaluate_checkpoint(config, ckpt_path, split="validation")
+                
+            self.assertIs(result, expected)
 
     def test_evaluate_checkpoint_uses_test_loader_when_requested(self) -> None:
         config = self._config()
@@ -503,6 +571,219 @@ if __name__ == "__main__":
 
 
 
+class TestFitIntegration(unittest.TestCase):
+    def test_fit_end_to_end_with_minimal_patching(self) -> None:
+        import tempfile
+        import json
+        import hashlib
+        from dlbench.a1.trainer import fit
+        import subprocess
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_path = Path(temp_dir)
+            split_file = temp_path / "split.json"
+            split_file.write_text("{}")
+            
+            source_file = temp_path / "source.py"
+            source_file.write_text("dummy")
+
+            config = {
+                "protocol": {
+                    "id": "a1-v0",
+                    "status": "frozen",
+                    "approved_by": ["A", "B", "C"],
+                },
+                "data": {
+                    "dataset": "fashion_mnist",
+                    "train_size": 48000,
+                    "validation_size": 12000,
+                    "test_size": 10000,
+                    "split_seed": 36,
+                    "stratified": True,
+                    "root": "dummy",
+                    "split_file": str(split_file),
+                },
+                "preprocessing": {
+                    "image_size": [28, 28],
+                    "channels": 1,
+                    "augmentation": "none",
+                    "crop_padding": 0,
+                    "mean": [0.1],
+                    "std": [0.2],
+                },
+                "evaluation": {
+                    "labels": list(range(10)),
+                    "metrics": ["accuracy", "macro_f1"],
+                    "zero_division": 0,
+                },
+                "checkpoint": {
+                    "monitor": "val_macro_f1",
+                    "mode": "max",
+                    "tie_breaker": ["val_loss_min", "earlier_epoch"],
+                },
+                "model": {
+                    "name": "mlp",
+                    "parameters": {"input_dim": 784, "num_classes": 10, "hidden_dims": [16]},
+                },
+                "budget": {
+                    "run_seeds": [42],
+                    "max_epochs": 1,
+                    "tuning_trials_per_model": 1,
+                },
+                "training": {
+                    "batch_size": 2,
+                    "optimizer": "sgd",
+                    "learning_rate": 0.1,
+                    "weight_decay": 0.0,
+                    "early_stopping_patience": 0,
+                    "early_stopping_monitor": "macro_f1",
+                },
+                "timing": {
+                    "batch_size": 1,
+                    "warmup_steps": 1,
+                    "measurement_steps": 1,
+                    "precision": "float32",
+                    "scope": "forward_only",
+                    "device": "cpu",
+                },
+                "run": {
+                    "seed": 42,
+                    "device": "cpu",
+                    "output_root": str(temp_path),
+                },
+                "_sources": {"model": str(source_file)},
+            }
+
+            import torch
+            from torch.utils.data import DataLoader
+            class DummyDataset(torch.utils.data.Dataset):
+                def __len__(self): return 10
+                def __getitem__(self, idx): return {'images': torch.randn(1, 28, 28), 'labels': torch.randint(0, 10, (1,)).item(), 'sample_ids': f'id_{idx}'}
+            
+            loader = DataLoader(DummyDataset(), batch_size=2)
+            
+            # We ONLY patch what we can't run because of unimplemented functions or heavy dataset downloads
+            from types import SimpleNamespace
+            with patch("dlbench.a1.trainer.build_dataloaders", return_value=SimpleNamespace(train=loader, validation=loader)), \
+                 patch("dlbench.a1.trainer.append_history"), \
+                 patch("dlbench.a1.trainer.save_metrics"):
+                
+                result = fit(config, smoke=False)
+                
+            self.assertTrue(result.best_checkpoint.exists())
+            
+            # Check metadata to ensure real hashes were used and it successfully ran without strict config validation dying
+            with open(result.run_dir / "metadata.json", "r") as f:
+                metadata = json.load(f)
+            
+            self.assertEqual(metadata["run_mode"], "main")
+            self.assertIn("git_revision", metadata)
+
+    def test_fit_and_evaluate_end_to_end(self) -> None:
+        import tempfile
+        import json
+        import hashlib
+        from dlbench.a1.trainer import fit, evaluate_checkpoint
+        import subprocess
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_path = Path(temp_dir)
+            split_file = temp_path / "split.json"
+            split_file.write_text("{}")
+            
+            source_file = temp_path / "source.py"
+            source_file.write_text("dummy")
+
+            config = {
+                "protocol": {
+                    "id": "a1-v0",
+                    "status": "frozen",
+                    "approved_by": ["A", "B", "C"],
+                },
+                "data": {
+                    "dataset": "fashion_mnist",
+                    "train_size": 48000,
+                    "validation_size": 12000,
+                    "test_size": 10000,
+                    "split_seed": 36,
+                    "stratified": True,
+                    "root": "dummy",
+                    "split_file": str(split_file),
+                },
+                "preprocessing": {
+                    "image_size": [28, 28],
+                    "channels": 1,
+                    "augmentation": "none",
+                    "crop_padding": 0,
+                    "mean": [0.1],
+                    "std": [0.2],
+                },
+                "evaluation": {
+                    "labels": list(range(10)),
+                    "metrics": ["accuracy", "macro_f1"],
+                    "zero_division": 0,
+                },
+                "checkpoint": {
+                    "monitor": "val_macro_f1",
+                    "mode": "max",
+                    "tie_breaker": ["val_loss_min", "earlier_epoch"],
+                },
+                "model": {
+                    "name": "mlp",
+                    "parameters": {"input_dim": 784, "num_classes": 10, "hidden_dims": [16]},
+                },
+                "budget": {
+                    "run_seeds": [42],
+                    "max_epochs": 1,
+                    "tuning_trials_per_model": 1,
+                },
+                "training": {
+                    "batch_size": 2,
+                    "optimizer": "sgd",
+                    "learning_rate": 0.1,
+                    "weight_decay": 0.0,
+                    "early_stopping_patience": 0,
+                    "early_stopping_monitor": "macro_f1",
+                },
+                "timing": {
+                    "batch_size": 1,
+                    "warmup_steps": 1,
+                    "measurement_steps": 1,
+                    "precision": "float32",
+                    "scope": "forward_only",
+                    "device": "cpu",
+                },
+                "run": {
+                    "seed": 42,
+                    "device": "cpu",
+                    "output_root": str(temp_path),
+                },
+                "_sources": {"model": str(source_file)},
+            }
+
+            import torch
+            from torch.utils.data import DataLoader
+            class DummyDataset(torch.utils.data.Dataset):
+                def __len__(self): return 10
+                def __getitem__(self, idx): return {'images': torch.randn(1, 28, 28), 'labels': torch.randint(0, 10, (1,)).item(), 'sample_ids': f'id_{idx}'}
+            
+            loader = DataLoader(DummyDataset(), batch_size=2)
+            
+            from types import SimpleNamespace
+            with patch("dlbench.a1.trainer.build_dataloaders", return_value=SimpleNamespace(train=loader, validation=loader, test=loader)), \
+                 patch("dlbench.a1.trainer.append_history"), \
+                 patch("dlbench.a1.trainer.save_metrics"):
+                
+                result = fit(config, smoke=False)
+                self.assertTrue(result.best_checkpoint.exists())
+                
+                # Now evaluate the checkpoint with the same config, no extra patching needed!
+                eval_result = evaluate_checkpoint(config, result.best_checkpoint, split="validation")
+                
+                # Evaluate result should have metrics populated natively
+                self.assertTrue(hasattr(eval_result, "metrics"))
+                self.assertTrue(hasattr(eval_result, "predictions"))
+            
 class TestFitResume(unittest.TestCase):
     def setUp(self) -> None:
         self.output_root = tempfile.mkdtemp()
@@ -580,8 +861,17 @@ class TestFitResume(unittest.TestCase):
         patch.stopall()
 
     def test_fit_saves_real_metadata(self) -> None:
+        self.mock_provenance.stop()
+        
         from dlbench.a1.trainer import fit
         import json
+        import hashlib
+        
+        # Create a dummy source file for save_run_metadata
+        source_file = Path(self.output_root) / "model.py"
+        source_file.write_text("dummy source")
+        self.config["_sources"] = {"model": str(source_file)}
+        
         res = fit(self.config, smoke=True)
         run_dir = res.run_dir
         
@@ -592,6 +882,15 @@ class TestFitResume(unittest.TestCase):
         self.assertIn('run_mode', metadata)
         self.assertEqual(metadata['run_mode'], 'smoke')
         self.assertEqual(metadata['run_seed'], 42)
+        
+        # Verify hashes are actually computed
+        split_hash = hashlib.sha256(b"{}").hexdigest()
+        stats_json = json.dumps({"mean": [0.1], "std": [0.2]}, sort_keys=True, separators=(",", ":"))
+        stats_hash = hashlib.sha256(stats_json.encode("utf-8")).hexdigest()
+        
+        self.assertEqual(metadata["split"]["sha256"], split_hash)
+        self.assertEqual(metadata["normalization"]["sha256"], stats_hash)
+        self.assertIn("git_revision", metadata)
 
     def test_fit_resumes_training_identically(self) -> None:
         from dlbench.a1.trainer import fit
