@@ -1,4 +1,6 @@
 import tempfile
+import csv
+import hashlib
 import unittest
 from pathlib import Path
 
@@ -11,9 +13,102 @@ from dlbench.common.artifacts import (
     checkpoint_provenance,
     create_run_dir,
     save_run_metadata,
+    append_history,
+    save_metrics,
+    compute_data_provenance,
 )
 ROOT = Path(__file__).resolve().parents[1]
 class ArtifactTests(unittest.TestCase):
+    @staticmethod
+    def history_row(epoch=0):
+        return dict(epoch=epoch, train_loss=0.8, val_loss=0.9,
+                    train_accuracy=0.7, val_accuracy=0.6,
+                    train_macro_f1=0.65, val_macro_f1=0.55,
+                    learning_rate=0.001, epoch_seconds=1.2)
+
+    def test_history_appends_without_duplicate_header(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            append_history(root, self.history_row())
+            append_history(root, self.history_row(1))
+            with (root / "history.csv").open(newline="", encoding="utf-8") as file:
+                rows = list(csv.DictReader(file))
+            self.assertEqual([r["epoch"] for r in rows], ["0", "1"])
+
+    def test_history_rejections_preserve_existing_bytes(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            append_history(root, self.history_row())
+            before = (root / "history.csv").read_bytes()
+            bad_rows = [self.history_row(), {**self.history_row(1), "val_loss": float("nan")},
+                        {**self.history_row(1), "val_accuracy": 1.1},
+                        {**self.history_row(1), "epoch": True},
+                        {**self.history_row(1), "extra": 1}]
+            for row in bad_rows:
+                with self.subTest(row=row), self.assertRaises(ValueError):
+                    append_history(root, row)
+                self.assertEqual((root / "history.csv").read_bytes(), before)
+
+    def test_history_rejects_wrong_existing_header(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            path = root / "history.csv"
+            path.write_text("epoch,wrong\n0,1\n", encoding="utf-8")
+            before = path.read_bytes()
+            with self.assertRaises(ValueError):
+                append_history(root, self.history_row(1))
+            self.assertEqual(path.read_bytes(), before)
+
+    @staticmethod
+    def metrics_payload():
+        return dict(eval_split="validation", epoch=0, val_loss=0.5,
+                    val_accuracy=0.8, val_macro_f1=0.7,
+                    timing_scope="fit", timing_units="seconds")
+
+    def test_metrics_roundtrip_and_no_overwrite(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            payload = self.metrics_payload()
+            save_metrics(root, payload)
+            path = root / "metrics.json"
+            self.assertEqual(json.loads(path.read_text()), payload)
+            before = path.read_bytes()
+            with self.assertRaises(FileExistsError):
+                save_metrics(root, payload)
+            self.assertEqual(path.read_bytes(), before)
+            test = {k.replace("val_", "test_"): v for k, v in payload.items()}
+            test["eval_split"] = "test"
+            save_metrics(root, test)
+            self.assertEqual(json.loads((root / "metrics_test.json").read_text()), test)
+            self.assertEqual(path.read_bytes(), before)
+
+    def test_invalid_metrics_do_not_create_file(self):
+        for change in ({"val_loss": float("nan")}, {"epoch": -1},
+                       {"val_accuracy": 2}, {"test_loss": 1},
+                       {"extra": Path("unsupported")}):
+            with self.subTest(change=change), tempfile.TemporaryDirectory() as temp:
+                with self.assertRaises((ValueError, TypeError)):
+                    save_metrics(Path(temp), {**self.metrics_payload(), **change})
+                self.assertEqual(list(Path(temp).iterdir()), [])
+
+    def test_data_provenance_needs_no_run_or_sources(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "split.json"
+            path.write_bytes(b'{"train_indices": [0]}')
+            config = {"data": {"split_file": str(path)},
+                      "preprocessing": {"mean": [0.1], "std": [0.2]}}
+            first = compute_data_provenance(config)
+            self.assertEqual(first["split_hash"], hashlib.sha256(path.read_bytes()).hexdigest())
+            config["preprocessing"] = {"std": [0.2], "mean": [0.1]}
+            self.assertEqual(first, compute_data_provenance(config))
+            path.write_bytes(b'{"train_indices": [1]}')
+            self.assertNotEqual(first["split_hash"], compute_data_provenance(config)["split_hash"])
+            config["preprocessing"]["std"] = [0.3]
+            self.assertNotEqual(first["statistics_hash"], compute_data_provenance(config)["statistics_hash"])
+            path.unlink()
+            with self.assertRaises(FileNotFoundError):
+                compute_data_provenance(config)
+
     def test_create_run_dir_creates_new_directory(self):
         with tempfile.TemporaryDirectory() as temp:
             output_root = Path(temp) / "runs" / "a1"
@@ -138,6 +233,10 @@ class ArtifactTests(unittest.TestCase):
 
             self.assertEqual(saved_config, resolved_config)
             self.assertEqual(returned_metadata, metadata)
+            self.assertEqual(compute_data_provenance(resolved_config), {
+                "split_hash": metadata["split"]["sha256"],
+                "statistics_hash": metadata["normalization"]["sha256"],
+            })
             self.assertEqual(metadata["schema_version"], 1)
             self.assertEqual(metadata["run_mode"], "smoke")
             self.assertEqual(metadata["run_seed"], 69420)
