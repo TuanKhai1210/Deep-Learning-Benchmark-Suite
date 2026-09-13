@@ -2,6 +2,7 @@ import tempfile
 import csv
 import hashlib
 import unittest
+from unittest.mock import MagicMock, patch
 from pathlib import Path
 
 from copy import deepcopy
@@ -112,6 +113,121 @@ class ArtifactTests(unittest.TestCase):
             save_metrics(root, test)
             self.assertEqual(json.loads((root / "metrics_test.json").read_text()), test)
             self.assertEqual(path.read_bytes(), before)
+
+    def test_metrics_overwrite_keeps_each_previous_version(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            payload = self.metrics_payload()
+            save_metrics(root, payload, overwrite=True)
+            self.assertFalse((root / "backups").exists())
+            path = root / "metrics.json"
+            originals = []
+            for epoch in (1, 2):
+                originals.append(path.read_bytes())
+                updated = {**payload, "epoch": epoch}
+                save_metrics(root, updated, overwrite=True)
+                self.assertEqual(json.loads(path.read_text()), updated)
+            backups = list((root / "backups").glob("metrics-*.json"))
+            self.assertEqual(len(backups), 2)
+            self.assertCountEqual([p.read_bytes() for p in backups], originals)
+            self.assertEqual(list(root.glob("*.tmp")), [])
+
+    def test_invalid_overwrite_preserves_metrics_without_backup(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            payload = self.metrics_payload()
+            save_metrics(root, payload)
+            before = (root / "metrics.json").read_bytes()
+            for change in ({"val_loss": float("nan")}, {"extra": Path("bad")}):
+                with self.subTest(change=change), self.assertRaises((ValueError, TypeError)):
+                    save_metrics(root, {**payload, **change}, overwrite=True)
+                self.assertEqual((root / "metrics.json").read_bytes(), before)
+                self.assertFalse((root / "backups").exists())
+
+    def test_metrics_replace_failure_preserves_old_file_and_cleans_temp(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            payload = self.metrics_payload()
+            save_metrics(root, payload)
+            before = (root / "metrics.json").read_bytes()
+            with patch("dlbench.common.artifacts.os.replace", side_effect=OSError("failed")):
+                with self.assertRaises(OSError):
+                    save_metrics(root, {**payload, "epoch": 1}, overwrite=True)
+            self.assertEqual((root / "metrics.json").read_bytes(), before)
+            backups = list((root / "backups").glob("*.json"))
+            self.assertEqual(len(backups), 1)
+            self.assertEqual(backups[0].read_bytes(), before)
+            self.assertEqual(list(root.glob("*.tmp")), [])
+
+    def test_metrics_backup_failure_preserves_old_file(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            payload = self.metrics_payload()
+            save_metrics(root, payload)
+            before = (root / "metrics.json").read_bytes()
+            (root / "backups").write_text("blocked", encoding="utf-8")
+            with self.assertRaises(OSError):
+                save_metrics(root, {**payload, "epoch": 1}, overwrite=True)
+            self.assertEqual((root / "metrics.json").read_bytes(), before)
+            self.assertEqual(list(root.glob("*.tmp")), [])
+
+    def test_overwrite_test_metrics_preserves_validation_metrics(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            validation = self.metrics_payload()
+            save_metrics(root, validation)
+            validation_path = root / "metrics.json"
+            validation_before = validation_path.read_bytes()
+            test_metrics = {key.replace("val_", "test_"): value
+                            for key, value in validation.items()}
+            test_metrics["eval_split"] = "test"
+            save_metrics(root, test_metrics)
+            test_path = root / "metrics_test.json"
+            test_before = test_path.read_bytes()
+
+            updated = {**test_metrics, "epoch": 2, "test_loss": 0.3}
+            save_metrics(root, updated, overwrite=True)
+
+            self.assertEqual(json.loads(test_path.read_text(encoding="utf-8")), updated)
+            self.assertEqual(validation_path.read_bytes(), validation_before)
+            backups = list((root / "backups").iterdir())
+            self.assertEqual(len(backups), 1)
+            self.assertTrue(backups[0].name.startswith("metrics_test-"))
+            self.assertEqual(backups[0].read_bytes(), test_before)
+            self.assertEqual(list(root.glob("*.tmp")), [])
+
+    def test_backup_write_failure_preserves_metrics_and_cleans_temp(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            payload = self.metrics_payload()
+            save_metrics(root, payload)
+            target = root / "metrics.json"
+            before = target.read_bytes()
+            original_open = Path.open
+            backup_writer = MagicMock()
+            backup_writer.write.side_effect = OSError("Backup write failed")
+            opened_backups = []
+
+            def intercept_open(path, *args, **kwargs):
+                if path.parent == root / "backups" and args == ("xb",):
+                    real_file = original_open(path, *args, **kwargs)
+                    opened_backups.append(path)
+                    context = MagicMock()
+                    context.__enter__.return_value = backup_writer
+                    context.__exit__.side_effect = lambda *exc: real_file.close()
+                    return context
+                return original_open(path, *args, **kwargs)
+
+            with patch.object(Path, "open", new=intercept_open), \
+                    patch("dlbench.common.artifacts.os.replace") as replace:
+                with self.assertRaisesRegex(OSError, "Backup write failed"):
+                    save_metrics(root, {**payload, "epoch": 1}, overwrite=True)
+                replace.assert_not_called()
+
+            self.assertEqual(len(opened_backups), 1)
+            backup_writer.write.assert_called_once_with(before)
+            self.assertEqual(target.read_bytes(), before)
+            self.assertEqual(list(root.glob("*.tmp")), [])
 
     def test_invalid_metrics_do_not_create_file(self):
         for change in ({"val_loss": float("nan")}, {"epoch": -1},

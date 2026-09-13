@@ -7,6 +7,9 @@ import json
 import math
 import re
 import subprocess
+import os
+import tempfile
+from uuid import uuid4
 from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
@@ -316,8 +319,16 @@ def append_history(run_dir: Path, row: Mapping[str, Any]) -> None:
         writer.writerow(row)
 
 
-def save_metrics(run_dir: Path, metrics: Mapping[str, Any]) -> None:
-    """Save metrics.json: evaluation split, scores, epoch, timing scope/units."""
+def save_metrics(
+    run_dir: Path, metrics: Mapping[str, Any], *, overwrite: bool = False,
+) -> None:
+    """Save split-specific metrics; explicit overwrite backs up old bytes first.
+
+    A single writer owns each run. Replacement uses a temporary file on the
+    same filesystem; validation or backup failure leaves the old file intact.
+    """
+    if type(overwrite) is not bool:
+        raise TypeError("overwrite must be a boolean")
     required = {"eval_split", "epoch", "timing_scope", "timing_units"}
     if not required <= set(metrics):
         raise ValueError(f"Missing metrics fields: {sorted(required - set(metrics))}")
@@ -342,4 +353,31 @@ def save_metrics(run_dir: Path, metrics: Mapping[str, Any]) -> None:
     # Serialize before opening. Validation and test must not overwrite each other.
     text = _encode_json(dict(metrics))
     filename = "metrics.json" if split == "validation" else "metrics_test.json"
-    _write_text_new(run_dir / filename, text)
+    target = run_dir / filename
+    if not overwrite or not target.exists():
+        _write_text_new(target, text)
+        return
+
+    old_bytes = target.read_bytes()
+    temporary_path = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w", encoding="utf-8", dir=run_dir,
+            prefix=f".{filename}.", suffix=".tmp", delete=False,
+        ) as file:
+            temporary_path = Path(file.name)
+            file.write(text)
+            file.flush()
+            os.fsync(file.fileno())
+
+        backups = run_dir / "backups"
+        backups.mkdir(exist_ok=True)
+        backup = backups / f"{target.stem}-{uuid4().hex}.json"
+        with backup.open("xb") as file:
+            file.write(old_bytes)
+            file.flush()
+            os.fsync(file.fileno())
+        os.replace(temporary_path, target)
+    finally:
+        if temporary_path is not None:
+            temporary_path.unlink(missing_ok=True)

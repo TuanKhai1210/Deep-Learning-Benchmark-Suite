@@ -35,9 +35,17 @@ training. This API never silently truncates history.
 Additional JSON-serializable provenance fields are preserved. The writer does
 not infer a checkpoint, fabricate durations or supply missing scores.
 
-Existing metric files are refused, including on resume. A trainer that supports
-replacing final results must first agree on a versioning/replacement policy.
-For now the caller must arrange a fresh result destination. Run identity and
+Existing metric files are refused by default. To update results in the same
+run directory, call `save_metrics(run_dir, metrics, overwrite=True)` explicitly.
+The writer validates and serializes first, stages the new file, saves the old
+bytes under `backups/<metric-stem>-<unique-id>.json`, then atomically replaces
+the target. Invalid input or a backup/replacement error preserves the old target.
+A failed replacement can leave a valid backup; temporary files are cleaned up.
+Validation and test remain separate; updating one does not update or invalidate
+the other automatically. One writer per run is required.
+
+Trainer usage: `save_metrics(run_dir, final_metrics, overwrite=resume_from is not None)`.
+Run identity and
 hashes remain in the adjacent metadata.json; callers should supply checkpoint
 identity explicitly when exporting metrics separately from their run directory.
 
