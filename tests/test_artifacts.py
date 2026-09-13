@@ -59,6 +59,37 @@ class ArtifactTests(unittest.TestCase):
                 append_history(root, self.history_row(1))
             self.assertEqual(path.read_bytes(), before)
 
+    def test_history_rejects_corrupt_existing_rows_without_modification(self):
+        corrupt_rows = {
+            "non_numeric": b"1,broken,0.9,0.7,0.6,0.65,0.55,0.001,1.2\n",
+            "missing_column": b"1,0.8,0.9,0.7,0.6,0.65,0.55,0.001\n",
+            "extra_column": b"1,0.8,0.9,0.7,0.6,0.65,0.55,0.001,1.2,extra\n",
+            "non_finite": b"1,nan,0.9,0.7,0.6,0.65,0.55,0.001,1.2\n",
+        }
+        for name, damaged_row in corrupt_rows.items():
+            with self.subTest(case=name), tempfile.TemporaryDirectory() as temp:
+                root = Path(temp)
+                append_history(root, self.history_row())
+                path = root / "history.csv"
+                with path.open("ab") as file:
+                    file.write(damaged_row)
+                before = path.read_bytes()
+                with self.assertRaisesRegex(ValueError, "invalid row"):
+                    append_history(root, self.history_row(2))
+                self.assertEqual(path.read_bytes(), before)
+
+    def test_history_rejects_partial_final_line_without_modification(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            append_history(root, self.history_row())
+            path = root / "history.csv"
+            with path.open("ab") as file:
+                file.write(b"1,0.8,0.9,0.7")
+            before = path.read_bytes()
+            with self.assertRaisesRegex(ValueError, "incomplete final line"):
+                append_history(root, self.history_row(2))
+            self.assertEqual(path.read_bytes(), before)
+
     @staticmethod
     def metrics_payload():
         return dict(eval_split="validation", epoch=0, val_loss=0.5,
