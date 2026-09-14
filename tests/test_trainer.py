@@ -191,7 +191,8 @@ class TestFitCalculations(unittest.TestCase):
         
         self.mock_validate_config.assert_called_once()
         self.assertFalse(self.mock_validate_config.call_args.kwargs["strict"])
-        self.assertEqual(self.mock_validate_config.call_args.args[0]["budget"]["max_epochs"], 2)
+        # Smoke test overrides max_epochs to 10.
+        self.assertEqual(self.mock_validate_config.call_args.args[0]["budget"]["max_epochs"], 10)
         self.assertEqual(self.mock_build_dataloaders.call_args.args[0]["training"]["batch_size"], 32)
 
     def test_fit_supports_validation_loss_as_early_stopping_monitor(self) -> None:
@@ -920,7 +921,7 @@ class TestFitResume(unittest.TestCase):
         
         # Resume Run 2 to epoch 2
         config3 = copy.deepcopy(self.config)
-        config3['budget']['max_epochs'] = 1
+        config3['budget']['max_epochs'] = 2
         res3 = fit(config3, smoke=True, resume_from=last_pt2)
         run_dir3 = res3.run_dir
         self.assertEqual(run_dir2, run_dir3)
