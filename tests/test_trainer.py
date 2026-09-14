@@ -193,7 +193,7 @@ class TestFitCalculations(unittest.TestCase):
         self.assertFalse(self.mock_validate_config.call_args.kwargs["strict"])
         # Smoke test overrides max_epochs to 10.
         self.assertEqual(self.mock_validate_config.call_args.args[0]["budget"]["max_epochs"], 10)
-        self.assertEqual(self.mock_build_dataloaders.call_args.args[0]["training"]["batch_size"], 32)
+        self.assertEqual(self.mock_build_dataloaders.call_args.args[0]["training"]["batch_size"], 16)
 
     def test_fit_supports_validation_loss_as_early_stopping_monitor(self) -> None:
         config = self._config()
