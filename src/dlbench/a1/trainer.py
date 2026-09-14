@@ -144,9 +144,9 @@ def _resolve_smoke_config(config: Mapping[str, Any]) -> dict[str, Any]:
         max_epochs = 0
 
     if max_epochs <= 0:
-        budget["max_epochs"] = 2
+        budget["max_epochs"] = 10
     else:
-        budget["max_epochs"] = min(max_epochs, 2)
+        budget["max_epochs"] = min(max_epochs, 10)
 
     try:
         batch_size = int(training.get("batch_size", 0))
@@ -154,9 +154,9 @@ def _resolve_smoke_config(config: Mapping[str, Any]) -> dict[str, Any]:
         batch_size = 0
 
     if batch_size <= 0:
-        training["batch_size"] = 32
+        training["batch_size"] = 16
     else:
-        training["batch_size"] = min(batch_size, 32)
+        training["batch_size"] = min(batch_size, 16)
 
     try:
         save_frequency = int(training.get("save_frequency", 1))
@@ -273,12 +273,8 @@ def fit(config: Mapping[str, Any], *, smoke: bool = False, resume_from: Path | N
     criterion = torch.nn.CrossEntropyLoss()
 
     # Get training parameters
-    epochs_to_train = int(resolved_config["budget"]["max_epochs"])
-    if smoke:
-        # For smoke tests, use minimal epochs
-        epochs_to_train = min(epochs_to_train, 10)
+    max_epochs = int(resolved_config["budget"]["max_epochs"])
     
-    epochs = start_epoch + epochs_to_train
 
     # Track best model
     early_stopping_patience = int(training_config.get("early_stopping_patience", 0))
@@ -327,7 +323,7 @@ def fit(config: Mapping[str, Any], *, smoke: bool = False, resume_from: Path | N
     epochs_without_improvement = payload.get("epochs_without_improvement", 0) if resume_from is not None else 0
 
     # Training loop
-    for epoch in range(start_epoch, epochs):
+    for epoch in range(start_epoch, max_epochs):
         start_time = time.time()
 
         # Train
@@ -396,7 +392,7 @@ def fit(config: Mapping[str, Any], *, smoke: bool = False, resume_from: Path | N
         # Save resumable state at the configured frequency, at the final epoch,
         # and when early stopping cuts the run short.
         last_checkpoint_path = run_dir / "last.pt"
-        should_save_last = (epoch + 1) % save_frequency == 0 or epoch == epochs - 1
+        should_save_last = (epoch + 1) % save_frequency == 0 or epoch == max_epochs - 1
 
         # Update best model if needed
         if is_better(selection_metrics, best_selection_metrics):
