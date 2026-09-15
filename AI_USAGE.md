@@ -140,3 +140,18 @@
 - Responsible member: Tạ Tuấn Khải
 - Verification sources: `tests/test_artifacts.py`, local unit-test output, project configuration files, and Git diff inspection
 - Experiment impact: No training runs or benchmark measurements were performed as part of this work
+
+## 2026-09-13 - History, metrics and shared provenance helpers
+
+- Tool/model: OpenAI Codex (GPT-6)
+- Used by: Tạ Tuấn Khải
+- Stage: C03 implementation
+- Purpose: Complete history and metrics writers and provide shared data-provenance hashing
+- Affected sections: `src/dlbench/common/artifacts.py`, `tests/test_artifacts.py`, and `docs/artifact-api.md`
+- Prompt summary: Requested implementation of `append_history()`, `save_metrics()`, and `compute_data_provenance()` to support trainer integration
+- AI contribution: Implemented the helpers and regression tests; added CSV schema and epoch validation, finite-value checks, non-overwriting metrics output, and shared split/statistics hashing
+- Human verification: Notebook walkthrough and manual review are planned; implementation will be checked step by step by the responsible member
+- Automated verification: AI executed the local test suite — 97 tests run, 94 passed and 3 existing tests skipped; `git diff --check` reported no whitespace errors
+- Responsible member: Tạ Tuấn Khải
+- Verification sources: Repository source code, artifact tests, local test output, and Git diff
+- Experiment impact: No training runs or benchmark measurements were performed
