@@ -318,9 +318,8 @@ class TestEvaluateCheckpoint(unittest.TestCase):
         with patch("dlbench.a1.trainer.validate_config"), \
                 patch("dlbench.a1.trainer.get_device", return_value=torch.device("cpu")), \
                 patch("dlbench.a1.trainer.load_checkpoint", return_value=payload), \
-                patch("dlbench.a1.trainer.save_run_metadata") as mock_save, \
-                patch("dlbench.a1.trainer.checkpoint_provenance", return_value={
-                    "split_hash": "split-hash", "statistics_hash": "stats-hash", "git_revision": "git"
+                patch("dlbench.a1.trainer.compute_data_provenance", return_value={
+                    "split_hash": "split-hash", "statistics_hash": "stats-hash"
                 }), \
                 patch("dlbench.a1.trainer.build_model", return_value=model), \
                 patch("dlbench.a1.trainer.build_dataloaders", return_value=loaders), \
@@ -329,15 +328,6 @@ class TestEvaluateCheckpoint(unittest.TestCase):
 
         self.assertIs(result, expected)
         self.assertIs(evaluate.call_args.args[1], loaders.validation)
-        
-        mock_save.assert_called_once()
-        args, kwargs = mock_save.call_args
-        self.assertIsInstance(args[0], Path)
-        expected_config = dict(config)
-        expected_config["run"] = dict(expected_config.get("run", {}))
-        expected_config["run"]["mode"] = "main"
-        self.assertEqual(args[1], expected_config)
-
     def test_evaluate_checkpoint_real_hashes(self) -> None:
         import tempfile
         import json
@@ -420,9 +410,8 @@ class TestEvaluateCheckpoint(unittest.TestCase):
         with patch("dlbench.a1.trainer.validate_config"), \
                 patch("dlbench.a1.trainer.get_device", return_value=torch.device("cpu")), \
                 patch("dlbench.a1.trainer.load_checkpoint", return_value=payload), \
-                patch("dlbench.a1.trainer.save_run_metadata"), \
-                patch("dlbench.a1.trainer.checkpoint_provenance", return_value={
-                    "split_hash": "split-hash", "statistics_hash": "stats-hash", "git_revision": "git"
+                patch("dlbench.a1.trainer.compute_data_provenance", return_value={
+                    "split_hash": "split-hash", "statistics_hash": "stats-hash"
                 }), \
                 patch("dlbench.a1.trainer.build_model", return_value=model), \
                 patch("dlbench.a1.trainer.build_dataloaders", return_value=loaders), \
@@ -444,9 +433,8 @@ class TestEvaluateCheckpoint(unittest.TestCase):
         with patch("dlbench.a1.trainer.validate_config"), \
                 patch("dlbench.a1.trainer.get_device", return_value=torch.device("cpu")), \
                 patch("dlbench.a1.trainer.load_checkpoint", return_value=payload), \
-                patch("dlbench.a1.trainer.save_run_metadata"), \
-                patch("dlbench.a1.trainer.checkpoint_provenance", return_value={
-                    "split_hash": "current-split", "statistics_hash": "stats-hash", "git_revision": "git"
+                patch("dlbench.a1.trainer.compute_data_provenance", return_value={
+                    "split_hash": "current-split", "statistics_hash": "stats-hash"
                 }), \
                 patch("dlbench.a1.trainer.build_model") as build_model:
             with self.assertRaisesRegex(ValueError, "split"):
@@ -849,12 +837,19 @@ class TestFitResume(unittest.TestCase):
         patch('dlbench.a1.trainer.validate_config').start()
         patch('dlbench.a1.trainer.append_history').start()
         patch('dlbench.a1.trainer.save_metrics').start()
-        self.mock_provenance = patch('dlbench.a1.trainer.checkpoint_provenance', return_value={
+        self.patcher_provenance = patch('dlbench.a1.trainer.checkpoint_provenance', return_value={
             'schema_version': 1,
             'split_hash': 'fake_split',
             'statistics_hash': 'fake_stats',
             'git_revision': 'fake_git'
-        }).start()
+        })
+        self.mock_provenance = self.patcher_provenance.start()
+        
+        self.patcher_compute_provenance = patch('dlbench.a1.trainer.compute_data_provenance', return_value={
+            'split_hash': 'fake_split',
+            'statistics_hash': 'fake_stats'
+        })
+        self.mock_compute_provenance = self.patcher_compute_provenance.start()
 
     def tearDown(self) -> None:
         import shutil
@@ -862,7 +857,8 @@ class TestFitResume(unittest.TestCase):
         patch.stopall()
 
     def test_fit_saves_real_metadata(self) -> None:
-        self.mock_provenance.stop()
+        self.patcher_provenance.stop()
+        self.patcher_compute_provenance.stop()
         
         from dlbench.a1.trainer import fit
         import json
@@ -934,3 +930,38 @@ class TestFitResume(unittest.TestCase):
         # The weights should be exactly the same
         for k in model_weights1:
             self.assertTrue(torch.equal(model_weights1[k], model_weights3[k]))
+
+    def test_fit_resumes_training_real_provenance(self) -> None:
+        self.patcher_provenance.stop()
+        self.patcher_compute_provenance.stop()
+        
+        from dlbench.a1.trainer import fit
+        import torch
+        import copy
+        
+        source_file = Path(self.output_root) / "model.py"
+        source_file.write_text("dummy source")
+        self.config["_sources"] = {"model": str(source_file)}
+        
+        # Train for 1 epoch
+        config2 = copy.deepcopy(self.config)
+        config2['budget']['max_epochs'] = 1
+        res2 = fit(config2, smoke=True)
+        
+        last_pt2 = res2.run_dir / 'last.pt'
+        
+        # Resume with correct config
+        config3 = copy.deepcopy(self.config)
+        config3['budget']['max_epochs'] = 2
+        res3 = fit(config3, smoke=True, resume_from=last_pt2)
+        self.assertEqual(res3.run_dir, res2.run_dir)
+        
+        # Now change the split file to have a different hash
+        bad_split_file = Path(self.output_root) / "bad_split.json"
+        bad_split_file.write_text('{"different": "hash"}')
+        config4 = copy.deepcopy(self.config)
+        config4['budget']['max_epochs'] = 2
+        config4['data']['split_file'] = str(bad_split_file)
+        
+        with self.assertRaisesRegex(ValueError, "Checkpoint split does not match"):
+            fit(config4, smoke=True, resume_from=last_pt2)

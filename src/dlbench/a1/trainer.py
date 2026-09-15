@@ -26,6 +26,7 @@ from dlbench.common.artifacts import (
     save_run_metadata,
     append_history,
     save_metrics,
+    compute_data_provenance,
 )
 from dlbench.common.config import validate_config
 from dlbench.a1.checkpoint import save_checkpoint, is_better, load_checkpoint
@@ -238,6 +239,13 @@ def fit(config: Mapping[str, Any], *, smoke: bool = False, resume_from: Path | N
     else:
         payload = load_checkpoint(resume_from, resume=True)
         run_dir = resume_from.parent
+
+        current_provenance = compute_data_provenance(resolved_config)
+        if payload["split_hash"] != current_provenance["split_hash"]:
+            raise ValueError("Checkpoint split does not match the supplied configuration.")
+        if payload["statistics_hash"] != current_provenance["statistics_hash"]:
+            raise ValueError("Checkpoint preprocessing does not match the supplied configuration.")
+
         metadata_provenance = {
             "schema_version": payload["schema_version"],
             "split_hash": payload["split_hash"],
@@ -479,18 +487,14 @@ def evaluate_checkpoint(config: Mapping[str, Any], checkpoint_path: Path, *,
         if payload["config"].get(section) != config.get(section):
             raise ValueError(f"Configuration mismatch in section: {section}")
     
-    import tempfile
-    from copy import deepcopy
-    resolved_config = _resolve_smoke_config(config) if smoke else deepcopy(dict(config))
-    resolved_config["run"]["mode"] = "smoke" if smoke else "main"
+    resolved_config = _resolve_smoke_config(config) if smoke else dict(config)
     
-    with tempfile.TemporaryDirectory() as temp_dir:
-        current_metadata = checkpoint_provenance(save_run_metadata(Path(temp_dir), resolved_config))
+    current_provenance = compute_data_provenance(resolved_config)
 
-    if payload["split_hash"] != current_metadata["split_hash"]:
+    if payload["split_hash"] != current_provenance["split_hash"]:
         raise ValueError("Checkpoint split does not match the supplied configuration.")
 
-    if payload["statistics_hash"] != current_metadata["statistics_hash"]:
+    if payload["statistics_hash"] != current_provenance["statistics_hash"]:
         raise ValueError("Checkpoint preprocessing does not match the supplied configuration.")
     
     model = build_model(config["model"])
