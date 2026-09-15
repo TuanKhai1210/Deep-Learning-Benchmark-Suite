@@ -94,19 +94,27 @@
 - Sources used for verification: Existing MLP implementation, parameter-count helper, repository test conventions, and PyTorch module behavior.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ## 2026-09-08 - GitHub Pages visual redesign
+=======
+>>>>>>> d1887766a2cd56f38eb017ed8834e19c2983917f
 
-- Tool/model: OpenAI Codex; exact model identifier not recorded
-- Used by / responsible member: Tạ Tuấn Khải
-- Purpose: Redesign the research portfolio and assignment pages while preserving confirmed team roles, split seed 36 and run seeds 69420, 67, 69
-- Affected sections: docs site configuration, layouts, styles, interactive conceptual architecture diagrams, assignment pages and experiment-contract presentation
-- AI contribution: Authored site design and frontend code; reorganized existing content; corrected two stale four-seed references in the contract to three run seeds
-- Human verification: Pending team review of content, accessibility, course alignment and the deployed GitHub Pages build
-- Verification scope: Local preview checks are documented with the delivered update; they do not verify the hosted Jekyll build or ML implementations
-- Experimental status: No model training, evaluation or measured benchmark results were generated or claimed
+## 2026-09-06 - Exploratory Data Analysis requirements and leakage constraints
 
-### Readability revision requested on 2026-09-08
+- Tool: Gemini 3.8 Flash
+- Used by: Nguyễn Hạo Thiên
+- Stage: Assignment 1 data exploration and protocol design
+- Purpose: Technical clarification of EDA scope for Fashion-MNIST and guidelines for data leakage prevention.
+- Affected files/sections:
+  - `src/dlbench/a1/data/eda.py`
+  - Report Part 1 (Problem and Data Description, EDA narrative)
+- Prompt summary: Inquired what EDA means within the assignment context, what specific checks are required for Fashion-MNIST, and why it must be performed before model training.
+- AI contribution: Clarified required analytical components (class balance, shape/dtype verification, pixel range bounds, and representative grid visualizations) and emphasized that normalization statistics must be computed strictly on the training partition to prevent leakage.
+- Student verification: Audited Fashion-MNIST class labels against Zalando's official specifications, confirmed all 10 classes are evenly represented, and reviewed the handbook Section 3.1 and 13 data requirements.
+- Responsible member: Nguyễn Hạo Thiên
+- Sources used for verification: Course Project Handbook CO3133 (Semester-261) Section 3.1, 10, and 13.
 
+<<<<<<< HEAD
 - User feedback: Enlarge small text, make interactive controls obvious, brighten backgrounds and emphasize important figures and labels.
 - Changes: Stronger typography and contrast; visible link/button treatments; highlighted counts and seeds; clearer member cards; model tags now navigate to and open the corresponding A1 model details.
 - Scope: Presentation and navigation only. Experiment choices and measured-results status are unchanged.
@@ -167,6 +175,8 @@
 <<<<<<< HEAD
 =======
 
+=======
+>>>>>>> d1887766a2cd56f38eb017ed8834e19c2983917f
 ## 2026-09-07 - Stratified dataset splitting and manifest persistence
 
 - Tool: Gemini 3.8 Flash
@@ -199,6 +209,7 @@
 - Responsible member: Nguyễn Hạo Thiên
 - Sources used for verification:
   - `dlbench/a1/contracts.py` (`Batch`, `DataLoaders`)
+<<<<<<< HEAD
 <<<<<<< HEAD
   - PyTorch documentation for `torch.utils.data.DataLoader` (worker initialization, generators, and collation mechanics)
 >>>>>>> 0d70a0f (docs: add AI usage)
@@ -248,3 +259,6 @@
 =======
   - PyTorch documentation for `torch.utils.data.DataLoader` (worker initialization, generators, and collation mechanics)
 >>>>>>> 376d553 (docs: fix AI usage)
+=======
+  - PyTorch documentation for `torch.utils.data.DataLoader` (worker initialization, generators, and collation mechanics)
+>>>>>>> d1887766a2cd56f38eb017ed8834e19c2983917f
