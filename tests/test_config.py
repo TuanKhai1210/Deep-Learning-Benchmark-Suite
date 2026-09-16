@@ -208,6 +208,7 @@ class ConfigTests(unittest.TestCase):
                 return len(self.targets)
 
         manifest = type("Manifest", (), {
+            "split_seed": 36,
             "train_indices": list(range(250)),
             "validation_indices": list(range(250, 260)),
             "test_indices": list(range(260, 270)),

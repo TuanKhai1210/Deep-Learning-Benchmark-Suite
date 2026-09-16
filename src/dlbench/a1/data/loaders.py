@@ -13,7 +13,7 @@ from torch.utils.data import DataLoader
 
 from dlbench.a1.contracts import Batch, DataLoaders
 from dlbench.a1.data.dataset import FashionMNISTSubset, load_official_dataset
-from dlbench.a1.data.split import load_split
+from dlbench.a1.data.split import load_split, validate_split_against_config
 from dlbench.a1.data.transforms import build_transforms
 from dlbench.common.reproducibility import seed_worker
 
@@ -44,6 +44,7 @@ def build_dataloaders(config: Mapping[str, Any], *, smoke: bool = False) -> Data
         data_cfg.get("split_file", config.get("split_path", "configs/a1/splits/fashion_mnist_seed36.json"))
     )
     manifest = load_split(split_path)
+    validate_split_against_config(manifest, data_cfg)
 
     # Load raw official datasets without transforms attached to base instances
     raw_train = load_official_dataset(data_root, train=True, download=False)

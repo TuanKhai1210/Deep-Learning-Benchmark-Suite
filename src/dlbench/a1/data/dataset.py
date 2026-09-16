@@ -14,7 +14,7 @@ import torch
 from torch.utils.data import Dataset
 from torchvision.datasets import FashionMNIST
 
-from dlbench.a1.data.split import create_split, load_split, save_split
+from dlbench.a1.data.split import create_split, load_split, save_split, validate_split_against_config
 from dlbench.a1.data.transforms import compute_normalization
 
 class FashionMNISTSubset(Dataset):
@@ -84,6 +84,7 @@ def prepare_data(config: Mapping[str, Any]) -> dict[str, Any]:
         labels = [int(label) for label in raw_train.targets]
         manifest = create_split(labels, validation_size=val_size, split_seed=split_seed)
         save_split(manifest, split_path)
+    validate_split_against_config(manifest, data_config)
 
     # 3. Compute train-only normalization statistics dynamically without leakage
     mean, std = compute_normalization(raw_train, manifest.train_indices)

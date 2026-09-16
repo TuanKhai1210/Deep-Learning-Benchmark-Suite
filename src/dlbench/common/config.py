@@ -133,7 +133,9 @@ def validate_config(config: dict[str, Any], *, strict: bool = False) -> list[str
         require(name in ("random_crop", "random_horizontal_flip"),
                 "Implement/review a new augmentation policy before adding its config value.")
         if name == "random_crop":
-            size = augmentation.get("size", prep["image_size"])
+            size = augmentation.get("size")
+            require(isinstance(size, list) and len(size) == 2,
+                "random_crop.size must be a two-item list.")
             require(size == [28, 28], "random_crop must produce a 28x28 image.")
             require(nonnegative_int(augmentation.get("padding")),
                     "random_crop.padding must be a nonnegative integer.")

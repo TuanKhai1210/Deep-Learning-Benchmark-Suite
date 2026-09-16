@@ -22,6 +22,15 @@ class PipelineContractTests(unittest.TestCase):
         self.assertFalse(is_better({**incumbent, "test_accuracy": 1.0}, incumbent))
         self.assertTrue(is_better(incumbent, None))
 
+    def test_create_split_uses_exact_validation_size(self):
+        from dlbench.a1.data.split import create_split
+
+        labels = [class_id for class_id in range(10) for _ in range(100)]
+        manifest = create_split(labels, validation_size=11, split_seed=36)
+
+        self.assertEqual(len(manifest.validation_indices), 11)
+        self.assertEqual(len(manifest.train_indices), 989)
+
     @unittest.skip("TODO A (Thiên): implement split validation; remove this skip.")
     def test_split_overlap_is_rejected(self):
         from dlbench.a1.contracts import SplitManifest

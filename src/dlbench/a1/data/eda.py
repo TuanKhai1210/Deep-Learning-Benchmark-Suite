@@ -13,13 +13,13 @@ import numpy as np
 import torch
 
 from dlbench.a1.data.dataset import load_official_dataset
-from dlbench.a1.data.split import load_split
+from dlbench.a1.data.split import load_split, validate_split_against_config
 
 
 def generate_eda(
     config: Mapping[str, Any],
     output_dir: Path,
-    curated_dir: Path | None = Path("docs/assets/a1"),
+    curated_dir: Path | None = None,
 ) -> None:
     """Export counts, class distribution, shape/range checks and representative images.
 
@@ -41,6 +41,7 @@ def generate_eda(
     raw_train = load_official_dataset(data_root, train=True, download=False)
     raw_test = load_official_dataset(data_root, train=False, download=False)
     manifest = load_split(split_path)
+    validate_split_against_config(manifest, data_cfg)
 
     classes = raw_train.classes
     train_targets = np.array(raw_train.targets)[manifest.train_indices]
@@ -62,7 +63,7 @@ def generate_eda(
         "source": "torchvision.datasets.FashionMNIST",
         "license": "MIT License",
         "split": {
-            "seed": int(data_cfg.get("split_seed", 36)),
+            "seed": manifest.split_seed,
             "file": split_path_str,
             "train_size": len(manifest.train_indices),
             "validation_size": len(manifest.validation_indices),

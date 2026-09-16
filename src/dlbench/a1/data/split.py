@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 
 import numpy as np
 from dlbench.a1.contracts import SplitManifest
@@ -19,14 +19,32 @@ def create_split(labels: Sequence[int], *, validation_size: int, split_seed: int
         raise ValueError(f"validation_size must be between 1 and {num_samples - 1}, got {validation_size}")
 
     rng = np.random.default_rng(split_seed)
-    train_indices: list[int] = []
-    val_indices: list[int] = []
-
     classes = np.unique(labels_arr)
+    class_indices: dict[int, np.ndarray] = {}
+    class_quotas: dict[int, float] = {}
+    val_counts: dict[int, int] = {}
     for c in classes:
         cls_idx = np.where(labels_arr == c)[0]
+        class_indices[int(c)] = cls_idx
+        quota = len(cls_idx) * (validation_size / num_samples)
+        class_quotas[int(c)] = quota
+        val_counts[int(c)] = int(np.floor(quota))
+
+    remainder = validation_size - sum(val_counts.values())
+    ranked_classes = sorted(
+        classes,
+        key=lambda c: (class_quotas[int(c)] - val_counts[int(c)], -int(c)),
+        reverse=True,
+    )
+    for c in ranked_classes[:remainder]:
+        val_counts[int(c)] += 1
+
+    train_indices: list[int] = []
+    val_indices: list[int] = []
+    for c in classes:
+        cls_idx = class_indices[int(c)]
         rng.shuffle(cls_idx)
-        cls_val_count = int(round(len(cls_idx) * (validation_size / num_samples))) # Proportional split for each class
+        cls_val_count = val_counts[int(c)]
         val_indices.extend(cls_idx[:cls_val_count].tolist())
         train_indices.extend(cls_idx[cls_val_count:].tolist())
 
@@ -42,12 +60,42 @@ def create_split(labels: Sequence[int], *, validation_size: int, split_seed: int
         test_indices=test_indices,
     )
 
-    validate_split(manifest)
+    validate_split(manifest, train_val_size=num_samples)
     return manifest
 
 
-def validate_split(manifest: SplitManifest) -> None:
-    """Check ranges, duplicates, 60k partition coverage, and 10k test coverage."""
+def validate_split_against_config(manifest: SplitManifest, data_config: Mapping[str, object]) -> None:
+    """Verify that a persisted manifest matches the active data protocol."""
+    expected_dataset = data_config.get("dataset")
+    if expected_dataset is not None and manifest.dataset != expected_dataset:
+        raise ValueError(
+            f"Split dataset {manifest.dataset!r} does not match config {expected_dataset!r}."
+        )
+
+    expected_seed = data_config.get("split_seed")
+    if expected_seed is not None and manifest.split_seed != expected_seed:
+        raise ValueError(
+            f"Split seed {manifest.split_seed} does not match config {expected_seed}."
+        )
+
+    expected_counts = {
+        "train_size": len(manifest.train_indices),
+        "validation_size": len(manifest.validation_indices),
+        "test_size": len(manifest.test_indices),
+    }
+    for key, actual in expected_counts.items():
+        expected = data_config.get(key)
+        if expected is not None and actual != expected:
+            raise ValueError(f"Split {key} {actual} does not match config {expected}.")
+
+
+def validate_split(
+    manifest: SplitManifest,
+    *,
+    train_val_size: int = 60_000,
+    test_size: int = 10_000,
+) -> None:
+    """Check ranges, duplicates, partition coverage, and test coverage."""
     train_set = set(manifest.train_indices)
     val_set = set(manifest.validation_indices)
     test_set = set(manifest.test_indices)
@@ -67,14 +115,18 @@ def validate_split(manifest: SplitManifest) -> None:
 
     # 3. Exactly partition the 60,000 official training images
     combined_train_val = train_set.union(val_set)
-    if combined_train_val != set(range(60_000)):
+    if combined_train_val != set(range(train_val_size)):
         raise ValueError(
-            f"Train and validation must partition indices 0..59999. Found {len(combined_train_val)} total samples."
+            f"Train and validation must partition indices 0..{train_val_size - 1}. "
+            f"Found {len(combined_train_val)} total samples."
         )
 
-    # 4. Cover the 10,000 official test set images
-    if test_set != set(range(10_000)):
-        raise ValueError(f"Test indices must span indices 0..9999. Found {len(test_set)} elements.")
+    # 4. Cover the expected test set images
+    if test_set != set(range(test_size)):
+        raise ValueError(
+            f"Test indices must span indices 0..{test_size - 1}. "
+            f"Found {len(test_set)} elements."
+        )
 
 
 def save_split(manifest: SplitManifest, path: Path) -> None:

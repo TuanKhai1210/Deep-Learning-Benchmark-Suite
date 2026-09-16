@@ -71,7 +71,7 @@ def build_transforms(preprocessing: Mapping[str, Any], *, training: bool) -> Cal
             elif name == "random_crop":
                 transform_list.append(
                     transforms.RandomCrop(
-                        size=augmentation["size"],
+                        size=tuple(augmentation["size"]),
                         padding=augmentation["padding"],
                         pad_if_needed=False,
                         fill=augmentation.get("fill", 0),

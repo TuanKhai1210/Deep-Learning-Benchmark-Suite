@@ -31,7 +31,7 @@ class DatasetPreparationTests(unittest.TestCase):
                 {
                     "split_seed": 36,
                     "train_indices": [],
-                    "validation_indices": [],
+                    "validation_indices": list(range(10_000)),
                     "test_indices": [],
                 },
             )()
