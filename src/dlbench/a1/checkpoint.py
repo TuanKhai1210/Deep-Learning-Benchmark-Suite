@@ -107,7 +107,7 @@ def save_checkpoint(path: Path, payload: Mapping[str, Any], *, resume=False) -> 
         raise
 
 
-def load_checkpoint(path: Path, *, map_location: str = "cpu", resume=False) -> dict[str, Any]:
+def load_checkpoint(path: Path, *, map_location: str | torch.device = "cpu", resume=False) -> dict[str, Any]:
     """Load trusted checkpoint only, then verify expected keys/schema/version."""
 
     target_path = Path(path)
