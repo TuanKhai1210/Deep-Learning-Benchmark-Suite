@@ -10,36 +10,7 @@ import json
 from pathlib import Path
 import sys
 import tempfile
-import types
 import unittest
-
-try:
-    import numpy  # type: ignore # pragma: no cover
-except ModuleNotFoundError:  # CI does not install optional ML extras for config-only tests.
-    class _FakeArray(list):
-        def __init__(self, value):
-            super().__init__(value)
-            self.shape = self._infer_shape(value)
-
-        @staticmethod
-        def _infer_shape(value):
-            if isinstance(value, list):
-                if value and isinstance(value[0], list):
-                    return (len(value), len(value[0]))
-                return (len(value),)
-            return ()
-
-        def __getitem__(self, key):
-            if isinstance(key, list):
-                return _FakeArray([self[i] for i in key])
-            return super().__getitem__(key)
-
-    fake_numpy = types.ModuleType("numpy")
-    fake_numpy.array = lambda value, *args, **kwargs: _FakeArray(value) if not isinstance(value, _FakeArray) else value
-    fake_numpy.arange = lambda *args, **kwargs: list(range(*args))
-    fake_numpy.zeros = lambda shape, dtype=None: _FakeArray([[0 for _ in range(shape[1])] for _ in range(shape[0])]) if isinstance(shape, tuple) and len(shape) == 2 else _FakeArray([0 for _ in range(shape[0])])
-    fake_numpy.uint8 = "uint8"
-    sys.modules["numpy"] = fake_numpy
 
 from dlbench.a1.cli import main
 from dlbench.a1.contracts import EpochMetrics, Predictions
@@ -131,13 +102,12 @@ class ConfigTests(unittest.TestCase):
         ]
         self.assertEqual(validate_config(config), [
             "protocol.status is draft; review and freeze the main protocol.",
+            "protocol.approved_by must record all three distinct reviewers.",
             "preprocessing.mean/std are unmeasured; compute from train only.",
             "budget.max_epochs is undecided (0).",
             "budget.tuning_trials_per_model is undecided (0).",
             "training.batch_size is undecided (0).",
             "timing.batch_size is undecided (0).",
-            "timing.warmup_steps is undecided (0).",
-            "timing.measurement_steps is undecided (0).",
             "timing.device must identify the agreed benchmark device.",
         ])
 
