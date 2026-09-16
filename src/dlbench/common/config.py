@@ -107,6 +107,7 @@ def validate_config(config: dict[str, Any], *, strict: bool = False) -> list[str
     model = config["model"]
     training = config["training"]
     run = config["run"]
+    require(type(data.get("download")) is bool, "data.download must be a boolean.")
     require(protocol.get("status") in ("draft", "frozen"), "protocol.status must be draft or frozen.")
     require(isinstance(protocol.get("id"), str) and bool(protocol["id"]), "protocol.id is required.")
     approved = protocol.get("approved_by")
@@ -123,9 +124,25 @@ def validate_config(config: dict[str, Any], *, strict: bool = False) -> list[str
         require(isinstance(data.get(key), str) and bool(data[key]), f"data.{key} is required.")
     require(prep.get("image_size") == [28, 28] and prep.get("channels") == 1,
             "The current A1 input contract is one-channel 28x28.")
-    require(prep.get("augmentation") in ("none", "random_crop"),
-            "Implement/review a new augmentation policy before adding its config value.")
-    require(nonnegative_int(prep.get("crop_padding")), "crop_padding must be nonnegative.")
+    augmentations = prep.get("augmentations")
+    require(isinstance(augmentations, list), "preprocessing.augmentations must be a list.")
+    for augmentation in augmentations:
+        require(isinstance(augmentation, dict),
+                "Each preprocessing augmentation must be a dictionary.")
+        name = augmentation.get("name")
+        require(name in ("random_crop", "random_horizontal_flip"),
+                "Implement/review a new augmentation policy before adding its config value.")
+        if name == "random_crop":
+            size = augmentation.get("size", prep["image_size"])
+            require(size == [28, 28], "random_crop must produce a 28x28 image.")
+            require(nonnegative_int(augmentation.get("padding")),
+                    "random_crop.padding must be a nonnegative integer.")
+            require(augmentation.get("padding_mode", "constant") in ("constant", "edge", "reflect", "symmetric"),
+                    "random_crop.padding_mode is unsupported.")
+        else:
+            probability = augmentation.get("p", 0.5)
+            require(finite_number(probability) and 0 <= probability <= 1,
+                    "random_horizontal_flip.p must be between 0 and 1.")
     require(evaluation.get("labels") == list(range(10)), "Evaluation labels must be 0..9.")
     require(evaluation.get("metrics") == ["accuracy", "macro_f1"], "Use shared accuracy/macro_f1.")
     require(evaluation.get("zero_division") == 0, "Current metric contract uses zero_division=0.")

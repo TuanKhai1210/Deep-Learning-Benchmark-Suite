@@ -69,6 +69,14 @@ class ConfigTests(unittest.TestCase):
         self.assertEqual(self.config["run"]["seed"], 69420)
         self.assertEqual(self.config["data"]["split_seed"], 36)
 
+    def test_download_must_be_boolean(self):
+        self.config["data"]["download"] = False
+        validate_config(self.config)
+
+        self.config["data"]["download"] = "true"
+        with self.assertRaisesRegex(ConfigError, "data.download must be a boolean"):
+            validate_config(self.config)
+
     def test_python_config_does_not_execute_statements(self):
         with tempfile.TemporaryDirectory() as temp:
             path = Path(temp) / "unsafe.py"
@@ -115,6 +123,36 @@ class ConfigTests(unittest.TestCase):
         config["training"]["batch_size"] = 8
         config["timing"].update(device="cpu", batch_size=8)
         self.assertEqual(validate_config(config, strict=True), [])
+
+    def test_augmentation_entries_are_validated(self):
+        config = deepcopy(self.config)
+        config["preprocessing"]["augmentations"] = [
+            {"name": "random_crop", "size": [28, 28], "padding": 2}
+        ]
+        self.assertEqual(validate_config(config), [
+            "protocol.status is draft; review and freeze the main protocol.",
+            "preprocessing.mean/std are unmeasured; compute from train only.",
+            "budget.max_epochs is undecided (0).",
+            "budget.tuning_trials_per_model is undecided (0).",
+            "training.batch_size is undecided (0).",
+            "timing.batch_size is undecided (0).",
+            "timing.warmup_steps is undecided (0).",
+            "timing.measurement_steps is undecided (0).",
+            "timing.device must identify the agreed benchmark device.",
+        ])
+
+    def test_invalid_augmentation_entry_is_rejected(self):
+        self.config["preprocessing"]["augmentations"] = [
+            {"name": "random_crop", "size": [32, 32], "padding": 2}
+        ]
+        with self.assertRaises(ConfigError):
+            validate_config(self.config)
+
+        self.config["preprocessing"]["augmentations"] = [
+            {"name": "random_horizontal_flip", "p": 2}
+        ]
+        with self.assertRaises(ConfigError):
+            validate_config(self.config)
 
     def test_model_cannot_override_shared_data(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -190,7 +228,7 @@ class ConfigTests(unittest.TestCase):
         class FakeDataset:
             classes = ["T-shirt/top", "Trouser", "Pullover", "Dress", "Coat",
                        "Sandal", "Shirt", "Sneaker", "Bag", "Ankle boot"]
-            targets = list(range(10)) * 3
+            targets = list(range(10)) * 27
 
             def __getitem__(self, index):
                 image = [[0 for _ in range(28)] for _ in range(28)]
@@ -200,15 +238,15 @@ class ConfigTests(unittest.TestCase):
                 return len(self.targets)
 
         manifest = type("Manifest", (), {
-            "train_indices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-            "validation_indices": [10, 11, 12],
-            "test_indices": [13, 14, 15],
+            "train_indices": list(range(250)),
+            "validation_indices": list(range(250, 260)),
+            "test_indices": list(range(260, 270)),
         })()
 
         with patch("dlbench.a1.data.eda.load_official_dataset", side_effect=[FakeDataset(), FakeDataset()]), \
              patch("dlbench.a1.data.eda.load_split", return_value=manifest), \
              tempfile.TemporaryDirectory() as tempdir:
-            generate_eda(config, Path(tempdir))
+            generate_eda(config, Path(tempdir), curated_dir=None)
             summary = json.loads(Path(tempdir, "eda_summary.json").read_text(encoding="utf-8"))
 
         self.assertIn("split", summary)

@@ -49,7 +49,7 @@ def compute_normalization(dataset: Dataset, train_indices: Sequence[int]) -> tup
 def build_transforms(preprocessing: Mapping[str, Any], *, training: bool) -> Callable:
     """Produce [1,28,28] float32; validation/test transforms must be deterministic.
 
-    Proposed order: optional training-only crop -> ToTensor -> Normalize.
+    Proposed order: optional training-only augmentations -> ToTensor -> Normalize.
     Never mutate a dataset's transform shared by train and validation Subsets.
     """
     if "mean" not in preprocessing or "std" not in preprocessing:
@@ -64,14 +64,22 @@ def build_transforms(preprocessing: Mapping[str, Any], *, training: bool) -> Cal
     transform_list: list[Any] = []
 
     if training:
-        aug = preprocessing.get("augmentation")
-    
-        if aug == "random_horizontal_flip":
-            transform_list.append(transforms.RandomHorizontalFlip(p=0.5))
-        elif aug == "random_crop":
-            padding = preprocessing.get("crop_padding", 2)
-            crop_size = tuple(preprocessing.get("image_size", [28, 28]))
-            transform_list.append(transforms.RandomCrop(crop_size, padding=padding))
+        for augmentation in preprocessing["augmentations"]:
+            name = augmentation.get("name")
+            if name == "random_horizontal_flip":
+                transform_list.append(transforms.RandomHorizontalFlip(p=augmentation.get("p", 0.5)))
+            elif name == "random_crop":
+                transform_list.append(
+                    transforms.RandomCrop(
+                        size=augmentation["size"],
+                        padding=augmentation["padding"],
+                        pad_if_needed=False,
+                        fill=augmentation.get("fill", 0),
+                        padding_mode=augmentation.get("padding_mode", "constant"),
+                    )
+                )
+            else:
+                raise ValueError(f"Unsupported augmentation: {name!r}")
 
     transform_list.append(transforms.ToTensor())
     transform_list.append(transforms.Normalize(mean=mean, std=std))

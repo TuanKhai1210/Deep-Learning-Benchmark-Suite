@@ -16,23 +16,26 @@ from dlbench.a1.data.dataset import load_official_dataset
 from dlbench.a1.data.split import load_split
 
 
-def generate_eda(config: Mapping[str, Any], output_dir: Path) -> None:
+def generate_eda(
+    config: Mapping[str, Any],
+    output_dir: Path,
+    curated_dir: Path | None = Path("docs/assets/a1"),
+) -> None:
     """Export counts, class distribution, shape/range checks and representative images.
 
     Include imbalance and leakage checks, plus dataset source/license.
     Raw preparation outputs go to runs; curated images go to docs/assets/a1.
     """
-    data_cfg = config.get("data", {})
-    data_root = str(data_cfg.get("root", config.get("data_root", "./data")))
-    split_path = Path(
-        data_cfg.get("split_file", config.get("split_path", "configs/a1/splits/fashion_mnist_seed36.json"))
-    )
+    data_cfg = config["data"]
+    data_root = data_cfg["root"]
+    split_path = Path(data_cfg["split_file"])
 
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    curated_dir = Path("docs/assets/a1")
-    curated_dir.mkdir(parents=True, exist_ok=True)
+    if curated_dir is not None:
+        curated_dir = Path(curated_dir)
+        curated_dir.mkdir(parents=True, exist_ok=True)
 
     # 1. Load raw datasets and split manifest
     raw_train = load_official_dataset(data_root, train=True, download=False)
@@ -103,24 +106,31 @@ def generate_eda(config: Mapping[str, Any], output_dir: Path) -> None:
     plt.tight_layout()
 
     fig.savefig(output_dir / "class_distribution.png", dpi=200)
-    fig.savefig(curated_dir / "class_distribution.png", dpi=200)
+    if curated_dir is not None:
+        fig.savefig(curated_dir / "class_distribution.png", dpi=200)
     plt.close(fig)
 
-    # 4. Representative Sample Grid (One sample per class)
-    fig, axes = plt.subplots(2, 5, figsize=(10, 4.5))
-    axes = axes.flatten()
+    # 4. Representative samples: one 5x5 grid file per class.
+    for class_index, class_name in enumerate(classes):
+        class_indices = [
+            idx for idx in manifest.train_indices
+            if raw_train.targets[idx] == class_index
+        ][:25]
+        if len(class_indices) < 25:
+            raise ValueError(
+                f"Class {class_index} ({class_name}) has fewer than 25 training samples."
+            )
 
-    for c in range(10):
-        # Pick the first image belonging to class c from training set
-        sample_idx = next(idx for idx in manifest.train_indices if raw_train.targets[idx] == c)
-        img, _ = raw_train[sample_idx]
-        axes[c].imshow(img, cmap="gray")
-        axes[c].set_title(classes[c], fontsize=10)
-        axes[c].axis("off")
+        fig, axes = plt.subplots(5, 5, figsize=(6, 6))
+        for axis, sample_idx in zip(axes.flat, class_indices):
+            img, _ = raw_train[sample_idx]
+            axis.imshow(img, cmap="gray")
+            axis.axis("off")
 
-    plt.suptitle("Fashion-MNIST Representative Class Samples", fontsize=12)
-    plt.tight_layout()
-
-    fig.savefig(output_dir / "representative_samples.png", dpi=200)
-    fig.savefig(curated_dir / "representative_samples.png", dpi=200)
-    plt.close(fig)
+        fig.suptitle(f"Fashion-MNIST Representative Samples: {class_name}", fontsize=14)
+        fig.tight_layout()
+        output_path = output_dir / f"representative_class_{class_index}.png"
+        fig.savefig(output_path, dpi=200)
+        if curated_dir is not None:
+            fig.savefig(curated_dir / output_path.name, dpi=200)
+        plt.close(fig)
