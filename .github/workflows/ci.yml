@@ -23,13 +23,19 @@ jobs:
         run: python -m pip install -e .
       - name: Syntax check
         run: python -m compileall -q src configs tests setup.py
-      - name: Configuration and contract tests
-        run: python -m unittest discover -s tests -p "test_config.py" -v
+      - name: Check lightweight imports without ML dependencies
+        run: |
+          python -c "from dlbench.a1 import contracts; from dlbench.a1.models import registry; from dlbench.common import config; from dlbench.a1 import cli"
+          python -m dlbench.a1.cli --help
+      # test_config.py also contains loader/EDA tests in the data PR.
+      # The complete suite, including config tests, runs in ml-checks below.
       - name: Inspect draft configuration
         run: python -m dlbench.a1.cli validate-config --config configs/a1/models/linear.py
   ml-checks:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    env:
+      MPLBACKEND: Agg
     steps:
       - uses: actions/checkout@v7
         with:
@@ -39,5 +45,5 @@ jobs:
           python-version: '3.11'
       - name: Install project with ML dependencies
         run: python -m pip install -e ".[ml]"
-      - name: Run ML and reproducibility tests
+      - name: Run all tests including configuration, data and reproducibility
         run: python -m unittest discover -s tests -v

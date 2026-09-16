@@ -1,10 +1,15 @@
 """Owner C (Khải): run directories and provenance; never overwrite an existing run."""
 from __future__ import annotations
 import hashlib
+import csv
+import io
 import json
 import math
 import re
 import subprocess
+import os
+import tempfile
+from uuid import uuid4
 from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
@@ -18,6 +23,47 @@ CHECKPOINT_PROVENANCE_KEYS: frozenset[str] = frozenset({
     "statistics_hash",
     "git_revision",
 })
+
+HISTORY_COLUMNS = (
+    "epoch", "train_loss", "val_loss", "train_accuracy", "val_accuracy",
+    "train_macro_f1", "val_macro_f1", "learning_rate", "epoch_seconds",
+)
+
+
+def _data_records(config: Mapping[str, Any]) -> tuple[dict, dict]:
+    location = config["data"]["split_file"]
+    return (
+        _build_split_record(Path(location), str(location)),
+        _build_normalization_record(config["preprocessing"]),
+    )
+
+
+def compute_data_provenance(config: Mapping[str, Any]) -> dict[str, str]:
+    """Hash current split bytes and normalization; no files or RNG are changed.
+
+    Requires only data.split_file and preprocessing.mean/std. Does not validate
+    split membership or compare model/config compatibility for the caller.
+    """
+    split, normalization = _data_records(config)
+    return {"split_hash": split["sha256"],
+            "statistics_hash": normalization["sha256"]}
+
+
+def _validate_number(name: str, value: Any, *, unit_interval: bool = False) -> None:
+    if type(value) not in (int, float) or not math.isfinite(value):
+        raise ValueError(f"{name} must be a finite number")
+    if value < 0 or (unit_interval and value > 1):
+        raise ValueError(f"{name} is outside its allowed range")
+
+
+def _validate_history_row(row: Mapping[str, Any]) -> None:
+    if set(row) != set(HISTORY_COLUMNS):
+        raise ValueError("History row must match HISTORY_COLUMNS exactly")
+    if type(row["epoch"]) is not int or row["epoch"] < 0:
+        raise ValueError("epoch must be a nonnegative integer")
+    for key in HISTORY_COLUMNS[1:]:
+        _validate_number(key, row[key], unit_interval=(
+            key.endswith("accuracy") or key.endswith("macro_f1")))
 
 
 def _encode_json(payload: Any) -> str:
@@ -175,14 +221,7 @@ def save_run_metadata(
             "snapshot": f"sources/{snapshot_name}",
             "sha256": hashlib.sha256(content).hexdigest(),
         }
-    split_location = config["data"]["split_file"]
-    split_record = _build_split_record(
-        Path(split_location),
-        str(split_location),
-    )
-    normalization_record = _build_normalization_record(
-        config["preprocessing"]
-    )
+    split_record, normalization_record = _data_records(config)
 
     repository_root = Path(__file__).resolve().parents[3]
 
@@ -247,9 +286,98 @@ def append_history(run_dir: Path, row: Mapping[str, Any]) -> None:
     Columns: epoch, train_loss, val_loss, train_accuracy, val_accuracy,
     train_macro_f1, val_macro_f1, learning_rate, epoch_seconds.
     """
-    raise NotImplementedError("TODO C (Khải): write/validate one CSV history row.")
+    _validate_history_row(row)
+    path = run_dir / "history.csv"
+    exists = path.exists()
+    last_epoch = -1
+    if exists:
+        content = path.read_text(encoding="utf-8")
+        if not content.endswith("\n"):
+            raise ValueError("History is empty or has an incomplete final line")
+        reader = csv.DictReader(io.StringIO(content, newline=""))
+        if reader.fieldnames != list(HISTORY_COLUMNS):
+            raise ValueError("Existing history header does not match HISTORY_COLUMNS")
+        for saved in reader:
+            try:
+                parsed = {key: int(saved[key]) if key == "epoch" else float(saved[key])
+                          for key in HISTORY_COLUMNS}
+                if set(saved) != set(HISTORY_COLUMNS):
+                    raise ValueError("Unexpected CSV fields")
+                _validate_history_row(parsed)
+            except (TypeError, ValueError, KeyError) as exc:
+                raise ValueError("Existing history contains an invalid row") from exc
+            if parsed["epoch"] <= last_epoch:
+                raise ValueError("Existing history epochs must increase strictly")
+            last_epoch = parsed["epoch"]
+    if row["epoch"] <= last_epoch:
+        raise ValueError("Epoch must be greater than the last saved epoch")
+    # One writer per run. Validate before opening so rejected rows preserve bytes.
+    with path.open("a" if exists else "x", encoding="utf-8", newline="") as file:
+        writer = csv.DictWriter(file, fieldnames=HISTORY_COLUMNS)
+        if not exists:
+            writer.writeheader()
+        writer.writerow(row)
 
 
-def save_metrics(run_dir: Path, metrics: Mapping[str, Any]) -> None:
-    """Save metrics.json: evaluation split, scores, epoch, timing scope/units."""
-    raise NotImplementedError("TODO C (Khải): serialize real metrics with provenance.")
+def save_metrics(
+    run_dir: Path, metrics: Mapping[str, Any], *, overwrite: bool = False,
+) -> None:
+    """Save split-specific metrics; explicit overwrite backs up old bytes first.
+
+    A single writer owns each run. Replacement uses a temporary file on the
+    same filesystem; validation or backup failure leaves the old file intact.
+    """
+    if type(overwrite) is not bool:
+        raise TypeError("overwrite must be a boolean")
+    required = {"eval_split", "epoch", "timing_scope", "timing_units"}
+    if not required <= set(metrics):
+        raise ValueError(f"Missing metrics fields: {sorted(required - set(metrics))}")
+    split = metrics["eval_split"]
+    if split not in ("validation", "test"):
+        raise ValueError("eval_split must be validation or test")
+    if type(metrics["epoch"]) is not int or metrics["epoch"] < 0:
+        raise ValueError("epoch must be a nonnegative integer")
+    if not isinstance(metrics["timing_scope"], str) or not metrics["timing_scope"].strip():
+        raise ValueError("timing_scope must be a nonempty string")
+    if metrics["timing_units"] != "seconds":
+        raise ValueError("timing_units must be seconds")
+    prefix = "val" if split == "validation" else "test"
+    for suffix in ("loss", "accuracy", "macro_f1"):
+        key = f"{prefix}_{suffix}"
+        if key not in metrics:
+            raise ValueError(f"Missing metrics field: {key}")
+        _validate_number(key, metrics[key], unit_interval=suffix != "loss")
+    opposite = "test" if prefix == "val" else "val"
+    if any(f"{opposite}_{suffix}" in metrics for suffix in ("loss", "accuracy", "macro_f1")):
+        raise ValueError("Metric names conflict with eval_split")
+    # Serialize before opening. Validation and test must not overwrite each other.
+    text = _encode_json(dict(metrics))
+    filename = "metrics.json" if split == "validation" else "metrics_test.json"
+    target = run_dir / filename
+    if not overwrite or not target.exists():
+        _write_text_new(target, text)
+        return
+
+    old_bytes = target.read_bytes()
+    temporary_path = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w", encoding="utf-8", dir=run_dir,
+            prefix=f".{filename}.", suffix=".tmp", delete=False,
+        ) as file:
+            temporary_path = Path(file.name)
+            file.write(text)
+            file.flush()
+            os.fsync(file.fileno())
+
+        backups = run_dir / "backups"
+        backups.mkdir(exist_ok=True)
+        backup = backups / f"{target.stem}-{uuid4().hex}.json"
+        with backup.open("xb") as file:
+            file.write(old_bytes)
+            file.flush()
+            os.fsync(file.fileno())
+        os.replace(temporary_path, target)
+    finally:
+        if temporary_path is not None:
+            temporary_path.unlink(missing_ok=True)
