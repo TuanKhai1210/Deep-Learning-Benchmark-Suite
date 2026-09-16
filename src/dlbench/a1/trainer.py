@@ -43,6 +43,15 @@ def _truncate_history(run_dir: Path, target_epoch: int) -> None:
     from uuid import uuid4
     
     history_file = run_dir / "history.csv"
+    
+    best_pt = run_dir / "best.pt"
+    if best_pt.exists():
+        import torch
+        best_payload = torch.load(best_pt, map_location="cpu", weights_only=False)
+        best_epoch = best_payload.get("epoch", -1)
+        if best_epoch > target_epoch:
+            raise ValueError(f"Cannot resume from epoch {target_epoch} which is older than best.pt (epoch {best_epoch})")
+
     if not history_file.exists():
         if target_epoch >= 0:
             raise ValueError(f"History file missing but trying to resume from epoch {target_epoch}")
@@ -68,8 +77,8 @@ def _truncate_history(run_dir: Path, target_epoch: int) -> None:
         except (TypeError, ValueError, KeyError) as exc:
             raise ValueError(f"Existing history contains an invalid row at line {i+2}") from exc
             
-        if parsed["epoch"] <= last_epoch:
-            raise ValueError("Existing history epochs must increase strictly")
+        if parsed["epoch"] != last_epoch + 1:
+            raise ValueError("History epochs must be contiguous starting from 0")
         last_epoch = parsed["epoch"]
         if parsed["epoch"] <= target_epoch:
             valid_rows.append(saved)
@@ -560,11 +569,16 @@ def evaluate_checkpoint(config: Mapping[str, Any], checkpoint_path: Path, *,
     and only after all model-selection decisions are fixed.
     Load only trusted checkpoints using an appropriate safe loading policy.
     """
-    validate_config(dict(config), strict=True)
     if split not in ("validation", "test"):
         raise ValueError(f"Unrecognized evaluation split: {split}")
+    
+    if smoke and split == "test":
+        raise ValueError("Smoke evaluation cannot use the official test split.")
+    
+    resolved_config = _resolve_smoke_config(config) if smoke else deepcopy(dict(config))
+    validate_config(resolved_config, strict=not smoke)
 
-    device = resolve_device(config)
+    device = resolve_device(resolved_config)
     map_location = device
     
     payload = load_checkpoint(checkpoint_path, map_location=map_location, resume=False)
@@ -577,10 +591,8 @@ def evaluate_checkpoint(config: Mapping[str, Any], checkpoint_path: Path, *,
         "checkpoint",
         "model",
     ):
-        if payload["config"].get(section) != config.get(section):
+        if payload["config"].get(section) != resolved_config.get(section):
             raise ValueError(f"Configuration mismatch in section: {section}")
-    
-    resolved_config = _resolve_smoke_config(config) if smoke else dict(config)
     
     current_provenance = compute_data_provenance(resolved_config)
 
@@ -590,12 +602,12 @@ def evaluate_checkpoint(config: Mapping[str, Any], checkpoint_path: Path, *,
     if payload["statistics_hash"] != current_provenance["statistics_hash"]:
         raise ValueError("Checkpoint preprocessing does not match the supplied configuration.")
     
-    model = build_model(config["model"])
+    model = build_model(resolved_config["model"])
     model.load_state_dict(payload["model_state_dict"])
     
     model.to(device)
     
-    loaders = build_dataloaders(config, smoke=False)
+    loaders = build_dataloaders(resolved_config, smoke=smoke)
     loader = loaders.validation if split == "validation" else loaders.test
     
     criterion = torch.nn.CrossEntropyLoss()

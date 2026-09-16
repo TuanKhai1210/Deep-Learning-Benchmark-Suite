@@ -530,8 +530,8 @@ class TestEvaluateCheckpoint(unittest.TestCase):
                  
                  mock_validate.assert_called_once()
                  mock_loaders.assert_called_once()
-                 # check that build_dataloaders was called with smoke=False inside evaluate_checkpoint
-                 self.assertFalse(mock_loaders.call_args.kwargs.get("smoke", True))
+                 # check that build_dataloaders was called with smoke=smoke inside evaluate_checkpoint
+                 self.assertTrue(mock_loaders.call_args.kwargs.get("smoke", False))
 
 
 class TestGetScheduler(unittest.TestCase):
@@ -1090,3 +1090,83 @@ class TestFitResume(unittest.TestCase):
         
         # They should be identical since the second part was resumed from the first
         self.assertTrue(torch.equal(state_continuous, state_resumed))
+
+class TestTruncateHistoryValidation(unittest.TestCase):
+    def setUp(self):
+        import tempfile
+        self.temp_dir = tempfile.TemporaryDirectory()
+        self.run_dir = Path(self.temp_dir.name)
+        
+    def tearDown(self):
+        self.temp_dir.cleanup()
+        
+    def write_history(self, rows):
+        from dlbench.common.artifacts import HISTORY_COLUMNS
+        import csv
+        history_file = self.run_dir / "history.csv"
+        with history_file.open("w", encoding="utf-8", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=HISTORY_COLUMNS)
+            writer.writeheader()
+            for row in rows:
+                writer.writerow(row)
+                
+    def test_fails_if_best_epoch_newer_than_target(self):
+        from dlbench.a1.trainer import _truncate_history
+        import torch
+        
+        # Target epoch is 1, but best.pt says it was saved at epoch 2
+        best_pt = self.run_dir / "best.pt"
+        torch.save({"epoch": 2}, best_pt)
+        
+        # Write dummy history just to pass file check, though it fails before reading
+        self.write_history([])
+        
+        with self.assertRaisesRegex(ValueError, "older than best.pt"):
+            _truncate_history(self.run_dir, target_epoch=1)
+            
+    def test_fails_if_history_missing_epoch_0(self):
+        from dlbench.a1.trainer import _truncate_history
+        from dlbench.common.artifacts import HISTORY_COLUMNS
+        
+        # Epoch 0 is missing
+        row = {k: 0.0 for k in HISTORY_COLUMNS}
+        row["epoch"] = 1
+        self.write_history([row])
+        
+        with self.assertRaisesRegex(ValueError, "contiguous starting from 0"):
+            _truncate_history(self.run_dir, target_epoch=1)
+            
+    def test_fails_if_history_not_contiguous(self):
+        from dlbench.a1.trainer import _truncate_history
+        from dlbench.common.artifacts import HISTORY_COLUMNS
+        
+        # Epoch 1 is missing
+        row0 = {k: 0.0 for k in HISTORY_COLUMNS}
+        row0["epoch"] = 0
+        row2 = {k: 0.0 for k in HISTORY_COLUMNS}
+        row2["epoch"] = 2
+        self.write_history([row0, row2])
+        
+        with self.assertRaisesRegex(ValueError, "contiguous starting from 0"):
+            _truncate_history(self.run_dir, target_epoch=2)
+            
+    def test_success_if_valid(self):
+        from dlbench.a1.trainer import _truncate_history
+        from dlbench.common.artifacts import HISTORY_COLUMNS
+        
+        # Valid history 0, 1, 2
+        rows = []
+        for i in range(3):
+            r = {k: 0.0 for k in HISTORY_COLUMNS}
+            r["epoch"] = i
+            rows.append(r)
+        self.write_history(rows)
+        
+        # No best.pt, or best.pt is older than target
+        best_pt = self.run_dir / "best.pt"
+        import torch
+        torch.save({"epoch": 1}, best_pt)
+        
+        # Target epoch 2 is >= best_epoch (1), history is contiguous 0..2
+        # This should succeed and not raise
+        _truncate_history(self.run_dir, target_epoch=2)
