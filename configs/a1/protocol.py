@@ -20,6 +20,7 @@ CONFIG = {
         "test_size": 10000,
         "stratified": True,
         "split_file": "configs/a1/splits/fashion_mnist_seed36.json",
+        "download": True
     },
     "preprocessing": {
         "image_size": [28, 28],
@@ -27,8 +28,15 @@ CONFIG = {
         # TODO A (Thiên): measure on the unaugmented 50k TRAIN partition.
         "mean": [],
         "std": [],
-        "augmentation": "random_crop",
-        "crop_padding": 2,
+        "augmentations": [
+            {
+                "name": "random_crop",
+                "size": [28, 28],
+                "padding": 2,
+                "padding_mode": "constant",
+                "fill": 0,
+            },
+        ],
     },
     "evaluation": {
         "metrics": ["accuracy", "macro_f1"],
