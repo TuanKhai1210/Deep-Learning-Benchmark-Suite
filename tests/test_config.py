@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
+from unittest.mock import patch, MagicMock
 from contextlib import redirect_stdout, redirect_stderr
 from copy import deepcopy
 import io
 import json
 from pathlib import Path
+import sys
 import tempfile
 import unittest
 
@@ -37,6 +39,14 @@ class ConfigTests(unittest.TestCase):
         self.assertEqual(self.config["budget"]["run_seeds"], [69420, 67, 69])
         self.assertEqual(self.config["run"]["seed"], 69420)
         self.assertEqual(self.config["data"]["split_seed"], 36)
+
+    def test_download_must_be_boolean(self):
+        self.config["data"]["download"] = False
+        validate_config(self.config)
+
+        self.config["data"]["download"] = "true"
+        with self.assertRaisesRegex(ConfigError, "data.download must be a boolean"):
+            validate_config(self.config)
 
     def test_python_config_does_not_execute_statements(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -85,6 +95,35 @@ class ConfigTests(unittest.TestCase):
         config["timing"].update(device="cpu", batch_size=8)
         self.assertEqual(validate_config(config, strict=True), [])
 
+    def test_augmentation_entries_are_validated(self):
+        config = deepcopy(self.config)
+        config["preprocessing"]["augmentations"] = [
+            {"name": "random_crop", "size": [28, 28], "padding": 2}
+        ]
+        self.assertEqual(validate_config(config), [
+            "protocol.status is draft; review and freeze the main protocol.",
+            "protocol.approved_by must record all three distinct reviewers.",
+            "preprocessing.mean/std are unmeasured; compute from train only.",
+            "budget.max_epochs is undecided (0).",
+            "budget.tuning_trials_per_model is undecided (0).",
+            "training.batch_size is undecided (0).",
+            "timing.batch_size is undecided (0).",
+            "timing.device must identify the agreed benchmark device.",
+        ])
+
+    def test_invalid_augmentation_entry_is_rejected(self):
+        self.config["preprocessing"]["augmentations"] = [
+            {"name": "random_crop", "size": [32, 32], "padding": 2}
+        ]
+        with self.assertRaises(ConfigError):
+            validate_config(self.config)
+
+        self.config["preprocessing"]["augmentations"] = [
+            {"name": "random_horizontal_flip", "p": 2}
+        ]
+        with self.assertRaises(ConfigError):
+            validate_config(self.config)
+
     def test_model_cannot_override_shared_data(self):
         with tempfile.TemporaryDirectory() as temp:
             path = Path(temp) / "model.py"
@@ -121,6 +160,69 @@ class ConfigTests(unittest.TestCase):
         self.config["data"]["stratified"] = False
         with self.assertRaises(ConfigError):
             validate_config(self.config)
+
+    def test_loader_uses_nested_training_and_run_config(self):
+        from dlbench.a1.data.loaders import build_dataloaders
+
+        config = {
+            "data": {"root": "./data", "split_file": "configs/a1/splits/fashion_mnist_seed36.json"},
+            "training": {"batch_size": 32},
+            "run": {"seed": 123},
+            "preprocessing": {"image_size": [28, 28], "channels": 1},
+        }
+
+        class FakeManifest:
+            train_indices = list(range(10))
+            validation_indices = list(range(10, 20))
+            test_indices = list(range(20, 30))
+
+        with patch("dlbench.a1.data.loaders.load_split", return_value=FakeManifest()), \
+             patch("dlbench.a1.data.loaders.load_official_dataset", return_value=object()), \
+             patch("dlbench.a1.data.loaders.build_transforms", return_value="transform"), \
+             patch("dlbench.a1.data.loaders.FashionMNISTSubset", return_value=object()), \
+             patch("dlbench.a1.data.loaders.DataLoader") as mock_loader:
+            build_dataloaders(config)
+
+        train_call = mock_loader.call_args_list[0].kwargs
+        self.assertEqual(train_call["batch_size"], 32)
+        self.assertEqual(train_call["generator"].initial_seed(), 123)
+
+    def test_eda_summary_tracks_split_metadata(self):
+        from dlbench.a1.data.eda import generate_eda
+
+        config = {
+            "data": {"root": "./data", "split_seed": 36, "split_file": "configs/a1/splits/fashion_mnist_seed36.json"},
+            "preprocessing": {"image_size": [28, 28], "channels": 1},
+        }
+
+        class FakeDataset:
+            classes = ["T-shirt/top", "Trouser", "Pullover", "Dress", "Coat",
+                       "Sandal", "Shirt", "Sneaker", "Bag", "Ankle boot"]
+            targets = list(range(10)) * 27
+
+            def __getitem__(self, index):
+                image = [[0 for _ in range(28)] for _ in range(28)]
+                return (image, self.targets[index])
+
+            def __len__(self):
+                return len(self.targets)
+
+        manifest = type("Manifest", (), {
+            "split_seed": 36,
+            "train_indices": list(range(250)),
+            "validation_indices": list(range(250, 260)),
+            "test_indices": list(range(260, 270)),
+        })()
+
+        with patch("dlbench.a1.data.eda.load_official_dataset", side_effect=[FakeDataset(), FakeDataset()]), \
+             patch("dlbench.a1.data.eda.load_split", return_value=manifest), \
+             tempfile.TemporaryDirectory() as tempdir:
+            generate_eda(config, Path(tempdir), curated_dir=None)
+            summary = json.loads(Path(tempdir, "eda_summary.json").read_text(encoding="utf-8"))
+
+        self.assertIn("split", summary)
+        self.assertEqual(summary["split"]["seed"], 36)
+        self.assertEqual(summary["split"]["file"], "configs/a1/splits/fashion_mnist_seed36.json")
 
     def test_source_paths_are_retained_for_run_metadata(self):
         self.assertEqual(Path(self.config["_sources"]["model_config"]), CONFIGS / "linear.py")
@@ -215,12 +317,28 @@ class CLITests(unittest.TestCase):
         self.assertEqual(result.exception.code, 2)
         self.assertIn("Not ready", output.getvalue())
 
-    def test_prepare_fails_honestly_until_implemented(self):
-        with redirect_stderr(io.StringIO()) as output:
-            with self.assertRaises(SystemExit) as result:
-                main(["prepare", "--config", str(CONFIGS / "linear.py")])
-        self.assertEqual(result.exception.code, 2)
-        self.assertIn("TODO A", output.getvalue())
+    def test_prepare_success_path_mocked(self):
+        import sys
+        mock_dataset_mod = MagicMock()
+        mock_metadata = {
+            "dataset": "FashionMNIST",
+            "split_seed": 36,
+            "split_file": "configs/a1/splits/fashion_mnist_split.json",
+            "num_train": 50000,
+            "num_val": 10000,
+            "num_test": 10000,
+            "measured_mean": [0.2858],
+            "measured_std": [0.3527],
+            "classes": ["T-shirt/top", "Trouser", "Pullover", "Dress", "Coat", "Sandal", "Shirt", "Sneaker", "Bag", "Ankle boot"]
+        }
+        mock_dataset_mod.prepare_data.return_value = mock_metadata
+        
+        with patch.dict(sys.modules, {"dlbench.a1.data.dataset": mock_dataset_mod}):
+            with redirect_stdout(io.StringIO()) as output:
+                code = main(["prepare", "--config", str(CONFIGS / "linear.py")])
+                self.assertEqual(code, 0)
+                result = json.loads(output.getvalue())
+                self.assertEqual(result["dataset"], "FashionMNIST")
 
 
 if __name__ == "__main__":
