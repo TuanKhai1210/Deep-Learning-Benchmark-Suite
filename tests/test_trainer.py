@@ -462,6 +462,77 @@ class TestEvaluateCheckpoint(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "model"):
                 evaluate_checkpoint(config, Path("checkpoint.pt"))
 
+    def test_evaluate_checkpoint_smoke(self) -> None:
+        import tempfile
+        import json
+        import hashlib
+        from dlbench.a1.trainer import evaluate_checkpoint
+        from dlbench.a1.checkpoint import save_checkpoint
+        import subprocess
+        
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_path = Path(temp_dir)
+            split_file = temp_path / "split.json"
+            split_file.write_text("{}")
+            
+            source_file = temp_path / "source.py"
+            source_file.write_text("dummy")
+
+            config = {
+                "protocol": {"id": "a1-v0"},
+                "data": {"split_file": str(split_file)},
+                "preprocessing": {"mean": [0.1], "std": [0.2]},
+                "evaluation": {"labels": list(range(10))},
+                "checkpoint": {"monitor": "val_macro_f1"},
+                "model": {"name": "linear", "parameters": {"input_dim": 1, "num_classes": 2}},
+                "budget": {},
+                "training": {},
+                "run": {"seed": 42},
+                "_sources": {"model": str(source_file)}
+            }
+            
+            split_hash = hashlib.sha256(b"{}").hexdigest()
+            stats_json = json.dumps({"mean": [0.1], "std": [0.2]}, sort_keys=True, separators=(",", ":"))
+            stats_hash = hashlib.sha256(stats_json.encode("utf-8")).hexdigest()
+            
+            repository_root = Path(__file__).resolve().parents[1]
+            git_revision = subprocess.run(
+                ["git", "rev-parse", "HEAD"], cwd=repository_root, check=True, capture_output=True, text=True
+            ).stdout.strip()
+            
+            model = torch.nn.Linear(1, 2)
+            payload = {
+                "config": config,
+                "model_state_dict": model.state_dict(),
+                "split_hash": split_hash,
+                "statistics_hash": stats_hash,
+                "schema_version": 1,
+                "git_revision": git_revision,
+                "run_seed": 42,
+                "val_metrics": {"loss": 0.2, "macro_f1": 0.9, "accuracy": 0.8, "epoch_seconds": 1.0},
+                "epoch": 1,
+            }
+            ckpt_path = temp_path / "checkpoint.pt"
+            save_checkpoint(ckpt_path, payload)
+            
+            loaders = SimpleNamespace(validation=object())
+            
+            with patch("dlbench.a1.trainer.validate_config") as mock_validate, \
+                 patch("dlbench.a1.trainer.get_device", return_value=torch.device("cpu")), \
+                 patch("dlbench.a1.trainer.build_dataloaders", return_value=loaders) as mock_loaders, \
+                 patch("dlbench.a1.trainer.build_model", return_value=model), \
+                 patch("dlbench.a1.trainer.evaluate_epoch", return_value=EvaluationResult(EpochMetrics(0,0,0,0), Predictions([],[],[],[]))):
+                 
+                 # The point of this test is that it succeeds without throwing errors
+                 # about config validation (which should be skipped or non-strict for smoke)
+                 # and correctly coordinates with build_dataloaders (which requires smoke=False)
+                 evaluate_checkpoint(config, ckpt_path, smoke=True)
+                 
+                 mock_validate.assert_called_once()
+                 mock_loaders.assert_called_once()
+                 # check that build_dataloaders was called with smoke=False inside evaluate_checkpoint
+                 self.assertFalse(mock_loaders.call_args.kwargs.get("smoke", True))
+
 
 class TestGetScheduler(unittest.TestCase):
     def setUp(self):
@@ -653,9 +724,7 @@ class TestFitIntegration(unittest.TestCase):
             
             # We ONLY patch what we can't run because of unimplemented functions or heavy dataset downloads
             from types import SimpleNamespace
-            with patch("dlbench.a1.trainer.build_dataloaders", return_value=SimpleNamespace(train=loader, validation=loader)), \
-                 patch("dlbench.a1.trainer.append_history"), \
-                 patch("dlbench.a1.trainer.save_metrics"):
+            with patch("dlbench.a1.trainer.build_dataloaders", return_value=SimpleNamespace(train=loader, validation=loader)):
                 
                 result = fit(config, smoke=False)
                 
@@ -759,9 +828,7 @@ class TestFitIntegration(unittest.TestCase):
             loader = DataLoader(DummyDataset(), batch_size=2)
             
             from types import SimpleNamespace
-            with patch("dlbench.a1.trainer.build_dataloaders", return_value=SimpleNamespace(train=loader, validation=loader, test=loader)), \
-                 patch("dlbench.a1.trainer.append_history"), \
-                 patch("dlbench.a1.trainer.save_metrics"):
+            with patch("dlbench.a1.trainer.build_dataloaders", return_value=SimpleNamespace(train=loader, validation=loader, test=loader)):
                 
                 result = fit(config, smoke=False)
                 self.assertTrue(result.best_checkpoint.exists())
@@ -803,11 +870,11 @@ class TestFitResume(unittest.TestCase):
                 'device': 'cpu',
                 'output_root': self.output_root,
             },
-            'data': {'split_file': str(Path(self.output_root) / 'unused.json')},
+            'data': {'split_file': str(Path(self.output_root) / 'unused.json'), 'dataset': 'fashion_mnist'},
             'preprocessing': {'mean': [0.1], 'std': [0.2]},
             'budget': {'max_epochs': 5},
             'checkpoint': {},
-            'protocol': {'id': 'test'},
+            'protocol': {'id': 'a1-v0', 'status': 'draft', 'approved_by': ['A']},
             'evaluation': {},
             'timing': {'precision': 'float32', 'scope': 'forward_only', 'device': 'cpu'},
             '_sources': {}
@@ -835,8 +902,6 @@ class TestFitResume(unittest.TestCase):
         # We also need to patch checkpoint_provenance to avoid hash/schema errors
         # if we aren't creating a real dataset and splitting it properly.
         patch('dlbench.a1.trainer.validate_config').start()
-        patch('dlbench.a1.trainer.append_history').start()
-        patch('dlbench.a1.trainer.save_metrics').start()
         self.patcher_provenance = patch('dlbench.a1.trainer.checkpoint_provenance', return_value={
             'schema_version': 1,
             'split_hash': 'fake_split',
@@ -965,3 +1030,63 @@ class TestFitResume(unittest.TestCase):
         
         with self.assertRaisesRegex(ValueError, "Checkpoint split does not match"):
             fit(config4, smoke=True, resume_from=last_pt2)
+
+    def test_fit_resumes_training_with_shuffle_and_generator(self) -> None:
+        self.patcher_provenance.stop()
+        self.patcher_compute_provenance.stop()
+        patch.stopall()
+        patch("dlbench.a1.trainer.validate_config").start()
+        
+        from dlbench.a1.trainer import fit
+        import torch
+        import copy
+        import types
+        from torch.utils.data import DataLoader
+        
+        source_file = Path(self.output_root) / "model.py"
+        source_file.write_text("dummy source")
+        
+        class SmallDataset(torch.utils.data.Dataset):
+            def __len__(self): return 10
+            def __getitem__(self, idx): return {'images': torch.randn(10), 'labels': idx % 2, 'sample_ids': f'id_{idx}'}
+            
+        def mock_build_dataloaders(*args, **kwargs):
+            # Each time fit is called, we need a fresh generator seeded identically
+            # so the continuous run and the interrupted run start from the same state.
+            gen = torch.Generator()
+            gen.manual_seed(12345)
+            train_loader = DataLoader(SmallDataset(), batch_size=2, shuffle=True, generator=gen)
+            val_loader = DataLoader(SmallDataset(), batch_size=2)
+            return types.SimpleNamespace(train=train_loader, validation=val_loader)
+            
+        patch("dlbench.a1.trainer.build_dataloaders", side_effect=mock_build_dataloaders).start()
+        
+        # Run 1: Continuous 2 epochs
+        config1 = copy.deepcopy(self.config)
+        config1["_sources"] = {"model": str(source_file)}
+        config1['budget']['max_epochs'] = 2
+        
+        res1 = fit(config1, smoke=True)
+        last_pt1 = res1.run_dir / 'last.pt'
+        payload1 = torch.load(last_pt1, map_location='cpu', weights_only=False)
+        state_continuous = payload1.get('dataloader_generator_state')
+        self.assertIsNotNone(state_continuous, "Generator state should not be None")
+        
+        # Run 2: 1 epoch, then resume for 1 epoch
+        config2 = copy.deepcopy(self.config)
+        config2["_sources"] = {"model": str(source_file)}
+        config2['budget']['max_epochs'] = 1
+        
+        res2_part1 = fit(config2, smoke=True)
+        last_pt2_part1 = res2_part1.run_dir / 'last.pt'
+        
+        config2['budget']['max_epochs'] = 2
+        res2_part2 = fit(config2, smoke=True, resume_from=last_pt2_part1)
+        
+        last_pt2 = res2_part2.run_dir / 'last.pt'
+        payload2 = torch.load(last_pt2, map_location='cpu', weights_only=False)
+        state_resumed = payload2.get('dataloader_generator_state')
+        self.assertIsNotNone(state_resumed, "Generator state should not be None after resume")
+        
+        # They should be identical since the second part was resumed from the first
+        self.assertTrue(torch.equal(state_continuous, state_resumed))

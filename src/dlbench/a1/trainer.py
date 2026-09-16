@@ -27,11 +27,90 @@ from dlbench.common.artifacts import (
     append_history,
     save_metrics,
     compute_data_provenance,
+    HISTORY_COLUMNS,
+    _validate_history_row,
 )
 from dlbench.common.config import validate_config
 from dlbench.a1.checkpoint import save_checkpoint, is_better, load_checkpoint
 from dlbench.common.reproducibility import seed_everything, capture_rng_state, restore_rng_state
 
+
+def _truncate_history(run_dir: Path, target_epoch: int) -> None:
+    import csv
+    import io
+    import os
+    import tempfile
+    from uuid import uuid4
+    
+    history_file = run_dir / "history.csv"
+    if not history_file.exists():
+        if target_epoch >= 0:
+            raise ValueError(f"History file missing but trying to resume from epoch {target_epoch}")
+        return
+
+    content = history_file.read_text(encoding="utf-8")
+    if not content.endswith("\n"):
+        raise ValueError("History is empty or has an incomplete final line")
+        
+    reader = csv.DictReader(io.StringIO(content, newline=""))
+    if reader.fieldnames != list(HISTORY_COLUMNS):
+        raise ValueError("Existing history header does not match HISTORY_COLUMNS")
+        
+    valid_rows = []
+    last_epoch = -1
+    for i, saved in enumerate(reader):
+        try:
+            parsed = {key: int(saved[key]) if key == "epoch" else float(saved[key])
+                      for key in HISTORY_COLUMNS}
+            if set(saved) != set(HISTORY_COLUMNS):
+                raise ValueError("Unexpected CSV fields")
+            _validate_history_row(parsed)
+        except (TypeError, ValueError, KeyError) as exc:
+            raise ValueError(f"Existing history contains an invalid row at line {i+2}") from exc
+            
+        if parsed["epoch"] <= last_epoch:
+            raise ValueError("Existing history epochs must increase strictly")
+        last_epoch = parsed["epoch"]
+        if parsed["epoch"] <= target_epoch:
+            valid_rows.append(saved)
+            
+    if last_epoch < target_epoch:
+        raise ValueError(f"History missing rows up to epoch {target_epoch}")
+        
+    if last_epoch == target_epoch:
+        return
+        
+    old_bytes = history_file.read_bytes()
+    backups = run_dir / "backups"
+    backups.mkdir(exist_ok=True)
+    backup_path = backups / f"history-{uuid4().hex}.csv"
+    
+    try:
+        with backup_path.open("xb") as file:
+            file.write(old_bytes)
+            file.flush()
+            os.fsync(file.fileno())
+    except Exception as exc:
+        raise RuntimeError("Failed to backup history file") from exc
+        
+    temporary_path = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w", encoding="utf-8", newline="", dir=run_dir,
+            prefix=".history.", suffix=".tmp", delete=False,
+        ) as file:
+            temporary_path = Path(file.name)
+            writer = csv.DictWriter(file, fieldnames=HISTORY_COLUMNS)
+            writer.writeheader()
+            for row in valid_rows:
+                writer.writerow(row)
+            file.flush()
+            os.fsync(file.fileno())
+            
+        os.replace(temporary_path, history_file)
+    finally:
+        if temporary_path is not None:
+            temporary_path.unlink(missing_ok=True)
 
 
 
@@ -288,6 +367,7 @@ def fit(config: Mapping[str, Any], *, smoke: bool = False, resume_from: Path | N
         restore_rng_state(payload["rng_state"])
         if payload.get("dataloader_generator_state") is not None and hasattr(dataloaders.train, "generator") and dataloaders.train.generator is not None:
             dataloaders.train.generator.set_state(payload["dataloader_generator_state"])
+        _truncate_history(run_dir, payload["epoch"])
 
     # Setup loss function
     criterion = torch.nn.CrossEntropyLoss()
