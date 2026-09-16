@@ -221,6 +221,8 @@ def fit(config: Mapping[str, Any], *, smoke: bool = False, resume_from: Path | N
     Save resolved config and actual epoch/time budget. Never overwrite a run.
     """
     resolved_config = _resolve_smoke_config(config) if smoke else deepcopy(dict(config))
+    resolved_config["run"]["mode"] = "smoke" if smoke else "main"
+
     validate_config(resolved_config, strict=not smoke)
     run_config = resolved_config["run"]
     # Prepare deterministic behavior
@@ -232,7 +234,6 @@ def fit(config: Mapping[str, Any], *, smoke: bool = False, resume_from: Path | N
         output_root = Path(run_config.get('output_root', 'runs/a1'))
         run_id = generate_run_id(resolved_config, smoke=smoke)
         run_dir = create_run_dir(output_root, run_id)
-        resolved_config["run"]["mode"] = "smoke" if smoke else "main"
         metadata = save_run_metadata(run_dir, resolved_config)
         metadata_provenance = checkpoint_provenance(metadata)
         start_epoch = 0
@@ -245,6 +246,15 @@ def fit(config: Mapping[str, Any], *, smoke: bool = False, resume_from: Path | N
             raise ValueError("Checkpoint split does not match the supplied configuration.")
         if payload["statistics_hash"] != current_provenance["statistics_hash"]:
             raise ValueError("Checkpoint preprocessing does not match the supplied configuration.")
+
+        for section in ("protocol", "model", "preprocessing", "training"):
+            if payload["config"].get(section) != resolved_config.get(section):
+                raise ValueError(f"Configuration mismatch in section: {section}")
+                
+        old_run = payload["config"].get("run", {})
+        new_run = resolved_config.get("run", {})
+        if old_run.get("seed") != new_run.get("seed") or old_run.get("mode") != new_run.get("mode"):
+            raise ValueError("Configuration mismatch in run (seed or mode)")
 
         metadata_provenance = {
             "schema_version": payload["schema_version"],
@@ -276,6 +286,8 @@ def fit(config: Mapping[str, Any], *, smoke: bool = False, resume_from: Path | N
         if scheduler and payload.get("scheduler_state_dict"):
             scheduler.load_state_dict(payload["scheduler_state_dict"])
         restore_rng_state(payload["rng_state"])
+        if payload.get("dataloader_generator_state") is not None and hasattr(dataloaders.train, "generator") and dataloaders.train.generator is not None:
+            dataloaders.train.generator.set_state(payload["dataloader_generator_state"])
 
     # Setup loss function
     criterion = torch.nn.CrossEntropyLoss()
@@ -384,6 +396,7 @@ def fit(config: Mapping[str, Any], *, smoke: bool = False, resume_from: Path | N
             "optimizer_state_dict": optimizer.state_dict(),
             "scheduler_state_dict": scheduler.state_dict() if scheduler else None,
             "rng_state": capture_rng_state(),
+            "dataloader_generator_state": dataloaders.train.generator.get_state() if hasattr(dataloaders.train, "generator") and dataloaders.train.generator is not None else None,
             "config": dict(resolved_config),
             "val_metrics": asdict(val_metrics.metrics),
             "run_seed": run_seed,
@@ -445,7 +458,7 @@ def fit(config: Mapping[str, Any], *, smoke: bool = False, resume_from: Path | N
         "timing_scope": "fit",
         "timing_units": "seconds",
     }
-    save_metrics(run_dir, final_metrics)
+    save_metrics(run_dir, final_metrics, overwrite=resume_from is not None)
 
     # Return FitResult
     history_file = run_dir / "history.csv"
