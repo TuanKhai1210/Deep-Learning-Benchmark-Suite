@@ -1,5 +1,19 @@
 # AI Usage Log
 
+## 2026-09-14 - Handbook v2 reconciliation
+
+- Tool/model: OpenAI Codex; exact model identifier not recorded for this entry
+- Used by: Tạ Tuấn Khải
+- Stage: Requirements and submission planning
+- Purpose: Compare the revised handbook with the previous PDF and update affected project documentation
+- Affected sections: `docs/handbook-v2-update.md`, `PROJECT_PLAN.md`, `README.md`, `docs/a1.md`, `docs/a1-experiment-contract.md`, and `reports/a1/report.md`
+- Prompt summary: Requested updates based on handbook v2; explicitly excluded assessment of group-registration timing
+- AI contribution: Compared extracted document text, visually inspected registration/submission pages, and updated workbook registration and Final PDF naming/submission guidance; preserved technical requirements, team seeds and ownership
+- Human verification: Pending review by the responsible member; no registration or submission completion is asserted
+- Responsible member: Tạ Tuấn Khải
+- Verification sources: User-provided `handbook-ene.pdf` and `handbook-ene-v2.pdf` (Revision 14 September 2026), especially sections 1.1-1.2, 4.1, 7.1 and 7.4; repository documentation
+- Experiment impact: Documentation only; no source/config changes, training, benchmark measurements, workbook edits or LMS submissions
+
 ## 2026-08-29 - Project planning and repository design
 
 - Tool/model: OpenAI Codex 5.6 Sol
