@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+from dataclasses import asdict
 from pathlib import Path
 from typing import Sequence
 
@@ -21,7 +22,9 @@ def build_parser() -> argparse.ArgumentParser:
             child.add_argument("--strict", action="store_true", help="Reject unresolved experiment decisions.")
         elif command == "train":
             child.add_argument("--smoke", action="store_true", help="Explicit non-benchmark debug run.")
+            child.add_argument("--resume-from", type=Path, help="Trusted checkpoint to continue; requires trainer resume support.")
         elif command == "evaluate":
+            child.add_argument("--smoke", action="store_true", help="Evaluate a smoke checkpoint on validation only.")
             child.add_argument("--checkpoint", type=Path, required=True)
             child.add_argument("--split", choices=("validation", "test"), default="validation")
             child.add_argument("--allow-test", action="store_true", help="Acknowledge frozen final-test evaluation.")
@@ -38,6 +41,12 @@ def main(argv: Sequence[str] | None = None) -> int:
             from dlbench.a1.analysis import analyze_run
             analyze_run(args.run_dir)
             return 0
+
+        if args.command == "evaluate":
+            if args.smoke and args.split == "test":
+                raise ConfigError("Smoke evaluation cannot use the official test split.")
+            if args.split == "test" and not args.allow_test:
+                raise ConfigError("Official test requires --allow-test after freezing model selection.")
 
         config = load_config(args.config)
         if args.seed is not None:
@@ -56,25 +65,40 @@ def main(argv: Sequence[str] | None = None) -> int:
             }, indent=2))
             return 0
 
-        strict = args.command == "train" and not args.smoke
-        strict = strict or (args.command == "evaluate" and args.split == "test")
+        strict = args.command in ("train", "evaluate") and not args.smoke
         validate_config(config, strict=strict)
         if args.command == "prepare":
             from dlbench.a1.data.dataset import prepare_data
             print(json.dumps(prepare_data(config), indent=2))
         elif args.command == "train":
             from dlbench.a1.trainer import fit
-            result = fit(config, smoke=args.smoke)
+            options = {"smoke": args.smoke}
+            if args.resume_from is not None:
+                _require_parameter(fit, "resume_from")
+                options["resume_from"] = args.resume_from
+            result = fit(config, **options)
             print(f"Completed run: {result.run_dir}")
         elif args.command == "evaluate":
-            if args.split == "test" and not args.allow_test:
-                raise ConfigError("Official test requires --allow-test after freezing model selection.")
             from dlbench.a1.trainer import evaluate_checkpoint
-            result = evaluate_checkpoint(config, args.checkpoint, split=args.split)
-            print(result.metrics)
+            options = {"split": args.split}
+            if args.smoke:
+                _require_parameter(evaluate_checkpoint, "smoke")
+                options["smoke"] = True
+            result = evaluate_checkpoint(config, args.checkpoint, **options)
+            print(json.dumps(asdict(result.metrics), indent=2, allow_nan=False))
         return 0
     except (ConfigError, OSError, ValueError, NotImplementedError) as error:
         parser.exit(2, f"error: {error}\n")
+
+
+def _require_parameter(function, name: str) -> None:
+    """Fail explicitly when an optional trainer API has not been integrated yet."""
+    from inspect import signature
+
+    if name not in signature(function).parameters:
+        raise ConfigError(
+            f"Installed trainer does not support {name}; integrate the compatible trainer first."
+        )
 
 
 if __name__ == "__main__":

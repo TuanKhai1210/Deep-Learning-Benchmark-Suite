@@ -9,6 +9,8 @@ Status: **draft for team review**. This document explains the shared protocol in
 
 ## Approval record
 
+Handbook checked against the 14 September 2026 revision: A1 technical requirements are unchanged. Registration/submission updates are tracked in [the v2 checklist]({{ '/handbook-v2-update.html' | relative_url }}); they do not freeze this protocol, change its ID, or require experiment reruns.
+
 | Field | Value |
 |---|---|
 | Protocol ID | `a1-v0` (draft) |

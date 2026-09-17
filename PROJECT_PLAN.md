@@ -5,13 +5,15 @@ Thành viên: **A — Nguyễn Hạo Thiên (2453194), B — Nguyễn Anh Khoa (
 
 Mã nhóm: chờ xác nhận.
 
-Cập nhật phân công và seed: **04/09/2026**. Các mốc dưới đây là kế hoạch, không phải xác nhận đã hoàn thành; thay đổi trên LMS được ưu tiên.
+Cập nhật quy định nộp bài: **14/09/2026**, theo handbook v2. Xem [đối chiếu và checklist v2](docs/handbook-v2-update.md). Phân công và seed nội bộ giữ nguyên. Các mốc dưới đây là kế hoạch, không phải xác nhận đã hoàn thành; thông báo LMS cụ thể cho milestone được ưu tiên. Lần cập nhật này không đánh giá thời gian đăng ký nhóm.
+
+Đăng ký qua workbook bằng email HCMUT: mỗi người điền cùng Group Name tại dòng MSSV của mình trong `GroupRegistration`; một đại diện điền landing-page URL trong `GroupLink`. Không đăng ký nhóm trên LMS. Group Name và đại diện chờ xác nhận.
 
 ## 1. Các mốc chính
 
 | Mốc | Hạn chính thức | Hạn nội bộ |
 |---|---:|---:|
-| Đăng ký nhóm + GitHub Pages ban đầu | 09/09/2026 | 08/09/2026 |
+| Group Name + landing-page URL trong workbook | 09/09/2026 | 08/09/2026 |
 | A1-M1 Draft | 23/09/2026 | 22/09/2026 |
 | A2-M1 Dataset Proposal | 07/10/2026 | 06/10/2026 |
 | A1-M2 Final | 21/10/2026 | 20/10/2026 |
@@ -92,7 +94,7 @@ Gate: thống nhất input/output trước khi triển khai model song song. Có
 | C | Config loader; deterministic seed; logging; model interface tests; README/Pages | Repro utilities, tests, site links |
 
 **08/09 internal freeze:** repo, landing page, A1/A2/A3 links, group information và `AI_USAGE.md` hoạt động.  
-**09/09 official gate:** Đăng ký nhóm + GitHub Pages ban đầu.
+**09/09 official gate (v2):** Cả nhóm dùng cùng Group Name trong `GroupRegistration`; đại diện ghi landing-page URL trong `GroupLink`.
 
 ### 09/09-14/09: Tích hợp Linear và MLP
 
@@ -263,3 +265,5 @@ Milestone chỉ hoàn thành khi:
 - Report, Pages, slides/video/checkpoint links đã kiểm tra ở chế độ đăng xuất.
 - Tất cả thành viên hiểu và giải thích được phần không do mình viết.
 - `AI_USAGE.md` đã được audit.
+- Với Final: đại diện nộp PDF lên LMS theo tên `<GroupName>_A1_Report.pdf`, `<GroupName>_A2_Report.pdf` hoặc `<GroupName>_A3_Report.pdf`; Group Name khớp workbook chính xác. Lưu biên nhận và nhờ một thành viên kiểm tra lại. Link Pages không thay thế PDF LMS.
+- Với Draft: có thể liên kết từ landing page theo v2; kiểm tra thêm thông báo LMS của milestone. Không áp dụng nhầm quy định Final PDF cho mọi Draft.

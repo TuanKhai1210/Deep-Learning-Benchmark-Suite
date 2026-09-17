@@ -200,6 +200,7 @@ This repository is developed as part of **CO3133 - Deep Learning and Its Applica
 
 - Instructor: Lê Thành Sách
 - Team size: 3 students
+- Handbook baseline: revision 14 September 2026; see the [registration and submission update](docs/handbook-v2-update.md). Registration uses the official workbook with HCMUT email accounts. Final PDF reports are submitted by the designated representative on LMS, named `<GroupName>_A1_Report.pdf`, `<GroupName>_A2_Report.pdf`, or `<GroupName>_A3_Report.pdf`, matching the registered Group Name exactly.
 - Project website: [Deep Learning Benchmark Suite](https://tuankhai1210.github.io/Deep-Learning-Benchmark-Suite/)
 
 Course provenance is retained for transparency, while the repository is structured as a maintainable and reproducible machine-learning portfolio project.

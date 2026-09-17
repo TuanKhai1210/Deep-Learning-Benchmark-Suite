@@ -2,6 +2,8 @@
 
 Status: **outline only — no measured results**.
 
+Submission rule (handbook revision 14 September 2026): export the Final as `<GroupName>_A1_Report.pdf`, with Group Name matching `GroupRegistration` exactly. The designated representative submits this PDF on LMS; a Pages link is not a substitute. Group Name and submitter remain to be confirmed. Draft may be linked from the landing page; check milestone-specific LMS announcements. See [v2 checklist](../../docs/handbook-v2-update.md).
+
 Institution/course/instructor: TODO. Group/member names and IDs: TODO. Submission revision/date: TODO.
 
 ## 1. Problem and Data Description

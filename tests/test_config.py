@@ -1,8 +1,7 @@
-"""Configuration and CLI tests: no ML dependencies or dataset downloads required."""
+"""Configuration, CLI and mocked data tests; ML dependencies, no downloads."""
 
 from __future__ import annotations
 
-from unittest.mock import patch, MagicMock
 from contextlib import redirect_stdout, redirect_stderr
 from copy import deepcopy
 import io
@@ -11,6 +10,8 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+from types import SimpleNamespace
+from unittest.mock import MagicMock, Mock, patch
 
 from dlbench.a1.cli import main
 from dlbench.a1.contracts import EpochMetrics, Predictions
@@ -339,6 +340,16 @@ class CLITests(unittest.TestCase):
                 self.assertEqual(code, 0)
                 result = json.loads(output.getvalue())
                 self.assertEqual(result["dataset"], "FashionMNIST")
+
+    def test_prepare_reports_unimplemented_backend_honestly(self):
+        backend = SimpleNamespace(prepare_data=Mock(
+            side_effect=NotImplementedError("Backend not implemented")
+        ))
+        with patch.dict("sys.modules", {"dlbench.a1.data.dataset": backend}), redirect_stderr(io.StringIO()) as output:
+            with self.assertRaises(SystemExit) as result:
+                main(["prepare", "--config", str(CONFIGS / "linear.py")])
+        self.assertEqual(result.exception.code, 2)
+        self.assertIn("Backend not implemented", output.getvalue())
 
 
 if __name__ == "__main__":

@@ -19,7 +19,7 @@ CONFIG = {
         "validation_size": 10000,
         "test_size": 10000,
         "stratified": True,
-        "split_file": "configs/a1/splits/fashion_mnist_seed36.json",
+        "split_file": "configs/a1/splits/fashion_mnist_split.json",
         "download": True
     },
     "preprocessing": {
