@@ -6,7 +6,7 @@ even when they share the same official training source.
 
 from __future__ import annotations
 
-from collections.abc import Callable, Mapping
+from collections.abc import Callable, Mapping, MutableMapping
 from pathlib import Path
 from typing import Any
 
@@ -55,13 +55,14 @@ def load_official_dataset(root: str, *, train: bool, download: bool = False) -> 
     return FashionMNIST(root=root, train=train, transform=None, download=download)
 
 
-def prepare_data(config: Mapping[str, Any]) -> dict[str, Any]:
+def prepare_data(config: MutableMapping[str, Any]) -> dict[str, Any]:
     """Download/check data, create or verify fixed split, measure train-only stats.
 
     Call split.py and transforms.py. Return measured metadata for group review.
     Do not silently overwrite an existing split or mark a protocol frozen.
     Store provenance and train-only normalization statistics with the split.
     """
+    config = config if isinstance(config, dict) else dict(config)
     data_config = config["data"]
     training_config = config["training"]
     run_config = config["run"]
@@ -88,6 +89,10 @@ def prepare_data(config: Mapping[str, Any]) -> dict[str, Any]:
 
     # 3. Compute train-only normalization statistics dynamically without leakage
     mean, std = compute_normalization(raw_train, manifest.train_indices)
+
+    preprocessing = config.setdefault("preprocessing", {})
+    preprocessing["mean"] = mean
+    preprocessing["std"] = std
 
     metadata = {
         "dataset": "FashionMNIST",

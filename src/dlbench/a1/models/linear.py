@@ -12,9 +12,23 @@ class LinearClassifier(nn.Module):
 
     def __init__(self, parameters: Mapping[str, Any]) -> None:
         super().__init__()
-        # TODO A (Thiên): validate config and declare a linear 784 -> num_classes layer.
-        # No optimizer, DataLoader, training loop or hard-coded device here.
-        raise NotImplementedError("TODO A (Thiên): implement LinearClassifier layers.")
+        if "input_dim" not in parameters:
+            raise ValueError("Input dimension not specified")
+        if "num_classes" not in parameters:
+            raise ValueError("Number of output classes not specified")
+        
+        input_dim = parameters["input_dim"]
+        num_classes = parameters["num_classes"]
+
+        if not isinstance(input_dim, int) or input_dim <= 0:
+            raise ValueError("Input dimension must be a positive integer")
+        if not isinstance(num_classes, int) or num_classes <= 0:
+            raise ValueError("Number of output classes must be a positive integer")
+
+        self.network = nn.Sequential(
+            nn.Flatten(start_dim=1),
+            nn.Linear(input_dim, num_classes),
+        )
 
     def forward(self, images: Tensor) -> Tensor:
         """Input float32 [B,1,28,28]; output raw logits [B,10].
@@ -22,4 +36,8 @@ class LinearClassifier(nn.Module):
         Flatten internally; return unnormalized logits. No hidden layer or softmax.
         Acceptance: batch sizes 1 and 7, finite outputs, backward updates weights.
         """
-        raise NotImplementedError("TODO A (Thiên): implement LinearClassifier.forward.")
+        if images.ndim < 2:
+            raise ValueError("Input must include a batch dimension")
+        if images.size(0) == 0:
+            raise ValueError("Batch size cannot be zero")
+        return self.network(images)
