@@ -12,12 +12,10 @@ class LinearClassifier(nn.Module):
 
     def __init__(self, parameters: Mapping[str, Any]) -> None:
         super().__init__()
-        if "input_dim" not in parameters:
-            raise ValueError("Input dimension not specified")
+        input_dim = parameters.get("input_dim", 784)
         if "num_classes" not in parameters:
             raise ValueError("Number of output classes not specified")
         
-        input_dim = parameters["input_dim"]
         num_classes = parameters["num_classes"]
 
         if not isinstance(input_dim, int) or input_dim <= 0:
