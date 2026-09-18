@@ -1,5 +1,34 @@
 # AI Usage Log
 
+## 2026-09-17 - C04 CLI integration review and split-path alignment
+
+- Tool/model: OpenAI Codex; exact model identifier not recorded for this entry
+- Used by: Tạ Tuấn Khải
+- Stage: C04 CLI integration and pre-commit review
+- Purpose: Verify CLI resume/evaluation controls and align the configured split path with the committed manifest
+- Affected sections: `src/dlbench/a1/cli.py`, `tests/test_cli.py`, `tests/test_config.py`, and `configs/a1/protocol.py`
+- Prompt summary: Requested branch review before committing and separation of CLI changes from handbook documentation
+- AI contribution: Reviewed AI-assisted CLI dispatch, resume and smoke-evaluation changes, checked tests and split-path alignment, and prepared scoped commits
+- Human verification: Responsible member review and real-data end-to-end verification remain pending; automated checks do not establish a completed benchmark
+- Automated verification: Local unit-test suite ran 171 tests: 168 passed and 3 skipped; `git diff --check` passed during pre-commit review
+- Responsible member: Tạ Tuấn Khải
+- Verification sources: Repository diff, CLI/config tests, trainer interfaces, committed split manifest and local test output
+- Experiment impact: No training or benchmark measurements performed; split seed and manifest contents unchanged. CLI tests use fake backends, not real-data training.
+
+## 2026-09-14 - Handbook v2 reconciliation
+
+- Tool/model: OpenAI Codex; exact model identifier not recorded for this entry
+- Used by: Tạ Tuấn Khải
+- Stage: Requirements and submission planning
+- Purpose: Compare the revised handbook with the previous PDF and update affected project documentation
+- Affected sections: `docs/handbook-v2-update.md`, `PROJECT_PLAN.md`, `README.md`, `docs/a1.md`, `docs/a1-experiment-contract.md`, and `reports/a1/report.md`
+- Prompt summary: Requested updates based on handbook v2; explicitly excluded assessment of group-registration timing
+- AI contribution: Compared extracted document text, visually inspected registration/submission pages, and updated workbook registration and Final PDF naming/submission guidance; preserved technical requirements, team seeds and ownership
+- Human verification: Pending review by the responsible member; no registration or submission completion is asserted
+- Responsible member: Tạ Tuấn Khải
+- Verification sources: User-provided `handbook-ene.pdf` and `handbook-ene-v2.pdf` (Revision 14 September 2026), especially sections 1.1-1.2, 4.1, 7.1 and 7.4; repository documentation
+- Experiment impact: Documentation only; no source/config changes, training, benchmark measurements, workbook edits or LMS submissions
+
 ## 2026-08-29 - Project planning and repository design
 
 - Tool/model: OpenAI Codex 5.6 Sol
