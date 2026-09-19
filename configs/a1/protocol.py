@@ -26,8 +26,8 @@ CONFIG = {
         "image_size": [28, 28],
         "channels": 1,
         # Measured on the unaugmented 50k TRAIN partition (split_seed=36)
-        "mean": [],
-        "std": [],
+        "mean": [0.28585961086061534],
+        "std": [0.352790375749525],
         "augmentations": [
             {
                 "name": "random_crop",
@@ -49,8 +49,9 @@ CONFIG = {
         "tie_breaker": ["val_loss_min", "earlier_epoch"],
     },
     "budget": {
-        # TODO team: 0 means UNDECIDED, never a completed zero-epoch run.
-        "max_epochs": 0,
+        # Shared epoch cap; early stopping may finish a run sooner.
+        "max_epochs": 100,
+        # TODO team: 0 means the tuning budget is still undecided.
         "tuning_trials_per_model": 0,
         "run_seeds": [69420, 67, 69],
     },
