@@ -26,14 +26,14 @@ class ConfigTests(unittest.TestCase):
     def setUp(self):
         self.config = load_config(CONFIGS / "linear.py")
 
-    def test_all_model_configs_load_and_report_draft(self):
+    def test_all_model_configs_load_and_validate_structure(self):
         files = sorted(CONFIGS.glob("*.py"))
         self.assertEqual(len(files), 5)
         for path in files:
             with self.subTest(model=path.stem):
                 config = load_config(path)
                 self.assertEqual(config["model"]["name"], path.stem)
-                self.assertTrue(validate_config(config))
+                self.assertIsInstance(validate_config(config), list)
                 self.assertEqual(config["data"], self.config["data"])
 
     def test_agreed_run_seeds_are_separate_from_split_seed(self):
@@ -83,6 +83,7 @@ class ConfigTests(unittest.TestCase):
                 load_config(path)
 
     def test_draft_strict_check_is_rejected(self):
+        self.config["protocol"].update(status="draft", approved_by=[])
         with self.assertRaisesRegex(ConfigError, "Not ready"):
             validate_config(self.config, strict=True)
 
@@ -271,6 +272,19 @@ class ConfigTests(unittest.TestCase):
 
 
 class CLITests(unittest.TestCase):
+    def setUp(self):
+        # Synthetic draft input; never depend on repository config being unfinished.
+        config = load_config(CONFIGS / "linear.py")
+        config["protocol"].update(status="draft", approved_by=[])
+        loader = patch("dlbench.a1.cli.load_config", side_effect=lambda _: deepcopy(config))
+        loader.start()
+        self.addCleanup(loader.stop)
+        # Fail safely if a rejection test accidentally reaches the training backend.
+        self.backend = SimpleNamespace(fit=Mock(side_effect=AssertionError("Training must not start")))
+        backend = patch.dict(sys.modules, {"dlbench.a1.trainer": self.backend})
+        backend.start()
+        self.addCleanup(backend.stop)
+
     def test_each_agreed_seed_overrides_run_without_resplitting(self):
         for seed in (69420, 67, 69):
             with self.subTest(seed=seed), redirect_stdout(io.StringIO()) as output:
@@ -314,6 +328,7 @@ class CLITests(unittest.TestCase):
                 main(["train", "--config", str(CONFIGS / "linear.py")])
         self.assertEqual(result.exception.code, 2)
         self.assertIn("Not ready", output.getvalue())
+        self.backend.fit.assert_not_called()
 
     def test_prepare_success_path_mocked(self):
         import sys

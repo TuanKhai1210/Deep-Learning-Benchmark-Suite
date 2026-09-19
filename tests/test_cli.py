@@ -22,6 +22,8 @@ CONFIG = ROOT / "configs/a1/models/linear.py"
 class CLIIntegrationTests(unittest.TestCase):
     def setUp(self):
         self.config = load_config(CONFIG)
+        # Exercise draft gates independently of the checked-in experiment status.
+        self.config["protocol"].update(status="draft", approved_by=[])
         self.original = deepcopy(self.config)
         self.calls = []
         self.result = EvaluationResult(

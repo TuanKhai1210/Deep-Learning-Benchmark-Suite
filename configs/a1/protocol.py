@@ -7,8 +7,12 @@ Use one literal CONFIG dictionary: no imports, functions or computations.
 CONFIG = {
     "protocol": {
         "id": "a1-v0",
-        "status": "draft",
-        "approved_by": [],
+        "status": "frozen",
+        "approved_by": [
+            "Nguyễn Hạo Thiên",
+            "Nguyễn Anh Khoa",
+            "Tạ Tuấn Khải",
+        ],
     },
     "data": {
         "dataset": "fashion_mnist",
@@ -51,13 +55,13 @@ CONFIG = {
     "budget": {
         # Shared epoch cap; early stopping may finish a run sooner.
         "max_epochs": 100,
-        # TODO team: 0 means the tuning budget is still undecided.
-        "tuning_trials_per_model": 0,
+        # One planned configuration per model for the initial draft runs.
+        "tuning_trials_per_model": 1,
         "run_seeds": [69420, 67, 69],
     },
     "timing": {
-        "device": "TBD",
-        "batch_size": 0,
+        "device": "cuda",
+        "batch_size": 64,
         "warmup_steps": 20,
         "measurement_steps": 100,
         "precision": "float32",
