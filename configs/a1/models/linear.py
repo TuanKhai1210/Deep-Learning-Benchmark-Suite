@@ -33,7 +33,7 @@ CONFIG = {
     "run": {
         # Repeat with run seeds 69420, 67 and 69 on the split created with seed 36.
         "seed": 69420,
-        "device": "cpu",
+        "device": "cuda",
         "output_root": "runs/a1",
     },
 }

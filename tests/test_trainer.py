@@ -589,6 +589,8 @@ class TestTrainerMLPIntegration(unittest.TestCase):
         from configs.a1.models.mlp import CONFIG
         import copy
         config = copy.deepcopy(CONFIG)
+        # This integration test must run on CPU even when experiment configs use CUDA.
+        config["run"]["device"] = "cpu"
         # Simplify the model and data for fast test
         config["model"]["parameters"]["input_dim"] = 4
         config["model"]["parameters"]["hidden_dims"] = [4]
