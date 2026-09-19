@@ -98,19 +98,16 @@ class ConfigTests(unittest.TestCase):
 
     def test_augmentation_entries_are_validated(self):
         config = deepcopy(self.config)
+        # Synthetic complete config: isolate augmentation validation from draft defaults.
+        config["protocol"].update(status="frozen", approved_by=["Example A", "Example B", "Example C"])
+        config["preprocessing"].update(mean=[0.5], std=[0.25])
+        config["budget"].update(max_epochs=2, tuning_trials_per_model=1)
+        config["training"]["batch_size"] = 8
+        config["timing"].update(device="cpu", batch_size=8, warmup_steps=1, measurement_steps=1)
         config["preprocessing"]["augmentations"] = [
             {"name": "random_crop", "size": [28, 28], "padding": 2}
         ]
-        self.assertEqual(validate_config(config), [
-            "protocol.status is draft; review and freeze the main protocol.",
-            "protocol.approved_by must record all three distinct reviewers.",
-            "preprocessing.mean/std are unmeasured; compute from train only.",
-            "budget.max_epochs is undecided (0).",
-            "budget.tuning_trials_per_model is undecided (0).",
-            "training.batch_size is undecided (0).",
-            "timing.batch_size is undecided (0).",
-            "timing.device must identify the agreed benchmark device.",
-        ])
+        self.assertEqual(validate_config(config, strict=True), [])
 
     def test_invalid_augmentation_entry_is_rejected(self):
         self.config["preprocessing"]["augmentations"] = [
