@@ -433,7 +433,7 @@ def fit(config: Mapping[str, Any], *, smoke: bool = False, resume_from: Path | N
     epochs_without_improvement = payload.get("epochs_without_improvement", 0) if resume_from is not None else 0
 
     # Training loop
-    for epoch in range(start_epoch, max_epochs):
+    for epoch in tqdm(range(start_epoch, max_epochs)):
         start_time = time.time()
 
         # Train
