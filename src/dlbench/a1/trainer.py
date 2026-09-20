@@ -15,6 +15,7 @@ import numpy as np
 import random
 import time
 import torch
+from tqdm import tqdm
 
 from dlbench.a1.contracts import EpochMetrics, EvaluationResult, FitResult
 from dlbench.a1.data.loaders import build_dataloaders
