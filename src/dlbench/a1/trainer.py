@@ -433,7 +433,9 @@ def fit(config: Mapping[str, Any], *, smoke: bool = False, resume_from: Path | N
     epochs_without_improvement = payload.get("epochs_without_improvement", 0) if resume_from is not None else 0
 
     # Training loop
-    for epoch in tqdm(range(start_epoch, max_epochs)):
+    pbar = tqdm(range(start_epoch, max_epochs))
+    
+    for epoch in pbar:
         start_time = time.time()
 
         # Train
@@ -525,6 +527,14 @@ def fit(config: Mapping[str, Any], *, smoke: bool = False, resume_from: Path | N
             epochs_without_improvement = 0
         else:
             epochs_without_improvement += 1
+            
+        pbar.set_postfix({
+            "val_f1": f"{val_metrics.metrics.macro_f1:.4f}",
+            "val_loss": f"{val_metrics.metrics.loss:.4f}",
+            "train_loss": f"{train_metrics.loss:.4f}",
+            "lr": f"{optimizer.param_groups[0]['lr']:.2e}",
+            "wait": f"{epochs_without_improvement}/{early_stopping_patience}"
+        })
 
         def save_last():
             checkpoint_payload["best_monitor_value"] = best_monitor_value

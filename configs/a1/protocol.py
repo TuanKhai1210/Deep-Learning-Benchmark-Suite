@@ -54,7 +54,7 @@ CONFIG = {
     },
     "budget": {
         # Shared epoch cap; early stopping may finish a run sooner.
-        "max_epochs": 100,
+        "max_epochs": 200,
         # One planned configuration per model for the initial draft runs.
         "tuning_trials_per_model": 1,
         "run_seeds": [69420, 67, 69],

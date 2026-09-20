@@ -8,27 +8,27 @@ CONFIG = {
             "input_dim": 784,
             "num_classes": 10,
             "hidden_dims": [256,128],
-            "dropout": 0.1,
+            "dropout": 0.2,
             "hidden_activation": "relu" # choose between tanh, sigmoid, relu, leakyrelu, gelu (default: relu)
         },
     },
     "training": {
         # Shared batch size for the Linear/MLP draft runs.
         "batch_size": 64,
-        "optimizer": "adam",
-        "learning_rate": 0.001,
-        "weight_decay": 0.0,
+        "optimizer": "adamw",
+        "learning_rate": 0.0005,
+        "weight_decay": 0.0001,
         "momentum": 0.9, 
         # 0 disables early stopping; positive values are patience in epochs.
         "early_stopping_patience": 15,
         # Choose "macro_f1" or "loss" for the early stopping monitor.
         "early_stopping_monitor": "macro_f1",
-        "min_delta": 0.001,
-        "save_frequency": 1000,
+        "min_delta": 0.0005,
+        "save_frequency": 10,
         "scheduler": {
             "name": "cosine",
             "parameters": {
-                "T_max": 100,
+                "T_max": 200,
                 "eta_min": 0.00001
             }
         }
