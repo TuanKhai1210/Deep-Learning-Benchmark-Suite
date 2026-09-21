@@ -282,3 +282,18 @@
 - Responsible member: Tạ Tuấn Khải
 - Verification sources: Repository source code, artifact tests, local test output, and Git diff
 - Experiment impact: No training runs or benchmark measurements were performed
+
+## 2026-09-21 - Saved-run analysis and inference benchmark tooling
+
+- Tool/model: OpenAI Codex
+- Used by: Tạ Tuấn Khải
+- Stage: A1 draft analysis and benchmark preparation
+- Purpose: Analyze saved validation histories and implement repeatable forward-only timing
+- Affected sections: `analysis.py`, `benchmark.py`, `scripts/postprocess_run.py`, analysis/benchmark tests, and `docs/a1-analysis-benchmark.md`
+- Prompt summary: Requested analysis and benchmarking of the supplied training runs
+- AI contribution: Implemented provenance-checked learning curves, validated prediction export, fixed-class confusion/error records, per-run comparison export, timing utilities and tests; generated curves for four supplied runs without changing their artifacts
+- Human verification: Pending review by Khải and the A/B module owners; Colab checkpoint re-evaluation and T4 timing remain to be performed
+- Automated verification: Synthetic CPU tests cover artifact validation, output protection, confusion counts, median/throughput calculations, and model-mode restoration; saved-run checks were executed on the four selected supplied runs
+- Responsible member: Tạ Tuấn Khải
+- Verification sources: Saved config/metadata/history/metrics and source snapshots, repository interfaces, local tests
+- Experiment impact: No full dataset training or official test evaluation; no GPU performance results were produced. Existing single-seed validation results remain unchanged.
