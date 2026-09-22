@@ -19,7 +19,7 @@ setup(
     # Dependency declarations, not a validated/frozen ML environment.
     # Select compatible torch/torchvision builds for the team's hardware.
     extras_require={
-        "ml": ["torch", "torchvision", "numpy", "scikit-learn", "matplotlib"],
+        "ml": ["torch", "torchvision", "numpy", "scikit-learn", "matplotlib", "tqdm"],
         "notebooks": ["jupyterlab"],
     },
     entry_points={"console_scripts": ["dlbench-a1=dlbench.a1.cli:main"]},
