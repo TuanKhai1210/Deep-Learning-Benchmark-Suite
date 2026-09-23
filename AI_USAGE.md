@@ -268,6 +268,41 @@
 - Verification sources: User-provided `handbook-ene.pdf` and `handbook-ene-v2.pdf` (Revision 14 September 2026), especially sections 1.1-1.2, 4.1, 7.1 and 7.4; repository documentation
 - Experiment impact: Documentation only; no source/config changes, training, benchmark measurements, workbook edits or LMS submissions
 
+## 2026-09-16 - Extra test addition
+
+- Tool/model: Gemini 3.8 Flash
+- Used by: Nguyễn Hạo Thiên
+- Stage: Assignment 1 validation and regression coverage
+- Purpose: Add one extra test to cover an uncovered edge case and confirm the implementation remains consistent with the project contract.
+- Affected files/sections:
+  - Additional regression coverage for the current implementation
+  - Validation of the relevant contract behavior
+- Prompt summary: Requested one extra test for an uncovered edge case and confirmation that the implementation still satisfies the expected behavior.
+- AI contribution: Added an extra regression test covering the missing edge case and validating the intended contract behavior.
+- Human verification: Reviewed the test against the implementation and confirmed it matches the expected project behavior.
+- Responsible member: Nguyễn Hạo Thiên
+- Verification sources: Local test execution, repository diff, and Git commit reference `b92fae6`
+- Commit reference: `b92fae6`
+- Experimental status: Regression test addition only; no model training or benchmark measurements were performed.
+
+## 2026-09-16 - Config refactor and `download` handling
+
+- Tool/model: Gemini 3.8 Flash
+- Used by: Nguyễn Hạo Thiên
+- Stage: Assignment 1 data/config review
+- Purpose: Include the `download` configuration flag in the dataset setup and explain how to refactor the configuration structure without breaking the current project contract.
+- Affected files/sections:
+  - `configs/a1/protocol.py`
+  - `src/dlbench/common/config.py`
+  - `src/dlbench/a1/data/dataset.py`
+  - `src/dlbench/a1/data/loaders.py`
+- Prompt summary: Requested that the AI include the `download` setting in the config and explain how to refactor the config into clearer sections for dataset, run, training, and model parameters while staying compatible with the current codebase.
+- AI contribution: Added the `download` option to the config-driven dataset path and explained a refactoring strategy based on nested, explicit sections such as `data`, `run`, `training`, and `model`, while keeping a compatibility layer for older keys until the contracts are fully migrated. The guidance also emphasized preserving deterministic behavior, preventing accidental downloads during validation, and keeping normalization statistics computed from the training split only.
+- Human verification: Reviewed the repo’s current config structure and verified that the actual data pipeline uses a config dictionary that can be extended cleanly without breaking the existing interfaces.
+- Responsible member: Nguyễn Hạo Thiên
+- Verification sources: Repository config files, dataset implementation, loader validation, and local runtime checks for config loading and DataLoader construction
+- Experiment impact: Documentation and configuration guidance only; no training or benchmark measurements were performed.
+
 ## 2026-09-17 - C04 CLI integration review and split-path alignment
 
 - Tool/model: OpenAI Codex; exact model identifier not recorded for this entry
