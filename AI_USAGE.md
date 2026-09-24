@@ -1,34 +1,5 @@
 # AI Usage Log
 
-## 2026-09-17 - C04 CLI integration review and split-path alignment
-
-- Tool/model: OpenAI Codex; exact model identifier not recorded for this entry
-- Used by: Tạ Tuấn Khải
-- Stage: C04 CLI integration and pre-commit review
-- Purpose: Verify CLI resume/evaluation controls and align the configured split path with the committed manifest
-- Affected sections: `src/dlbench/a1/cli.py`, `tests/test_cli.py`, `tests/test_config.py`, and `configs/a1/protocol.py`
-- Prompt summary: Requested branch review before committing and separation of CLI changes from handbook documentation
-- AI contribution: Reviewed AI-assisted CLI dispatch, resume and smoke-evaluation changes, checked tests and split-path alignment, and prepared scoped commits
-- Human verification: Responsible member review and real-data end-to-end verification remain pending; automated checks do not establish a completed benchmark
-- Automated verification: Local unit-test suite ran 171 tests: 168 passed and 3 skipped; `git diff --check` passed during pre-commit review
-- Responsible member: Tạ Tuấn Khải
-- Verification sources: Repository diff, CLI/config tests, trainer interfaces, committed split manifest and local test output
-- Experiment impact: No training or benchmark measurements performed; split seed and manifest contents unchanged. CLI tests use fake backends, not real-data training.
-
-## 2026-09-14 - Handbook v2 reconciliation
-
-- Tool/model: OpenAI Codex; exact model identifier not recorded for this entry
-- Used by: Tạ Tuấn Khải
-- Stage: Requirements and submission planning
-- Purpose: Compare the revised handbook with the previous PDF and update affected project documentation
-- Affected sections: `docs/handbook-v2-update.md`, `PROJECT_PLAN.md`, `README.md`, `docs/a1.md`, `docs/a1-experiment-contract.md`, and `reports/a1/report.md`
-- Prompt summary: Requested updates based on handbook v2; explicitly excluded assessment of group-registration timing
-- AI contribution: Compared extracted document text, visually inspected registration/submission pages, and updated workbook registration and Final PDF naming/submission guidance; preserved technical requirements, team seeds and ownership
-- Human verification: Pending review by the responsible member; no registration or submission completion is asserted
-- Responsible member: Tạ Tuấn Khải
-- Verification sources: User-provided `handbook-ene.pdf` and `handbook-ene-v2.pdf` (Revision 14 September 2026), especially sections 1.1-1.2, 4.1, 7.1 and 7.4; repository documentation
-- Experiment impact: Documentation only; no source/config changes, training, benchmark measurements, workbook edits or LMS submissions
-
 ## 2026-08-29 - Project planning and repository design
 
 - Tool/model: OpenAI Codex 5.6 Sol
@@ -283,6 +254,70 @@
 - Verification sources: Repository source code, artifact tests, local test output, and Git diff
 - Experiment impact: No training runs or benchmark measurements were performed
 
+## 2026-09-14 - Handbook v2 reconciliation
+
+- Tool/model: OpenAI Codex; exact model identifier not recorded for this entry
+- Used by: Tạ Tuấn Khải
+- Stage: Requirements and submission planning
+- Purpose: Compare the revised handbook with the previous PDF and update affected project documentation
+- Affected sections: `docs/handbook-v2-update.md`, `PROJECT_PLAN.md`, `README.md`, `docs/a1.md`, `docs/a1-experiment-contract.md`, and `reports/a1/report.md`
+- Prompt summary: Requested updates based on handbook v2; explicitly excluded assessment of group-registration timing
+- AI contribution: Compared extracted document text, visually inspected registration/submission pages, and updated workbook registration and Final PDF naming/submission guidance; preserved technical requirements, team seeds and ownership
+- Human verification: Pending review by the responsible member; no registration or submission completion is asserted
+- Responsible member: Tạ Tuấn Khải
+- Verification sources: User-provided `handbook-ene.pdf` and `handbook-ene-v2.pdf` (Revision 14 September 2026), especially sections 1.1-1.2, 4.1, 7.1 and 7.4; repository documentation
+- Experiment impact: Documentation only; no source/config changes, training, benchmark measurements, workbook edits or LMS submissions
+
+## 2026-09-16 - Extra test addition
+
+- Tool/model: Gemini 3.8 Flash
+- Used by: Nguyễn Hạo Thiên
+- Stage: Assignment 1 validation and regression coverage
+- Purpose: Add one extra test to cover an uncovered edge case and confirm the implementation remains consistent with the project contract.
+- Affected files/sections:
+  - Additional regression coverage for the current implementation
+  - Validation of the relevant contract behavior
+- Prompt summary: Requested one extra test for an uncovered edge case and confirmation that the implementation still satisfies the expected behavior.
+- AI contribution: Added an extra regression test covering the missing edge case and validating the intended contract behavior.
+- Human verification: Reviewed the test against the implementation and confirmed it matches the expected project behavior.
+- Responsible member: Nguyễn Hạo Thiên
+- Verification sources: Local test execution, repository diff, and Git commit reference `b92fae6`
+- Commit reference: `b92fae6`
+- Experimental status: Regression test addition only; no model training or benchmark measurements were performed.
+
+## 2026-09-16 - Config refactor and `download` handling
+
+- Tool/model: Gemini 3.8 Flash
+- Used by: Nguyễn Hạo Thiên
+- Stage: Assignment 1 data/config review
+- Purpose: Include the `download` configuration flag in the dataset setup and explain how to refactor the configuration structure without breaking the current project contract.
+- Affected files/sections:
+  - `configs/a1/protocol.py`
+  - `src/dlbench/common/config.py`
+  - `src/dlbench/a1/data/dataset.py`
+  - `src/dlbench/a1/data/loaders.py`
+- Prompt summary: Requested that the AI include the `download` setting in the config and explain how to refactor the config into clearer sections for dataset, run, training, and model parameters while staying compatible with the current codebase.
+- AI contribution: Added the `download` option to the config-driven dataset path and explained a refactoring strategy based on nested, explicit sections such as `data`, `run`, `training`, and `model`, while keeping a compatibility layer for older keys until the contracts are fully migrated. The guidance also emphasized preserving deterministic behavior, preventing accidental downloads during validation, and keeping normalization statistics computed from the training split only.
+- Human verification: Reviewed the repo’s current config structure and verified that the actual data pipeline uses a config dictionary that can be extended cleanly without breaking the existing interfaces.
+- Responsible member: Nguyễn Hạo Thiên
+- Verification sources: Repository config files, dataset implementation, loader validation, and local runtime checks for config loading and DataLoader construction
+- Experiment impact: Documentation and configuration guidance only; no training or benchmark measurements were performed.
+
+## 2026-09-17 - C04 CLI integration review and split-path alignment
+
+- Tool/model: OpenAI Codex; exact model identifier not recorded for this entry
+- Used by: Tạ Tuấn Khải
+- Stage: C04 CLI integration and pre-commit review
+- Purpose: Verify CLI resume/evaluation controls and align the configured split path with the committed manifest
+- Affected sections: `src/dlbench/a1/cli.py`, `tests/test_cli.py`, `tests/test_config.py`, and `configs/a1/protocol.py`
+- Prompt summary: Requested branch review before committing and separation of CLI changes from handbook documentation
+- AI contribution: Reviewed AI-assisted CLI dispatch, resume and smoke-evaluation changes, checked tests and split-path alignment, and prepared scoped commits
+- Human verification: Responsible member review and real-data end-to-end verification remain pending; automated checks do not establish a completed benchmark
+- Automated verification: Local unit-test suite ran 171 tests: 168 passed and 3 skipped; `git diff --check` passed during pre-commit review
+- Responsible member: Tạ Tuấn Khải
+- Verification sources: Repository diff, CLI/config tests, trainer interfaces, committed split manifest and local test output
+- Experiment impact: No training or benchmark measurements performed; split seed and manifest contents unchanged. CLI tests use fake backends, not real-data training.
+
 ## 2026-09-21 - Saved-run analysis and inference benchmark tooling
 
 - Tool/model: OpenAI Codex
@@ -297,3 +332,17 @@
 - Responsible member: Tạ Tuấn Khải
 - Verification sources: Saved config/metadata/history/metrics and source snapshots, repository interfaces, local tests
 - Experiment impact: No full dataset training or official test evaluation; no GPU performance results were produced. Existing single-seed validation results remain unchanged.
+
+## 2026-09-22 - Benchmark analysis notebook creation
+
+- Tool/model: Gemini 3.1 Pro (High)
+- Used by: Nguyễn Anh Khoa
+- Stage: A1 Analysis and Benchmark Visualization
+- Purpose: Create a standalone Jupyter notebook to process and visualize benchmark results and validation errors across multiple runs.
+- Affected sections: `notebooks/benchmark_analysis.ipynb`
+- Prompt summary: Requested a flexible notebook to process any number of runs, use shared analysis logic, display learning curves, plot confusion matrices, benchmark charts (latency/throughput with values on bars), and a misclassification gallery.
+- AI contribution: Wrote a Colab-compatible notebook that fetches checkpoint data, runs `postprocess_run.py`, uses `compare_runs` for CSV generation, and generates adaptive plots and gallery images with metadata overlay.
+- Human verification: Pending execution and review of the notebook in a Colab environment.
+- Responsible member: Nguyễn Anh Khoa
+- Verification sources: Visual inspection of the notebook source and generated matplotlib images.
+- Experiment impact: Generated analysis and visualization code only. No training or core library source was modified.
