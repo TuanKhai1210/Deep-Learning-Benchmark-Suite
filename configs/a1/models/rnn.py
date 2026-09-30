@@ -5,6 +5,7 @@ CONFIG = {
     "model": {
         "name": "rnn",
         "parameters": {
+            "input_size": 28, # NOT 784
             "num_classes": 10,
             "cell": "gru",
             "representation": "rows",
