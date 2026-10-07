@@ -1,0 +1,497 @@
+{
+  "train": {
+    "images": 5057,
+    "videos": 207,
+    "annotations": 8563,
+    "total_pixels": 755568000,
+    "foreground_union_pixels": 82095212,
+    "foreground_supervised_pixels": 81814580,
+    "background_pixels": 673472788,
+    "ignore_pixels": 280632,
+    "foreground_union_percent": 10.865363805772612,
+    "foreground_supervised_percent": 10.828221946932638,
+    "background_percent": 89.13463619422738,
+    "ignore_percent": 0.03714185883997205,
+    "empty_rasterized_annotations": 0,
+    "resolution_counts": {
+      "480x360": 2319,
+      "480x270": 2738
+    },
+    "classes": {
+      "rov": {
+        "category_id": 1,
+        "annotations": 2422,
+        "annotated_images": 1941,
+        "supervised_images": 1941,
+        "videos": 99,
+        "pixels": 39554115,
+        "percent_of_all_pixels": 5.235017232069119
+      },
+      "plant": {
+        "category_id": 2,
+        "annotations": 359,
+        "annotated_images": 350,
+        "supervised_images": 350,
+        "videos": 17,
+        "pixels": 2363431,
+        "percent_of_all_pixels": 0.3128018920864833
+      },
+      "animal_fish": {
+        "category_id": 3,
+        "annotations": 550,
+        "annotated_images": 459,
+        "supervised_images": 459,
+        "videos": 33,
+        "pixels": 4421227,
+        "percent_of_all_pixels": 0.5851527592486712
+      },
+      "animal_starfish": {
+        "category_id": 4,
+        "annotations": 199,
+        "annotated_images": 92,
+        "supervised_images": 92,
+        "videos": 9,
+        "pixels": 123280,
+        "percent_of_all_pixels": 0.016316201850793046
+      },
+      "animal_shells": {
+        "category_id": 5,
+        "annotations": 212,
+        "annotated_images": 105,
+        "supervised_images": 105,
+        "videos": 3,
+        "pixels": 103703,
+        "percent_of_all_pixels": 0.013725170997183575
+      },
+      "animal_crab": {
+        "category_id": 6,
+        "annotations": 142,
+        "annotated_images": 125,
+        "supervised_images": 125,
+        "videos": 9,
+        "pixels": 788795,
+        "percent_of_all_pixels": 0.10439761874510302
+      },
+      "animal_eel": {
+        "category_id": 7,
+        "annotations": 218,
+        "annotated_images": 187,
+        "supervised_images": 187,
+        "videos": 24,
+        "pixels": 255181,
+        "percent_of_all_pixels": 0.033773399614594586
+      },
+      "animal_etc": {
+        "category_id": 8,
+        "annotations": 162,
+        "annotated_images": 153,
+        "supervised_images": 153,
+        "videos": 12,
+        "pixels": 804932,
+        "percent_of_all_pixels": 0.10653336297990386
+      },
+      "trash_etc": {
+        "category_id": 9,
+        "annotations": 1418,
+        "annotated_images": 1202,
+        "supervised_images": 1199,
+        "videos": 107,
+        "pixels": 9144786,
+        "percent_of_all_pixels": 1.2103193888571246
+      },
+      "trash_fabric": {
+        "category_id": 10,
+        "annotations": 214,
+        "annotated_images": 189,
+        "supervised_images": 189,
+        "videos": 14,
+        "pixels": 2285115,
+        "percent_of_all_pixels": 0.30243670986595517
+      },
+      "trash_fishing_gear": {
+        "category_id": 11,
+        "annotations": 122,
+        "annotated_images": 102,
+        "supervised_images": 102,
+        "videos": 10,
+        "pixels": 1465197,
+        "percent_of_all_pixels": 0.19391993837748556
+      },
+      "trash_metal": {
+        "category_id": 12,
+        "annotations": 792,
+        "annotated_images": 765,
+        "supervised_images": 759,
+        "videos": 42,
+        "pixels": 3589865,
+        "percent_of_all_pixels": 0.4751213656480952
+      },
+      "trash_paper": {
+        "category_id": 13,
+        "annotations": 127,
+        "annotated_images": 101,
+        "supervised_images": 101,
+        "videos": 6,
+        "pixels": 946843,
+        "percent_of_all_pixels": 0.125315391864134
+      },
+      "trash_plastic": {
+        "category_id": 14,
+        "annotations": 1290,
+        "annotated_images": 1200,
+        "supervised_images": 1200,
+        "videos": 61,
+        "pixels": 12864994,
+        "percent_of_all_pixels": 1.7026917497829448
+      },
+      "trash_rubber": {
+        "category_id": 15,
+        "annotations": 101,
+        "annotated_images": 101,
+        "supervised_images": 101,
+        "videos": 3,
+        "pixels": 202738,
+        "percent_of_all_pixels": 0.02683252864070474
+      },
+      "trash_wood": {
+        "category_id": 16,
+        "annotations": 235,
+        "annotated_images": 219,
+        "supervised_images": 219,
+        "videos": 14,
+        "pixels": 2900378,
+        "percent_of_all_pixels": 0.3838672363043432
+      }
+    }
+  },
+  "validation": {
+    "images": 1077,
+    "videos": 54,
+    "annotations": 1956,
+    "total_pixels": 155476800,
+    "foreground_union_pixels": 16580249,
+    "foreground_supervised_pixels": 16463055,
+    "background_pixels": 138896551,
+    "ignore_pixels": 117194,
+    "foreground_union_percent": 10.664130596976527,
+    "foreground_supervised_percent": 10.588753434596029,
+    "background_percent": 89.33586940302348,
+    "ignore_percent": 0.07537716238049665,
+    "empty_rasterized_annotations": 0,
+    "resolution_counts": {
+      "480x270": 709,
+      "480x360": 368
+    },
+    "classes": {
+      "rov": {
+        "category_id": 1,
+        "annotations": 445,
+        "annotated_images": 375,
+        "supervised_images": 375,
+        "videos": 22,
+        "pixels": 7163611,
+        "percent_of_all_pixels": 4.607511217107633
+      },
+      "plant": {
+        "category_id": 2,
+        "annotations": 82,
+        "annotated_images": 69,
+        "supervised_images": 69,
+        "videos": 10,
+        "pixels": 586232,
+        "percent_of_all_pixels": 0.37705432579008574
+      },
+      "animal_fish": {
+        "category_id": 3,
+        "annotations": 117,
+        "annotated_images": 88,
+        "supervised_images": 88,
+        "videos": 7,
+        "pixels": 1444284,
+        "percent_of_all_pixels": 0.9289385940539039
+      },
+      "animal_starfish": {
+        "category_id": 4,
+        "annotations": 167,
+        "annotated_images": 23,
+        "supervised_images": 23,
+        "videos": 3,
+        "pixels": 36913,
+        "percent_of_all_pixels": 0.023741805851419634
+      },
+      "animal_shells": {
+        "category_id": 5,
+        "annotations": 30,
+        "annotated_images": 27,
+        "supervised_images": 27,
+        "videos": 2,
+        "pixels": 86594,
+        "percent_of_all_pixels": 0.05569576940096529
+      },
+      "animal_crab": {
+        "category_id": 6,
+        "annotations": 133,
+        "annotated_images": 30,
+        "supervised_images": 30,
+        "videos": 3,
+        "pixels": 198727,
+        "percent_of_all_pixels": 0.12781778374651395
+      },
+      "animal_eel": {
+        "category_id": 7,
+        "annotations": 41,
+        "annotated_images": 37,
+        "supervised_images": 37,
+        "videos": 6,
+        "pixels": 56701,
+        "percent_of_all_pixels": 0.036469106644849904
+      },
+      "animal_etc": {
+        "category_id": 8,
+        "annotations": 42,
+        "annotated_images": 37,
+        "supervised_images": 37,
+        "videos": 6,
+        "pixels": 78979,
+        "percent_of_all_pixels": 0.05079793255328126
+      },
+      "trash_etc": {
+        "category_id": 9,
+        "annotations": 260,
+        "annotated_images": 253,
+        "supervised_images": 253,
+        "videos": 23,
+        "pixels": 1921324,
+        "percent_of_all_pixels": 1.235762506045918
+      },
+      "trash_fabric": {
+        "category_id": 10,
+        "annotations": 55,
+        "annotated_images": 43,
+        "supervised_images": 43,
+        "videos": 4,
+        "pixels": 422040,
+        "percent_of_all_pixels": 0.2714488592510265
+      },
+      "trash_fishing_gear": {
+        "category_id": 11,
+        "annotations": 30,
+        "annotated_images": 25,
+        "supervised_images": 25,
+        "videos": 2,
+        "pixels": 327511,
+        "percent_of_all_pixels": 0.21064943451370235
+      },
+      "trash_metal": {
+        "category_id": 12,
+        "annotations": 167,
+        "annotated_images": 166,
+        "supervised_images": 166,
+        "videos": 12,
+        "pixels": 637799,
+        "percent_of_all_pixels": 0.4102213320572587
+      },
+      "trash_paper": {
+        "category_id": 13,
+        "annotations": 51,
+        "annotated_images": 51,
+        "supervised_images": 51,
+        "videos": 2,
+        "pixels": 256888,
+        "percent_of_all_pixels": 0.1652259372459428
+      },
+      "trash_plastic": {
+        "category_id": 14,
+        "annotations": 253,
+        "annotated_images": 241,
+        "supervised_images": 241,
+        "videos": 16,
+        "pixels": 2535182,
+        "percent_of_all_pixels": 1.6305853992364134
+      },
+      "trash_rubber": {
+        "category_id": 15,
+        "annotations": 24,
+        "annotated_images": 24,
+        "supervised_images": 24,
+        "videos": 2,
+        "pixels": 242892,
+        "percent_of_all_pixels": 0.1562239510975271
+      },
+      "trash_wood": {
+        "category_id": 16,
+        "annotations": 59,
+        "annotated_images": 59,
+        "supervised_images": 59,
+        "videos": 3,
+        "pixels": 467378,
+        "percent_of_all_pixels": 0.30060947999958837
+      }
+    }
+  },
+  "test": {
+    "images": 1078,
+    "videos": 51,
+    "annotations": 1817,
+    "total_pixels": 163814400,
+    "foreground_union_pixels": 15848604,
+    "foreground_supervised_pixels": 15809586,
+    "background_pixels": 147965796,
+    "ignore_pixels": 39018,
+    "foreground_union_percent": 9.674731891701828,
+    "foreground_supervised_percent": 9.65091347280825,
+    "background_percent": 90.32526810829818,
+    "ignore_percent": 0.023818418893577123,
+    "empty_rasterized_annotations": 0,
+    "resolution_counts": {
+      "480x360": 558,
+      "480x270": 520
+    },
+    "classes": {
+      "rov": {
+        "category_id": 1,
+        "annotations": 450,
+        "annotated_images": 405,
+        "supervised_images": 405,
+        "videos": 24,
+        "pixels": 6736002,
+        "percent_of_all_pixels": 4.111971841303329
+      },
+      "plant": {
+        "category_id": 2,
+        "annotations": 66,
+        "annotated_images": 63,
+        "supervised_images": 63,
+        "videos": 5,
+        "pixels": 660750,
+        "percent_of_all_pixels": 0.4033528187998125
+      },
+      "animal_fish": {
+        "category_id": 3,
+        "annotations": 97,
+        "annotated_images": 97,
+        "supervised_images": 97,
+        "videos": 5,
+        "pixels": 1576765,
+        "percent_of_all_pixels": 0.9625313769729645
+      },
+      "animal_starfish": {
+        "category_id": 4,
+        "annotations": 32,
+        "annotated_images": 19,
+        "supervised_images": 19,
+        "videos": 3,
+        "pixels": 22368,
+        "percent_of_all_pixels": 0.013654477262072199
+      },
+      "animal_shells": {
+        "category_id": 5,
+        "annotations": 7,
+        "annotated_images": 7,
+        "supervised_images": 7,
+        "videos": 2,
+        "pixels": 5938,
+        "percent_of_all_pixels": 0.0036248339584310047
+      },
+      "animal_crab": {
+        "category_id": 6,
+        "annotations": 34,
+        "annotated_images": 31,
+        "supervised_images": 31,
+        "videos": 3,
+        "pixels": 196053,
+        "percent_of_all_pixels": 0.11967995487576184
+      },
+      "animal_eel": {
+        "category_id": 7,
+        "annotations": 84,
+        "annotated_images": 35,
+        "supervised_images": 35,
+        "videos": 5,
+        "pixels": 76403,
+        "percent_of_all_pixels": 0.046639977926238474
+      },
+      "animal_etc": {
+        "category_id": 8,
+        "annotations": 31,
+        "annotated_images": 31,
+        "supervised_images": 31,
+        "videos": 7,
+        "pixels": 176854,
+        "percent_of_all_pixels": 0.10795998398187216
+      },
+      "trash_etc": {
+        "category_id": 9,
+        "annotations": 361,
+        "annotated_images": 285,
+        "supervised_images": 285,
+        "videos": 23,
+        "pixels": 1601068,
+        "percent_of_all_pixels": 0.9773670690732927
+      },
+      "trash_fabric": {
+        "category_id": 10,
+        "annotations": 45,
+        "annotated_images": 37,
+        "supervised_images": 37,
+        "videos": 3,
+        "pixels": 352025,
+        "percent_of_all_pixels": 0.2148925857555868
+      },
+      "trash_fishing_gear": {
+        "category_id": 11,
+        "annotations": 44,
+        "annotated_images": 40,
+        "supervised_images": 40,
+        "videos": 2,
+        "pixels": 215030,
+        "percent_of_all_pixels": 0.13126440654789812
+      },
+      "trash_metal": {
+        "category_id": 12,
+        "annotations": 167,
+        "annotated_images": 162,
+        "supervised_images": 162,
+        "videos": 8,
+        "pixels": 1274763,
+        "percent_of_all_pixels": 0.7781751787388654
+      },
+      "trash_paper": {
+        "category_id": 13,
+        "annotations": 15,
+        "annotated_images": 15,
+        "supervised_images": 15,
+        "videos": 2,
+        "pixels": 56242,
+        "percent_of_all_pixels": 0.03433275707141741
+      },
+      "trash_plastic": {
+        "category_id": 14,
+        "annotations": 321,
+        "annotated_images": 312,
+        "supervised_images": 312,
+        "videos": 20,
+        "pixels": 2479917,
+        "percent_of_all_pixels": 1.5138577560947022
+      },
+      "trash_rubber": {
+        "category_id": 15,
+        "annotations": 17,
+        "annotated_images": 17,
+        "supervised_images": 17,
+        "videos": 2,
+        "pixels": 47128,
+        "percent_of_all_pixels": 0.02876914361619003
+      },
+      "trash_wood": {
+        "category_id": 16,
+        "annotations": 46,
+        "annotated_images": 46,
+        "supervised_images": 46,
+        "videos": 3,
+        "pixels": 332280,
+        "percent_of_all_pixels": 0.20283931082981715
+      }
+    }
+  }
+}
