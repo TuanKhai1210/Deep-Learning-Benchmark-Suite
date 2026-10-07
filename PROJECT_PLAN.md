@@ -224,6 +224,16 @@ Một model chỉ được đánh dấu Done khi có đủ:
 
 ### A2 - sau khi Proposal được duyệt
 
+Cập nhật **07/10/2026**: [proposal TrashCan-Material](reports/a2/Tiki-taka_A2_TrashCan_Material_Proposal.pdf) đã được chuẩn bị để công bố trong repo/Pages; chưa xác nhận giảng viên duyệt hoặc đã nộp LMS.
+
+- Task: semantic segmentation, 16 foreground classes + background, ignore ID `255`.
+- EDA: 7.212 ảnh, 12.336 annotations, 312 video groups suy ra từ tên file.
+- Split gốc có 127 video groups giao nhau; giữ EDA cũ làm evidence. Split mới seed `36` chia theo video, 5.057/1.077/1.078 ảnh và không có video group giao nhau.
+- Dự kiến: U-Net scratch, SegFormer-B0 pretrained và đối chứng color augmentation on/off; foreground mIoU/Dice, trash-only mIoU và per-class metrics.
+- Run seed ban đầu `69420`; seeds `67`, `69` chỉ là lặp bổ sung nếu đủ compute.
+- Chỉ bắt đầu main experiments sau approval; pilot sẽ xác nhận và khóa budget/config. [Ghi chú proposal và evidence](reports/a2/README.md).
+
+
 | Khoảng thời gian | A | B | C | Mốc |
 |---|---|---|---|---|
 | 22/10-27/10 | Dataset adapter + EDA | Simple baseline | Pretrained model + fine-tuning | Draft freeze 27/10 |

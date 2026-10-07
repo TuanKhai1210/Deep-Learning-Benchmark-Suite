@@ -44,10 +44,10 @@ description: Five neural architectures. One shared protocol. Exploring the trade
       <div class="card-bottom"><span>Explore Assignment 1</span><span class="circle-arrow" aria-hidden="true">↗</span></div>
     </a>
     <a class="project-card" href="{{ '/a2.html' | relative_url }}">
-      <div class="card-top"><span class="card-number">02</span><span class="status-tag">PLANNED</span></div>
+      <div class="card-top"><span class="card-number">02</span><span class="status-tag">PROPOSAL PUBLISHED</span></div>
       <div class="project-icon icon-grid" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-      <span class="eyebrow">DATASET &amp; TASK TO BE CONFIRMED</span><h3>Scale &amp;<br>specialized learning</h3><p>Extend the study to larger-scale data and a specialized task, subject to proposal approval.</p>
-      <div class="card-bottom"><span>View research scope</span><span class="circle-arrow" aria-hidden="true">↗</span></div>
+      <span class="eyebrow">TRASHCAN-MATERIAL / SEMANTIC SEGMENTATION</span><h3>Underwater debris.<br>Pixel-level understanding.</h3><p>7,212 images. A video-disjoint split. U-Net and SegFormer-B0 planned, with instructor approval pending.</p>
+      <div class="card-bottom"><span>Read the A2 proposal</span><span class="circle-arrow" aria-hidden="true">↗</span></div>
     </a>
     <a class="project-card" href="{{ '/a3.html' | relative_url }}">
       <div class="card-top"><span class="card-number">03</span><span class="status-tag">PLANNED</span></div>

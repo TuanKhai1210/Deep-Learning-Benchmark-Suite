@@ -1,0 +1,7 @@
+{
+  "unique_images": 7212,
+  "unique_videos": 312,
+  "pairwise_video_overlap": 0,
+  "all_classes_meet_video_minima": true,
+  "manifest_content_sha256_verified": true
+}

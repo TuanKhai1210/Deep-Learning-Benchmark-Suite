@@ -11,6 +11,7 @@
 
 [Project website](https://tuankhai1210.github.io/Deep-Learning-Benchmark-Suite/) ·
 [Assignment 1](docs/a1.md) ·
+[Assignment 2 proposal](reports/a2/Tiki-taka_A2_TrashCan_Material_Proposal.pdf) ·
 [AI usage disclosure](AI_USAGE.md)
 
 </div>
@@ -30,10 +31,10 @@ The project begins with image classification and progressively extends toward sp
 | Module | Focus | Dataset or task | Status |
 |---|---|---|---|
 | Assignment 1 | Architecture benchmarking and end-to-end training pipelines | Fashion-MNIST image classification | In progress |
-| Assignment 2 | Large-scale data and a specialized vision or language task | Pending dataset proposal and approval | Planned |
+| Assignment 2 | Underwater semantic segmentation | TrashCan 1.0 Material | Proposal published; instructor approval pending |
 | Assignment 3 | Multimodal representation, fusion, and evaluation | Pending dataset proposal and approval | Planned |
 
-The current development priority is **Assignment 1**.
+Assignment 1 remains under development. Assignment 2 has reached the dataset-proposal milestone; main A2 experiments require instructor approval.
 
 Configuration validation and the command-line interface are available. Data preparation, model training, evaluation, and analysis are under development; no benchmark results are reported yet. See the [implementation guide](IMPLEMENTATION_GUIDE.md) for file ownership and implementation order.
 
@@ -72,6 +73,21 @@ The team uses **split seed 36** to create one saved data partition. Model traini
 
 Other experimental choices are still under review in the [A1 experiment contract](docs/a1-experiment-contract.md), including normalization statistics, compute budget, augmentation, and the final timing procedure.
 
+## Assignment 2: TrashCan-Material Semantic Segmentation
+
+The team proposes underwater marine-debris semantic segmentation using **TrashCan 1.0 Material**. The proposal retains all 16 foreground categories, adds background (17 output classes), and excludes ambiguous overlap and letterbox padding with ignore ID `255`.
+
+- [Dataset proposal PDF](reports/a2/Tiki-taka_A2_TrashCan_Material_Proposal.pdf)
+- [Assignment 2 project page](https://tuankhai1210.github.io/Deep-Learning-Benchmark-Suite/a2.html)
+- [Proposal and evidence notes](reports/a2/README.md)
+- [Group working data and EDA evidence](https://drive.google.com/drive/folders/1VwT0UyleGYyF9yrCtXaOwZpnp-ZRrfGD)
+
+Measured preliminary EDA contains **7,212 images**, **12,336 object annotations**, and **312 filename-derived video groups**. The original train/validation split shares **127 video groups**. The new seed-`36` split assigns whole videos: **5,057 / 1,077 / 1,078 images** in train/validation/test, with zero pairwise video-group overlap. Original-split findings remain evidence, not the training partition.
+
+The planned comparison is a scratch U-Net versus a pretrained SegFormer-B0, with a controlled color-augmentation on/off experiment within SegFormer. Primary evaluation is foreground macro mIoU, supported by foreground Dice, trash-only mIoU and per-class scores. The initial run seed is `69420`; paired repetitions at `67` and `69` are optional, compute-dependent plans.
+
+**Status:** Proposal published to this repository on 7 October 2026. Instructor approval, main training, model results and LMS submission are not asserted. Raw data and large checkpoints remain outside Git.
+
 ## Repository structure
 
 ```text
@@ -103,7 +119,8 @@ deep-learning-benchmark-suite/
 ├── notebooks/                 # Exploratory analysis, not the main pipeline
 ├── docs/                      # GitHub Pages and experiment contract
 │   └── assets/a1/             # Small reviewed tables and figures
-├── reports/a1/                # Report and presentation outline
+├── reports/a1/                # A1 report and presentation outline
+├── reports/a2/                # A2 proposal and measured EDA summaries
 ├── data/                      # Local datasets, excluded from Git
 ├── runs/                      # Local run artifacts, excluded from Git
 └── checkpoints/               # Model weights, excluded from Git
@@ -176,7 +193,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for review responsibilities and the pre-m
 - [ ] Implement CNN, LSTM/GRU, and Transformer models
 - [ ] Run the full controlled comparison and error analysis
 - [ ] Publish the Assignment 1 report, slides, video, and checkpoints
-- [ ] Begin Assignment 2 only after dataset proposal approval
+- [x] Publish the TrashCan-Material Assignment 2 proposal and EDA summary
+- [ ] Obtain instructor approval before main Assignment 2 experiments
 
 ## Team
 
