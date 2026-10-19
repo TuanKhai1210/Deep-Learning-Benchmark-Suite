@@ -346,3 +346,17 @@
 - Responsible member: Nguyễn Anh Khoa
 - Verification sources: Visual inspection of the notebook source and generated matplotlib images.
 - Experiment impact: Generated analysis and visualization code only. No training or core library source was modified.
+
+## 2026-10-19 - Transformer implementation support and verification
+
+- Tool/model: OpenAI Codex (exact model identifier not recorded)
+- Used by: Tạ Tuấn Khải
+- Stage: A1 Final, C05 Transformer implementation
+- Purpose: Understand and implement patch-token self-attention, then check the model against the shared training contract
+- Affected sections: `src/dlbench/a1/models/transformer.py` and `tests/test_model_contract.py` (commit `162a1ef`)
+- Prompt summary: Requested step-by-step teaching of Transformer tensor operations, followed by complete Transformer tests, code formatting, and guidance for a smoke run
+- AI contribution: Explained patch extraction, projection, positional embeddings, multi-head attention, residual blocks and mean pooling; wrote contract tests, supplied a four-image overfit test, and formatted the model and test files
+- Human contribution and verification: Khải implemented the model, inserted the overfit test, ran the full unit-test suite (`216 tests`, `OK`, `3 skipped`), trained a 64-sample smoke run through the shared trainer, and re-evaluated its saved best checkpoint on validation; the checkpoint metrics matched `metrics.json`
+- Responsible member: Tạ Tuấn Khải; reviewer Nguyễn Hạo Thiên has not yet approved this branch
+- Verification sources: Local test output; smoke run `a1_transformer_smoke_seed69420_20261019-081935_10d1c3` and its `history.csv`, `metrics.json`, `best.pt`, and metadata
+- Experiment impact: Smoke-only validation on a small subset, with a dirty Git working tree; no full-budget three-seed runs, official test evaluation, or final benchmark claim
