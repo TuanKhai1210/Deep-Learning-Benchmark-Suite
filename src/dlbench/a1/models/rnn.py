@@ -50,7 +50,7 @@ class RNNClassifier(nn.Module):
         """
         x = images.squeeze(1)
         if self.representation == 'columns':
-            x = x.permute(0, 2, 1)
+            x = x.permute(0, 2, 1).contiguous()
         
         # LSTM outputs: output, (hn, cn) where
         # - output (B, seq_len, directions * hidden_size): output features h_t of the LAST layer
