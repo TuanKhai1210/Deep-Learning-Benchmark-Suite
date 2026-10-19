@@ -1,10 +1,14 @@
 import unittest
+from pathlib import Path
 
 import torch
 from torch import nn
 
+from dlbench.common.config import load_config
 from dlbench.a1.metrics import count_parameters
 from dlbench.a1.models.cnn import CNNClassifier
+
+ROOT = Path(__file__).resolve().parents[1]
 
 
 class TestCNNClassifier(unittest.TestCase):
@@ -20,9 +24,8 @@ class TestCNNClassifier(unittest.TestCase):
         return parameters
 
     def test_initialization_from_project_config(self) -> None:
-        from configs.a1.models.cnn import CONFIG
-
-        model = CNNClassifier(CONFIG["model"]["parameters"])
+        config = load_config(ROOT / "configs" / "a1" / "models" / "cnn.py")
+        model = CNNClassifier(config["model"]["parameters"])
         logits = model(torch.randn(4, 1, 28, 28))
 
         self.assertEqual(tuple(logits.shape), (4, 10))
