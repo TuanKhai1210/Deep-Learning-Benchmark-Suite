@@ -132,8 +132,8 @@ def collect_environment() -> dict[str, Any]:
             gpus.append({
                 "index": index,
                 "name": torch.cuda.get_device_name(index),
-                "total_memory_bytes": props.total_mem,
-                "total_memory_gb": round(props.total_mem / (1024 ** 3), 2),
+                "total_memory_bytes": props.total_memory,
+                "total_memory_gb": round(props.total_memory / (1024 ** 3), 2),
                 "compute_capability": f"{props.major}.{props.minor}",
                 "multi_processor_count": props.multi_processor_count,
             })
