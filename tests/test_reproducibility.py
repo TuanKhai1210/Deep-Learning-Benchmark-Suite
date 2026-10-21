@@ -128,3 +128,63 @@ class ReproducibilityTests(unittest.TestCase):
         environment = collect_environment()
         if not environment["cuda_available"]:
             self.assertEqual(environment["gpus"], [])
+
+    def test_collect_environment_precision_fields(self):
+        environment = collect_environment()
+        self.assertIn("precision", environment)
+        precision = environment["precision"]
+        self.assertIn("float32_matmul_precision", precision)
+        self.assertIn(precision["float32_matmul_precision"], ("highest", "high", "medium"))
+        self.assertIn("cuda_matmul_allow_tf32", precision)
+        if environment["cuda_available"]:
+            self.assertIsInstance(precision["cuda_matmul_allow_tf32"], bool)
+        else:
+            self.assertIsNone(precision["cuda_matmul_allow_tf32"])
+
+    def test_collect_environment_cudnn_fields(self):
+        environment = collect_environment()
+        self.assertIn("cudnn", environment)
+        cudnn = environment["cudnn"]
+        self.assertIn("available", cudnn)
+        self.assertIn("enabled", cudnn)
+        self.assertIn("version", cudnn)
+        self.assertIn("allow_tf32", cudnn)
+        self.assertIn("benchmark", cudnn)
+        self.assertIn("deterministic", cudnn)
+        if cudnn["available"]:
+            self.assertIsInstance(cudnn["version"], int)
+            self.assertIsInstance(cudnn["allow_tf32"], bool)
+            self.assertIsInstance(cudnn["benchmark"], bool)
+            self.assertIsInstance(cudnn["deterministic"], bool)
+        else:
+            self.assertIsNone(cudnn["version"])
+
+    def test_collect_environment_system_ram(self):
+        environment = collect_environment()
+        self.assertIn("system_ram", environment)
+        ram = environment["system_ram"]
+        self.assertIn("total_bytes", ram)
+        self.assertIn("total_gb", ram)
+        if ram["total_bytes"] is not None:
+            self.assertIsInstance(ram["total_bytes"], int)
+            self.assertGreater(ram["total_bytes"], 0)
+            self.assertIsInstance(ram["total_gb"], float)
+            self.assertGreater(ram["total_gb"], 0)
+
+    def test_collect_environment_gpu_vram_and_arch(self):
+        environment = collect_environment()
+        if not environment["cuda_available"]:
+            return
+        for gpu in environment["gpus"]:
+            self.assertIn("total_memory_bytes", gpu)
+            self.assertIn("total_memory_gb", gpu)
+            self.assertIn("compute_capability", gpu)
+            self.assertIn("multi_processor_count", gpu)
+            self.assertIsInstance(gpu["total_memory_bytes"], int)
+            self.assertGreater(gpu["total_memory_bytes"], 0)
+            self.assertIsInstance(gpu["total_memory_gb"], float)
+            self.assertGreater(gpu["total_memory_gb"], 0)
+            self.assertRegex(gpu["compute_capability"], r"^\d+\.\d+$")
+            self.assertIsInstance(gpu["multi_processor_count"], int)
+            self.assertGreater(gpu["multi_processor_count"], 0)
+
