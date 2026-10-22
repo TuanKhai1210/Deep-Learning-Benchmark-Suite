@@ -11,8 +11,8 @@ CONFIG = {
         },
     },
     "training": {
-        # TODO team: choose after a memory/time check. 0 means undecided.
-        "batch_size": 0,
+        # Match the shared batch size after the GPU batch-64 pilot.
+        "batch_size": 64,
         "optimizer": "adam",
         "learning_rate": 0.001,
         "weight_decay": 0.0,
@@ -22,7 +22,7 @@ CONFIG = {
     "run": {
         # Repeat with run seeds 69420, 67 and 69 on the split created with seed 36.
         "seed": 69420,
-        "device": "cpu",
+        "device": "cuda",
         "output_root": "runs/a1",
     },
 }
