@@ -31,10 +31,10 @@ The project begins with image classification and progressively extends toward sp
 | Module | Focus | Dataset or task | Status |
 |---|---|---|---|
 | Assignment 1 | Architecture benchmarking and end-to-end training pipelines | Fashion-MNIST image classification | In progress |
-| Assignment 2 | Underwater semantic segmentation | TrashCan 1.0 Material | Proposal published; instructor approval pending |
+| Assignment 2 | Underwater semantic segmentation | TrashCan 1.0 Material | Initial code available; approval/pilot pending |
 | Assignment 3 | Multimodal representation, fusion, and evaluation | Pending dataset proposal and approval | Planned |
 
-Assignment 1 remains under development. Assignment 2 has reached the dataset-proposal milestone; main A2 experiments require instructor approval.
+Assignment 1 remains under development. Assignment 2 has an initial development pipeline; main A2 experiments require instructor approval and a pilot-confirmed protocol.
 
 Configuration validation and the command-line interface are available. Data preparation, model training, evaluation, and analysis are under development; no benchmark results are reported yet. See the [implementation guide](IMPLEMENTATION_GUIDE.md) for file ownership and implementation order.
 
@@ -74,6 +74,11 @@ The team uses **split seed 36** to create one saved data partition. Model traini
 Other experimental choices are still under review in the [A1 experiment contract](docs/a1-experiment-contract.md), including normalization statistics, compute budget, augmentation, and the final timing procedure.
 
 ## Assignment 2: TrashCan-Material Semantic Segmentation
+
+Initial code: [implementation and commands](docs/a2_initial_code.md) ·
+[development notebook](notebooks/a2_initial_code.ipynb) · [draft configs](configs/a2/README.md).
+Synthetic CPU checks and checkpoint-resume tests establish development contracts;
+real-data integration, GPU pilot and main results remain pending.
 
 The team proposes underwater marine-debris semantic segmentation using **TrashCan 1.0 Material**. The proposal retains all 16 foreground categories, adds background (17 output classes), and excludes ambiguous overlap and letterbox padding with ignore ID `255`.
 

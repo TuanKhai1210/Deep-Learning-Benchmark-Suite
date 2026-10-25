@@ -21,6 +21,7 @@ setup(
     extras_require={
         "ml": ["torch", "torchvision", "numpy", "scikit-learn", "matplotlib", "tqdm"],
         "notebooks": ["jupyterlab"],
+        "a2": ["torch", "torchvision", "numpy", "matplotlib", "Pillow==12.3.0", "transformers==4.57.6"],
     },
-    entry_points={"console_scripts": ["dlbench-a1=dlbench.a1.cli:main"]},
+    entry_points={"console_scripts": ["dlbench-a1=dlbench.a1.cli:main", "dlbench-a2=dlbench.a2.cli:main"]},
 )
