@@ -48,6 +48,11 @@ def main(argv=None):
     validate.add_argument("--main", action="store_true")
     manifest = commands.add_parser("check-manifest")
     manifest.add_argument("--manifest", required=True)
+    eda = commands.add_parser("eda", help="Run the preliminary EDA and create a split manifest")
+    eda.add_argument("--dataset-root", type=Path, required=True)
+    eda.add_argument("--output-dir", type=Path, required=True)
+    eda.add_argument("--seed", type=int, default=36)
+    eda.add_argument("--write-masks", action="store_true")
     smoke = commands.add_parser("smoke")
     smoke.add_argument("--config", required=True)
     smoke.add_argument("--device", default="cpu")
@@ -79,6 +84,11 @@ def main(argv=None):
         parser.error("--limit must be positive")
     if getattr(args, "workers", 0) < 0:
         parser.error("--workers must be nonnegative")
+    if args.command == "eda":
+        from .eda import run as run_eda
+
+        run_eda(args.dataset_root, args.output_dir, args.seed, args.write_masks)
+        return 0
     if args.command == "check-manifest":
         value = read_manifest(args.manifest)
         result = {"content_sha256": value["content_sha256"], "images": len(value["images"]),
