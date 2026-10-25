@@ -360,3 +360,22 @@
 - Responsible member: Tạ Tuấn Khải; reviewer Nguyễn Hạo Thiên has not yet approved this branch
 - Verification sources: Local test output; smoke run `a1_transformer_smoke_seed69420_20261019-081935_10d1c3` and its `history.csv`, `metrics.json`, `best.pt`, and metadata
 - Experiment impact: Smoke-only validation on a small subset, with a dirty Git working tree; no full-budget three-seed runs, official test evaluation, or final benchmark claim
+
+## 2026-10-25 — A2 initial-code implementation
+
+- Tool/model: OpenAI Codex (exact model identifier not recorded).
+- Used by: Tạ Tuấn Khải; requested completion of A2 through the initial-code milestone.
+- Affected sections: `src/dlbench/a2/`, `configs/a2/`, `tests/test_a2.py`, `notebooks/a2_initial_code.ipynb`, `docs/a2_initial_code.md`, package entry point and navigation.
+- AI contribution: Ported the EDA converter unchanged at function level; implemented manifest-backed data, stateless color pairing, U-Net and pinned SegFormer, shared semantic loss/metrics/engine, epoch-boundary checkpoint/resume, CLI/config/artifact handling, validation-only augmentation decision, tests and notebook.
+- Verification: 256 unit tests completed, OK (3 pre-existing skips), including 27 A2 tests; checkpoint resume matches uninterrupted synthetic training and selected-checkpoint validation replay. Actual B0 scratch and pinned ADE20K initialization passed synthetic forward/backward; paired pretrained initial-state hashes match. Both models passed finite `[1,17,512,512]` CPU forward checks. Published 7,212-entry manifest digest verified; four converter function ASTs match the 5 October source; notebook schema/syntax and default local execution passed; A1 linear config still validates.
+- Environment: Windows CPU, Python 3.14.6, torch 2.13.0+cpu, Pillow 12.3.0, Transformers 4.57.6; two CPU threads for development checks. Colab/GPU behavior is unverified.
+- Human contribution: Khải supplied scope and existing protocol/EDA. Teammate review remains pending; this work does not establish teammate authorship or acceptance.
+- Experiment impact: Synthetic optimization steps and fixture-only resume tests; no raw TrashCan training, official-test score, GPU pilot, approval confirmation or report-result writing. Optimizer/loss/budget remain explicitly draft. Existing A1 checkout edits and historical artifacts were preserved.
+
+## 2026-10-25 — Explicit A2 parameter counts
+
+- Requested by Tạ Tuấn Khải; implemented with OpenAI Codex.
+- Added a shared unique-parameter counter and separate total/trainable/frozen fields in smoke output and new-run metadata, using requires_grad and excluding buffers. Training/freeze policy is unchanged.
+- Verified: 259 tests, OK (3 existing skips), including 30 A2 tests; partial/all freezing, shared parameters, buffers, smoke fields and fixture run metadata. Measured U-Net 1,964,369 total/trainable; B0 3,718,513 total/trainable; both frozen counts zero.
+- An initial full-suite invocation from the context directory failed existing A1 relative-path/config-import tests; rerunning from the required repository root passed. No code changes were needed for those invocation errors.
+- No real-data training, GPU/Colab run, A1 change, commit/push/merge or report-result editing. Prior initial-code evidence remains dated and preserved.

@@ -13,6 +13,11 @@ The file is an unchanged copy of the team-supplied `trashcan_material_proposal (
 
 Instructor approval and LMS submission have **not** been confirmed. Publishing on GitHub/Pages is not LMS submission. Main experiments require approval.
 
+Initial code (25 October 2026, feature branch): see the
+[implementation guide](../../docs/a2_initial_code.md) and
+[development notebook](../../notebooks/a2_initial_code.ipynb).
+This is a development milestone; the original proposal/EDA evidence below remains dated as measured.
+
 ## Measured evidence
 
 The small JSON summaries below were measured on 5 October 2026; they are copied unchanged from the previously verified local EDA bundle.
