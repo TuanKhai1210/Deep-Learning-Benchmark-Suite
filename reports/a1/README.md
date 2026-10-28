@@ -2,7 +2,7 @@
 
 - [Final report](A1-report.pdf)
 - [Presentation slides](A1-presentation.pdf)
-- [Presentation video](https://www.youtube.com/watch?v=w4O4cdzHDUY)
+- [Presentation video](https://www.youtube.com/watch?v=cfNiu5XLi10)
 - [Assignment 1 checkpoints and run artifacts](../../checkpoints/a1/)
 - [Assignment 1 website page](https://tuankhai1210.github.io/Deep-Learning-Benchmark-Suite/a1.html)
 
