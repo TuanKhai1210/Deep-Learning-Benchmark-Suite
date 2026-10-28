@@ -11,7 +11,7 @@ description: Five neural architectures. One shared protocol. Exploring the trade
     <p class="hero-description">Different architectures. One shared question.<br>What makes a model worth choosing?</p>
     <p class="hero-detail">A comparative study of neural networks, their representations, and the trade-offs between performance, complexity, and compute.</p>
     <div class="hero-actions"><a class="button primary" href="{{ '/a1.html' | relative_url }}">Explore the benchmark <span aria-hidden="true">↗</span></a><a class="text-link" href="https://github.com/TuanKhai1210/deep-learning-benchmark-suite">View source <span aria-hidden="true">↗</span></a></div>
-    <div class="hero-meta"><span><i class="live-dot"></i>A1 · In development</span><span>PyTorch / Fashion-MNIST</span></div>
+    <div class="hero-meta"><span><i class="live-dot"></i>A1 · Final published</span><span>PyTorch / Fashion-MNIST</span></div>
   </div>
   <div class="explorer">
     <div class="explorer-top"><span class="eyebrow">ARCHITECTURE EXPLORER</span><span class="figure-number">FIG. 01</span></div>
@@ -38,7 +38,7 @@ description: Five neural architectures. One shared protocol. Exploring the trade
   <div class="section-heading"><div><span class="eyebrow">01 / RESEARCH PROGRAM</span><h2>Three studies.<br>A wider perspective.</h2></div><p>From the foundations of image classification to specialized tasks and multimodal learning.</p></div>
   <div class="project-grid">
     <a class="project-card featured" href="{{ '/a1.html' | relative_url }}">
-      <div class="card-top"><span class="card-number">01</span><span class="status-tag dark-tag"><i class="live-dot"></i>IN DEVELOPMENT</span></div>
+      <div class="card-top"><span class="card-number">01</span><span class="status-tag dark-tag"><i class="live-dot"></i>FINAL PUBLISHED</span></div>
       <div class="project-icon icon-layers" aria-hidden="true"><i></i><i></i><i></i></div>
       <span class="eyebrow">FASHION-MNIST / IMAGE CLASSIFICATION</span><h3>Foundations &amp;<br>architecture benchmarks</h3><p>Linear to Transformer. Compare five model families under one data and evaluation protocol.</p>
       <div class="card-bottom"><span>Explore Assignment 1</span><span class="circle-arrow" aria-hidden="true">↗</span></div>
@@ -65,8 +65,8 @@ description: Five neural architectures. One shared protocol. Exploring the trade
 </div></section>
 
 <section class="section container">
-  <div class="section-heading"><div><span class="eyebrow">03 / CURRENT FOCUS</span><h2>Building the evidence.</h2></div><p>Assignment 1 is in development. Verified measurements will be published as experiments are completed.</p></div>
-  <div class="progress-grid"><div class="progress-card"><span class="eyebrow">AGREED</span><h3>The experiment’s foundations</h3><ul class="check-list"><li>Fashion-MNIST as the main dataset</li><li>Team responsibilities and model ownership</li><li>Split seed 36 and three training seeds</li></ul><a class="text-link" href="{{ '/a1.html' | relative_url }}">See the full study ↗</a></div><div class="progress-card"><span class="eyebrow">IN DEVELOPMENT</span><h3>From pipeline to comparison</h3><p>Data preparation, model implementations, training and validation, and experiment logging.</p><div class="release-note"><span class="live-dot"></span><span>Benchmark results are not available yet.</span></div></div></div>
+  <div class="section-heading"><div><span class="eyebrow">03 / CURRENT FOCUS</span><h2>Building the evidence.</h2></div><p>Assignment 1 is complete and its report, presentation, checkpoints, and reproducibility evidence are published.</p></div>
+  <div class="progress-grid"><div class="progress-card"><span class="eyebrow">COMPLETED</span><h3>The experiment’s foundations</h3><ul class="check-list"><li>Fashion-MNIST as the main dataset</li><li>Team responsibilities and model ownership</li><li>Split seed 36 and three training seeds</li></ul><a class="text-link" href="{{ '/a1.html' | relative_url }}">See the full study ↗</a></div><div class="progress-card"><span class="eyebrow">PUBLISHED</span><h3>From pipeline to comparison</h3><p>Data preparation, five model families, training, validation, experiment logging, and final analysis are complete.</p><div class="release-note"><span class="live-dot"></span><span>Report, slides, video, and checkpoints are available.</span></div></div></div>
 </section>
 
 <section class="team-section section container" id="team">

@@ -56,6 +56,7 @@ nosetests.xml
 # Model checkpoints: keep the usage note, ignore model weights
 /checkpoints/*
 !/checkpoints/README.md
+!/checkpoints/a1/
 *.pt
 *.pth
 *.ckpt

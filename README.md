@@ -11,6 +11,10 @@
 
 [Project website](https://tuankhai1210.github.io/Deep-Learning-Benchmark-Suite/) ·
 [Assignment 1](docs/a1.md) ·
+[A1 report](reports/a1/A1-report.pdf) ·
+[A1 slides](reports/a1/A1-presentation.pdf) ·
+[A1 presentation video](https://www.youtube.com/watch?v=w4O4cdzHDUY) ·
+[A1 checkpoints](checkpoints/a1/) ·
 [Assignment 2 proposal](reports/a2/Tiki-taka_A2_TrashCan_Material_Proposal.pdf) ·
 [AI usage disclosure](AI_USAGE.md)
 
@@ -30,7 +34,7 @@ The project begins with image classification and progressively extends toward sp
 
 | Module | Focus | Dataset or task | Status |
 |---|---|---|---|
-| Assignment 1 | Architecture benchmarking and end-to-end training pipelines | Fashion-MNIST image classification | In progress |
+| Assignment 1 | Architecture benchmarking and end-to-end training pipelines | Fashion-MNIST image classification | Complete; report, slides, video, and checkpoints published |
 | Assignment 2 | Underwater semantic segmentation | TrashCan 1.0 Material | Initial code available; approval/pilot pending |
 | Assignment 3 | Multimodal representation, fusion, and evaluation | Pending dataset proposal and approval | Planned |
 
