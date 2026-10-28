@@ -1,0 +1,88 @@
+\documentclass[oneside,final,a4 paper]{hcmut-report}
+\usepackage{tabularx,microtype,xurl,needspace}
+\usepackage[section]{placeins}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+\setlength{\parindent}{0 pt}
+\setlength{\emergencystretch}{3 em}
+\setlength{\headheight}{44.3 pt}
+\setlength{\tabcolsep}{4 pt}
+\captionsetup{font=small,labelfont=bf}
+\newcommand{\cls}[1]{\texttt{\detokenize{#1}}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\makeatletter
+\renewcommand\small{\@setfontsize\small{11 pt}{13.2 pt}}
+\renewcommand\footnotesize{\@setfontsize\footnotesize{10 pt}{12 pt}}
+\makeatother
+\deptname{Faculty of Computer Science and Engineering}
+\coursename{Deep Learning and Its Applications (CO3133)}
+\reporttype{ASSIGNMENT 2 -- M2 DRAFT}
+\title{Video-Disjoint Semantic Segmentation of Marine Debris in TrashCan}
+\advisor{Dr. Le Thanh Sach}
+\groupname{Tiki-taka}
+\reportplace{Ho Chi Minh City}
+\reporttime{28 October 2026}
+\logofile{hcmut.png}
+\hypersetup{pdftitle={Tiki-taka A2 M2 Draft: Completed U-Net and Partial SegFormer Progress},pdfauthor={Nguyen Anh Khoa; Nguyen Hao Thien; Ta Tuan Khai}}
+
+\begin{document}
+\hypersetup{pageanchor=false}
+\thispagestyle{empty}
+\begin{center}
+{\bfseries\fontsize{14}{17}\selectfont VIETNAM NATIONAL UNIVERSITY, HO CHI MINH CITY\par
+HO CHI MINH CITY UNIVERSITY OF TECHNOLOGY\par
+FACULTY OF COMPUTER SCIENCE AND ENGINEERING\par}
+\vspace{0.8 cm}
+\includegraphics[width=3cm]{hcmut.png}\par
+\vspace{0.6 cm}
+{\bfseries\fontsize{17}{21}\selectfont DEEP LEARNING AND ITS APPLICATIONS\par}
+{\bfseries CO3133 -- SEMESTER-261\par}
+\vspace{0.5 cm}
+{\bfseries\fontsize{16}{20}\selectfont ASSIGNMENT 2 -- M2 DRAFT\par}
+\vspace{0.5 cm}
+{\bfseries\fontsize{20}{24}\selectfont Video-Disjoint Semantic Segmentation\par of Marine Debris in TrashCan\par}
+\vspace{0.4 cm}
+{\large Completed U-Net evaluation and partial SegFormer-B0 training\par}
+\vspace{0.7 cm}
+\begin{tabular}{rl}
+\textbf{Class:} & CC01\\
+\textbf{Instructor:} & Dr. Le Thanh Sach\\
+\textbf{Group:} & Tiki-taka\\
+\textbf{Milestone:} & M2 Draft\\
+\textbf{Evidence cutoff:} & 28 October 2026
+\end{tabular}\par
+\vspace{0.5 cm}
+\begin{tabular}{clc}\toprule
+No. & Group member & Student ID\\\midrule
+1 & Nguyen Anh Khoa & 2452539\\
+2 & Nguyen Hao Thien & 2453194\\
+3 & Ta Tuan Khai & 2452515\\\bottomrule
+\end{tabular}
+\vfill
+{\bfseries Ho Chi Minh City, 28 October 2026}
+\end{center}
+\clearpage
+\hypersetup{pageanchor=true}
+\pagenumbering{roman}
+\section*{Abstract}
+\addcontentsline{toc}{section}{Abstract}
+The project has completed a scratch U-Net experiment on a video-disjoint TrashCan-Material split and has progressed to pretrained SegFormer-B0: S0 has 15 completed main-training epochs, while S1 has completed its GPU pilot only.
+
+The validation-selected U-Net checkpoint obtains test foreground mean intersection over union (mIoU) 0.035627 and foreground Dice 0.058519. The partial S0 run reaches best-so-far validation foreground mIoU 0.195336 at epoch 15; this is a validation progress result, not a SegFormer test result or a final model ranking.
+
+The next stage is to complete S0, train the paired S1 configuration with color augmentation, and compare the two completed runs using the fixed validation rule before interpreting their test results. The current evidence does not establish the effect of augmentation or variability across seeds.
+
+\vspace{0.4 cm}
+\textbf{Keywords:} semantic segmentation; marine debris; TrashCan; U-Net; SegFormer; video-disjoint evaluation; progress report.
+\clearpage
+\tableofcontents
+\clearpage
+\pagenumbering{arabic}
+\input{sections/01-data}
+\clearpage
+\input{sections/02-method}
+\clearpage
+\input{sections/03-results}
+\clearpage
+\input{sections/04-supporting}
+\end{document}

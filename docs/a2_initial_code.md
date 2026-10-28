@@ -10,6 +10,7 @@ See [proposal/evidence](../reports/a2/README.md) and [configs](../configs/a2/REA
 |---|---|
 | Data | `src/dlbench/a2/data.py`: existing seed-36 manifest, original source annotation hashes, category map, group disjointness and per-image native target hash checks |
 | Converter | `converter.py`: four function bodies ported unchanged from the 5 October EDA tools; Pillow 12.3.0, same-class union/cross-class ignore |
+| EDA | `src/dlbench/a2/eda.py`: preliminary EDA utility, exposed through the `eda` CLI command; its measurement, split, report, QA and output behavior is retained |
 | Preprocessing | RGB bilinear/mask nearest, centered 512 letterbox, target padding 255, RGB black padding, fixed ImageNet mean/std for both models |
 | Augmentation | Train-only color jitter p=0.5 before letterbox/normalization; factors 0.9–1.1, hue ±0.01, random operation order; stateless seed/epoch/image RNG |
 | Models | Four-downsampling-stage U-Net (base 16, GroupNorm, bilinear upsampling); ADE20K SegFormer-B0, fresh 17-class classifier, raw logits resized to target |
@@ -76,15 +77,30 @@ TrashCanMaterial/
 eda_v1/splits/trashcan_material_seed36_v1.json
 ```
 
-Use the previously published manifest from the group's EDA folder. Do not rebuild
-the split per model or move raw images into the repository. The original source
-partition in each row remains the lookup path after the new video-disjoint split.
-The manifest is external to Git; the portable project package also includes a
-byte-identical convenience copy (no frames or annotations).
+Keep the raw dataset, EDA output, manifest, and training artifacts on local
+storage. The CLI does not mount or access Google Drive. Extract the official
+dataset locally so the root contains the two COCO JSON files and `train/` and
+`val/` image directories. The original source partition in each manifest row
+remains the lookup path after the new video-disjoint split.
+
+Run EDA locally once to create the report, evidence, and
+`splits/trashcan_material_seed36_v1.json`. Use seed `36` for the
+training-compatible manifest. The command refuses an existing non-empty output
+directory rather than overwriting evidence.
 
 ```console
-python -m dlbench.a2.cli check-manifest --manifest /path/to/trashcan_material_seed36_v1.json
-python -m dlbench.a2.cli check-data --config configs/a2/unet.py --data-root /path/to/TrashCanMaterial --manifest /path/to/trashcan_material_seed36_v1.json --limit 4
+python -m dlbench.a2.cli eda --dataset-root data/TrashCan/dataset/material_version --output-dir data/TrashCan/eda_v1 --seed 36
+python -m dlbench.a2.cli check-manifest --manifest data/TrashCan/eda_v1/splits/trashcan_material_seed36_v1.json
+```
+
+The generated manifest can be passed directly to `check-data` and `train` below.
+EDA is an explicit command; training does not rerun EDA or depend on its report
+files. The dataset loader reads images and annotations locally and generates
+semantic masks on demand using the same converter and preprocessing contract.
+
+```console
+python -m dlbench.a2.cli check-manifest --manifest data/TrashCan/eda_v1/splits/trashcan_material_seed36_v1.json
+python -m dlbench.a2.cli check-data --config configs/a2/unet.py --data-root data/TrashCan/dataset/material_version --manifest data/TrashCan/eda_v1/splits/trashcan_material_seed36_v1.json --limit 4
 ```
 
 `check-data` verifies all source annotation hashes/membership, then loads and
@@ -96,9 +112,9 @@ images before a pilot. Each model uses the same adapter and converter.
 ## Explicit small development integration (when real data is ready)
 
 ```console
-python -m dlbench.a2.cli train --config configs/a2/unet.py --data-root /path/to/TrashCanMaterial --manifest /path/to/trashcan_material_seed36_v1.json --output runs/a2/U-dev-001 --development --limit 8 --epochs 1
-python -m dlbench.a2.cli train --config configs/a2/unet.py --data-root /path/to/TrashCanMaterial --manifest /path/to/trashcan_material_seed36_v1.json --output runs/a2/U-dev-001 --development --limit 8 --epochs 2 --resume
-python -m dlbench.a2.cli evaluate --run-dir runs/a2/U-dev-001 --data-root /path/to/TrashCanMaterial --manifest /path/to/trashcan_material_seed36_v1.json --split validation --output runs/a2/U-dev-001/validation_replay.json
+python -m dlbench.a2.cli train --config configs/a2/unet.py --data-root data/TrashCan/dataset/material_version --manifest data/TrashCan/eda_v1/splits/trashcan_material_seed36_v1.json --output runs/a2/U-dev-001 --development --limit 8 --epochs 1
+python -m dlbench.a2.cli train --config configs/a2/unet.py --data-root data/TrashCan/dataset/material_version --manifest data/TrashCan/eda_v1/splits/trashcan_material_seed36_v1.json --output runs/a2/U-dev-001 --development --limit 8 --epochs 2 --resume
+python -m dlbench.a2.cli evaluate --run-dir runs/a2/U-dev-001 --data-root data/TrashCan/dataset/material_version --manifest data/TrashCan/eda_v1/splits/trashcan_material_seed36_v1.json --split validation --output runs/a2/U-dev-001/validation_replay.json
 ```
 
 Development limits slice train/validation only. Standalone validation replay

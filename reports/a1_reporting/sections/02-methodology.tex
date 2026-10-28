@@ -1,0 +1,290 @@
+\section{Methodology}
+\label{sec:methods}
+\subsection{End-to-End Pipeline and Data Loading}
+The pipeline uses a custom subset wrapper and collation function around torchvision's
+raw Fashion-MNIST dataset. Training and validation wrappers use disjoint official-training
+indices and independent transform objects; the test wrapper uses the official test
+source. Training shuffles through a dedicated run-seeded generator. Validation and
+test do not shuffle. All loaders retain IDs and use \texttt{drop\_last=False}.
+
+Figure~\ref{fig:pipeline} separates the update and evaluation paths. Training enables
+dropout and gradients; validation/test use evaluation mode and inference without
+gradient tracking. Both consume the same image/label batch contract.
+\begin{figure}[H]\centering
+\begin{tikzpicture}[>=Latex,node distance=8mm and 9mm,
+ box/.style={draw,rounded corners,align=center,text width=39mm,minimum height=12mm,
+ font=\small,fill=blue!5}]
+\node[box] (raw) {Raw IDX + fixed\\split manifest};
+\node[box,right=of raw] (prep) {Train crop / eval\\tensor + normalization};
+\node[box,right=of prep] (loader) {DataLoader\\images, labels, IDs};
+\node[box,below=of prep] (model) {Model forward\\raw logits \([B,10]\)};
+\node[box,below left=of model,fill=orange!10] (loss) {Cross-entropy\\backward + Adam};
+\node[box,below right=of model,fill=green!8] (eval) {Argmax + probabilities\\metrics + saved outputs};
+\draw[->] (raw)--(prep); \draw[->] (prep)--(loader);
+\draw[->] (loader.south)|-(model.east);
+\draw[->] (model.south west)--node[midway,above left,font=\small]{train} (loss.north east);
+\draw[->] (model)--node[above right,font=\small]{evaluate} (eval);
+\draw[->,dashed] (loss.west)-|([xshift=-5mm]raw.west)|-
+node[pos=.8,above,font=\small]{parameter update} (model.west);
+\end{tikzpicture}
+\caption{Data preparation and model interface, with distinct update/evaluation paths.
+Softmax probabilities support analysis; cross-entropy receives raw logits.}
+\label{fig:pipeline}
+\end{figure}
+The engine computes sample-weighted loss and epoch-level accuracy/F1 from online
+training predictions. These include augmentation and training-mode behavior.
+Thus, close train/validation curves alone do not prove absence of overfitting.
+
+\subsection{Shared Model Interface and Input Representations}
+Every classifier accepts float32 \([B,1,28,28]\) and returns raw \([B,10]\) logits.
+Representation changes occur inside the model, leaving data loading and metrics
+unchanged. Table~\ref{tab:representations} connects each representation to its
+structural preference.
+\begin{table}[H]\centering\small
+\caption{Representations used in the reported configurations.}
+\label{tab:representations}
+\begin{tabularx}{\linewidth}{lYY}
+\toprule Model & Internal representation & Structural preference\\\midrule
+Linear & Flattened 784-vector & One affine decision rule per class\\
+MLP & Flattened vector, dense hidden features & Nonlinear global combinations\\
+CNN & Two-dimensional feature maps & Local connectivity and shared filters\\
+GRU & 28 row timesteps of width 28 & Ordered recurrent context\\
+Transformer & 49 \(4\times4\) patches, width 64 & Position-aware token interactions\\
+\bottomrule
+\end{tabularx}
+\end{table}
+The input shape and label space are shared despite different learned representations
+and parameter counts.
+
+\subsection{Model Architectures}
+\subsubsection{Linear / Softmax Classifier}
+The baseline flattens each image and applies one affine layer:
+\[
+ x=\operatorname{flatten}(X)\in\mathbb{R}^{784},\qquad
+ z=Wx+b,\quad W\in\mathbb{R}^{10\times784}.
+\]
+There is no hidden nonlinearity. The \(784\times10+10=7,850\) parameters are all
+trainable; flattening adds none. Probabilities, when needed, are
+\(p_k=\exp(z_k)/\sum_{j=0}^{9}\exp(z_j)\).
+The implementation returns logits because cross-entropy already combines
+log-softmax and the label loss.\citep{pytorchce}
+The project implements the wrapper and validation around PyTorch
+\texttt{nn.Flatten} and \texttt{nn.Linear}. This small baseline has neither
+a hidden feature hierarchy nor built-in image locality.
+
+\subsubsection{Multilayer Perceptron}
+The MLP uses \(784\rightarrow256\rightarrow128\rightarrow10\).
+Every hidden affine layer is followed by ReLU and dropout 0.1; the final layer
+returns logits. For hidden layer \(\ell\),
+\[
+ a_\ell=W_\ell h_{\ell-1}+b_\ell,\qquad
+ h_\ell=\operatorname{ReLU}(a_\ell).
+\]
+ReLU keeps positive values and sets negative values to zero, enabling nonlinear
+boundaries. Without nonlinearities, consecutive affine layers collapse into one
+affine transformation. Training-time dropout masks hidden activations and scales
+retained values; evaluation disables these masks. It regularizes dense features,
+but does not favor spatially adjacent pixels.
+The parameter count is
+\[
+ (784\cdot256+256)+(256\cdot128+128)+(128\cdot10+10)=235,146.
+\]
+Project code assembles the network from PyTorch layers. Other activation names
+are supported, but only ReLU is used in the reported MLP runs; no activation
+ablation is claimed.
+
+\subsubsection{Custom Convolutional Neural Network}
+Convolutions apply learned filters to local neighborhoods, reusing weights across
+positions. Multiple filters yield feature maps responsive to patterns learned
+from data. For stride one, a filter response has the form
+\[
+ Z_{m,i,j}=b_m+\sum_c\sum_u\sum_v W_{m,c,u,v}X_{c,i+u,j+v}.
+\]
+For illustration, a \(2\times2\) filter with ones on its main diagonal gives
+\(1+6=7\) on \(\bigl[\begin{smallmatrix}1&2\\5&6\end{smallmatrix}\bigr]\).
+This is a numerical example; the actual network uses \(3\times3\) kernels.
+
+Max pooling retains the largest value in a region: the same example pools to 6,
+versus 3.5 under average pooling. Pooling reduces spatial resolution and may reduce
+sensitivity to small shifts, while discarding fine spatial detail. Its aggregation
+rule has no trainable weights.
+
+Table~\ref{tab:cnn} gives the actual custom architecture. Padding preserves each
+convolution's size; max pooling reduces spatial dimensions \(28\to14\to7\).
+The implementation uses \texttt{ceil\_mode=True}; these even-sized inputs have
+the dimensions shown. Adaptive average pooling gives one value per channel.
+\begin{table}[H]\centering\small
+\caption{Custom CNN layers and resulting tensor shapes.}
+\label{tab:cnn}
+\begin{tabular}{ll}
+\toprule Layer & Output\\\midrule
+Input & \([B,1,28,28]\)\\
+Conv \(1\to32\), \(3\times3\), pad 1; ReLU & \([B,32,28,28]\)\\
+MaxPool \(2\times2\) & \([B,32,14,14]\)\\
+Conv \(32\to64\), \(3\times3\), pad 1; ReLU & \([B,64,14,14]\)\\
+MaxPool \(2\times2\) & \([B,64,7,7]\)\\
+AdaptiveAvgPool; flatten & \([B,64]\)\\
+Linear \(64\to128\); ReLU; Dropout 0.1 & \([B,128]\)\\
+Linear \(128\to10\) & \([B,10]\)\\\bottomrule
+\end{tabular}
+\end{table}
+All 28,426 parameters are trainable. The project defines this network using
+PyTorch convolution, activation, pooling and linear layers; it is not a pretrained
+CNN backbone.
+
+\subsubsection{GRU-Based Image Classifier}
+Each image row is one timestep,
+\[
+ x_t=X_{t,:}\in\mathbb{R}^{28},\qquad t=1,\ldots,28.
+\]
+The batch-first sequence has shape \([B,28,28]\). A single unidirectional
+\texttt{nn.GRU} uses input width 28 and hidden width 128; its final hidden
+state is projected to ten logits. A timestep is a complete row, not one pixel.
+The traversal carries information from earlier rows into later decisions.
+
+The equations below match the PyTorch cell actually used:\citep{pytorchgru}
+\begin{align*}
+ r_t&=\sigma(W_{ir}x_t+b_{ir}+W_{hr}h_{t-1}+b_{hr}),\\
+ z_t&=\sigma(W_{iz}x_t+b_{iz}+W_{hz}h_{t-1}+b_{hz}),\\
+ n_t&=\tanh(W_{in}x_t+b_{in}+r_t\odot(W_{hn}h_{t-1}+b_{hn})),\\
+ h_t&=(1-z_t)\odot n_t+z_t\odot h_{t-1}.
+\end{align*}
+The reset gate modulates transformed past information in the candidate; the update
+gate blends it with retained memory. PyTorch multiplies by the reset gate after
+the hidden affine transformation.
+
+Recurrent weights and two bias vectors contribute
+\(3(28\cdot128+128\cdot128+2\cdot128)=60,672\) parameters.
+The head adds 1,290, totaling 61,962. The project wrapper handles row conversion
+and state selection, while the cell is a PyTorch component. Although the code
+supports columns, LSTM and bidirectionality, these variants were not evaluated.
+The reported single-layer GRU has no inter-layer dropout transition.
+
+\subsubsection{Custom Transformer Classifier}
+The custom Transformer divides an image into a \(7\times7\) grid of
+non-overlapping \(4\times4\) patches. The 49 patches are flattened to 16 values
+each and projected to embedding width 64. A learned \(49\times64\) position
+embedding is added:
+\[
+ P\in\mathbb{R}^{B\times49\times16},\qquad
+ H_0=PW_E+b_E+E_{\rm pos}\in\mathbb{R}^{B\times49\times64}.
+\]
+This represents local regions as tokens while preserving their image positions.
+Two pre-normalized residual blocks contain four-head self-attention and an FFN.
+Each head has \(d_h=16\):
+\[
+ Q=HW_Q,\quad K=HW_K,\quad V=HW_V,\qquad
+ A=\operatorname{softmax}\!\left(QK^\mathsf{T}/\sqrt{16}\right)V.
+\]
+Per image, attention weights have shape \([4,49,49]\). Each token attends to all
+49 tokens and receives a 16-value result per head; concatenation and an output
+projection restore width 64. The mechanism follows scaled dot-product
+attention,\citep{attention} with the project's residual structure
+\begin{align*}
+ U_\ell&=H_{\ell-1}+
+ \operatorname{Dropout}\bigl(\operatorname{MHSA}(\operatorname{LN}(H_{\ell-1}))\bigr),\\
+ H_\ell&=U_\ell+\operatorname{FFN}(\operatorname{LN}(U_\ell)).
+\end{align*}
+The FFN is \(64\to256\to64\), with GELU and dropout 0.1. After two blocks,
+final layer normalization and mean pooling over 49 tokens give a 64-value vector;
+a \(64\to10\) head returns logits. There is no class token.
+
+Parameter counts are 1,088 for patch projection, 3,136 for positions,
+two blocks of 49,984, 128 for final normalization and 650 for the head:
+104,970 in total. The project implements patchification, Q/K/V projections,
+attention, residual blocks and pooling with PyTorch tensor operations and layers.
+It does not substitute a built-in Transformer encoder or pretrained vision model.
+\FloatBarrier
+
+\subsection{Loss Function and Evaluation Metrics}
+Every model uses unweighted multiclass cross-entropy:
+\[
+ L=-\frac{1}{N}\sum_{i=1}^{N}
+ \log\frac{\exp(z_{i,y_i})}{\sum_{k=0}^{9}\exp(z_{i,k})}.
+\]
+Loss is aggregated by sample count, correctly weighting the incomplete final
+batch. Argmax logits give labels. For a confusion matrix whose rows are true
+classes and columns predictions,
+\[
+ \mathrm{Accuracy}=\frac{\sum_c C_{cc}}{\sum_{c,k}C_{ck}},\qquad
+ P_c=\frac{TP_c}{TP_c+FP_c},\quad R_c=\frac{TP_c}{TP_c+FN_c},
+\]
+\[
+ F1_c=\frac{2P_cR_c}{P_c+R_c},\qquad
+ \mathrm{MacroF1}=\frac{1}{10}\sum_{c=0}^{9}F1_c.
+\]
+Undefined class precision, recall or F1 is assigned zero, matching
+\texttt{zero\_division=0}. Macro-F1 weights classes equally and can reveal
+weaknesses hidden by overall accuracy. Tables use the mean and sample SD across
+three training seeds, with denominator \(n-1\). Scores converted to percent are
+labeled explicitly; differences between percent scores are percentage points.
+
+\subsection{Training, Hyperparameter Selection and Checkpointing}
+\label{sec:training}
+All 15 main runs use Adam, learning rate \(10^{-3}\), weight decay 0, batch size
+64 and a 100-epoch cap. The bundle contains one effective configuration per model
+repeated across three seeds; it does not document an exhaustive hyperparameter
+search. Momentum fields present in Linear/MLP configs do not change Adam into SGD.
+
+Linear and MLP use cosine annealing over 100 epochs to a minimum learning rate
+\(10^{-5}\), with early-stopping patience 15 and macro-F1 minimum improvement
+0.001. CNN, GRU and Transformer have no scheduler and early stopping disabled.
+Equal epoch caps therefore do not imply equal completed budgets or training policies.
+
+The selected checkpoint maximizes validation macro-F1, breaking exact ties by
+lower validation loss and earlier epoch. Test results never enter this choice.
+The early-stopping counter is separate: for Linear/MLP it resets only after an
+improvement larger than 0.001. A smaller improvement may update \texttt{best.pt}
+without resetting patience.
+
+The trainer saves configs, source snapshots, metadata, environment records,
+history, selected metrics and checkpoints. Evaluation uses \texttt{best.pt}.
+The last checkpoint retains optimizer, scheduler and RNG state for supported
+epoch-boundary resumption; no mid-minibatch resume guarantee is claimed.
+
+\subsection{Experimental Design and Fairness Controls}
+\begin{table}[H]\centering\small
+\caption{Questions, controls and interpretation limits.}
+\label{tab:design}
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{25mm}YYY}
+\toprule Focus & Changed factors & Fixed controls & Evidence/criterion\\\midrule
+Quality & Model configuration and representation & Split, preprocessing, labels, evaluator & Accuracy, macro-F1 and CE across three seeds\\
+Representation & Flat pixels, spatial maps, rows, patches & Image task and held-out test & Class errors; association, not isolated causality\\
+Efficiency & Architecture, completed epochs, kernels & Batch 64 within each timing protocol & Parameters, GPU loop time, separate CPU forward time\\
+Seed variation & Run seed & Per-model effective config & Mean/sample SD and paired seed differences\\
+\bottomrule
+\end{tabularx}
+\end{table}
+This is a shared-data comparison, not matched-parameter or matched-compute
+experimentation. No row/column, LSTM/GRU, dropout or augmentation ablation is
+claimed. Such follow-ups could test proposed explanations; their outcomes
+are not established by this comparison.
+
+\subsection{Environment, Timing and Reproduction Protocol}
+\label{sec:environment}
+Training used Google Colab Linux and an NVIDIA Tesla T4 (14.56 GiB recorded memory),
+PyTorch 2.11.0+cu130, torchvision 0.26.0+cu130, NumPy 2.1.3 and CUDA 13.0.
+Python is 3.13.15 for 13 runs and 3.13.16 for Transformer seeds 67/69.
+Inputs and models use float32 without AMP. The saved settings are matmul precision
+\texttt{highest}, CUDA matmul TF32 disabled, cuDNN TF32 allowed and cuDNN
+benchmarking disabled; deterministic algorithms are enabled. Python patch-version
+variation is a reproducibility limitation, not a verified cause of score differences.
+
+Validation replay and final-test evaluation used a separate Colab CPU session:
+Python 3.13.16, PyTorch 2.11.0+cpu, torchvision 0.26.0+cpu, NumPy 2.1.3 and two
+threads. Replay accuracy/F1 match the original validation scores in all runs;
+the largest loss difference is \(3.84\times10^{-8}\).
+
+Reported inference speed uses the separately retained \textbf{Windows CPU profile},
+measured on 24 October 2026: Python 3.14.6, PyTorch 2.13.0+cpu, torchvision
+0.28.0+cpu, NumPy 2.5.2 and two threads. The recorded processor is Intel64
+Family 6 Model 170 Stepping 4, GenuineIntel (AMD64); no friendly product name
+was recorded. These are not Colab or T4 speed measurements.
+
+For each selected checkpoint, the forward-only protocol uses a preallocated
+zero tensor \([64,1,28,28]\), float32, evaluation mode, 20 warm-ups and 100 timed
+forwards. It excludes checkpoint I/O, loading and transfer. Per-run latency is
+the median batch time; amortized latency divides that median by 64; throughput
+is 64 divided by the median in seconds. Tables average these run-level values
+and give sample SD across three seeds. This is not batch-one or end-to-end speed.
+\FloatBarrier

@@ -76,6 +76,7 @@ nosetests.xml
 # Documentation build outputs
 docs/_build/
 /site/
+/_preview/
 /docs/_site/
 /docs/.jekyll-cache/
 

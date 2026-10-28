@@ -1,0 +1,6 @@
+Source archive: C:\Users\tuank\Downloads\OS_CAITOA (2).zip
+SHA-256: da98059ce950d6bad908a7c79ffbf234887ac07fb4acc8e512a7dd8a2da1cb97
+
+Repository: https://github.com/hoang-himself/hcmut-report
+Issues: https://github.com/hoang-himself/hcmut-report/issues
+Commit: 350906b86be7adae1c953217029cbe12ad4f6ac5 refactor: update `listings` styles

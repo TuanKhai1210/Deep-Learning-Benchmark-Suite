@@ -1,0 +1,128 @@
+\section{Full Configurations and Architecture Details}
+\label{app:configs}
+The source package contains all 15 effective config snapshots under
+\path{evidence/configs/}. Within each model, seeds change but architecture,
+data/evaluation settings and training policy remain fixed. The common protocol
+uses Fashion-MNIST, split seed 36, batch 64, Adam at \(10^{-3}\), weight decay
+0, a 100-epoch cap and validation macro-F1 checkpoint selection.
+
+\begin{table}[H]\centering\small
+\caption{Effective model/training settings; detailed snapshots are included in the source.}
+\begin{tabularx}{\linewidth}{lYY}
+\toprule Model & Architecture & Model-specific training/regularization\\\midrule
+Linear & 784 to 10 & Cosine to \(10^{-5}\); patience 15, min-delta 0.001\\
+MLP & 784--256--128--10; ReLU & Hidden dropout 0.1; same cosine/patience as Linear\\
+CNN & Channels 32/64; 3-by-3 kernels; max pooling; 64--128--10 head & Head dropout 0.1; no scheduler/early stop\\
+GRU & Rows; input 28; hidden 128; one layer, one direction & No inter-layer dropout; no scheduler/early stop\\
+Transformer & Patch 4; width 64; four heads; two blocks; FFN width 256 & Dropout 0.1; no scheduler/early stop\\
+\bottomrule
+\end{tabularx}
+\end{table}
+The saved configs also identify operational paths and the source configuration
+modules. Device/path overrides used for later CPU stages are recorded separately,
+not silently presented as the original T4 training setup. Parameter elements are
+counted once through the model's parameter iterator; buffers are excluded and
+\texttt{requires\_grad} determines trainability.
+\FloatBarrier
+
+\section{Per-Seed Results and Run Provenance}
+\label{app:runs}
+Table~\ref{tab:seeds} reports all seeds. Accuracy/F1 are percentages and the
+selected epoch is 1-based; the source history itself uses 0-based indices.
+There is no best-test-seed selection.
+\begin{table}[H]\centering\footnotesize
+\caption{All 15 selected checkpoints and their evaluation results.}
+\label{tab:seeds}
+\input{tables/seed_results}
+\end{table}
+The following exact run IDs link these rows to their histories, effective configs
+and best checkpoints. Their timestamp and random suffix are artifact identifiers,
+not additional experimental factors.
+\begin{table}[H]\centering
+{\fontsize{9}{11}\selectfont
+\setlength{\tabcolsep}{3pt}
+\input{tables/run_ids}}
+\caption{Exact run identifiers. The \texttt{rnn} artifact name denotes the GRU configuration.}
+\label{tab:ids}
+\end{table}
+The source commit and common identities recorded by the bundle are:
+\begin{description}
+\item[Git revision] \small\texttt{a8539bee778d99e2902a1dd36aa157c6ebb3a42c}
+\item[Split SHA-256] \small\texttt{e4a776305b2a1b5c392ba196d023de004f47124e8f831495b9733c48e72c25e6}
+\item[Statistics SHA-256] \small\texttt{e47b863cb866cdc61613bb88d772d02f8aedc0a21fa56b79dee27b27d341381e}
+\end{description}
+Full per-run checkpoint/config hashes are retained in
+\path{evidence/report_facts.json} and the original run metadata.
+\FloatBarrier
+
+\section{Additional Class-Level Results}
+\label{app:class}
+The tables below aggregate official-test precision, recall and F1 over the three
+seeds as mean \(\pm\) sample SD, expressed in percent. Support is 1,000 examples
+per class per run. The same test images are evaluated repeatedly; the support
+is not 3,000 independent images. Validation and per-seed class results are also
+included in the machine-readable \path{evidence/per_class.csv}.
+
+\begin{table}[H]\centering\small
+\caption{Linear official-test per-class metrics, mean \(\pm\) sample SD, \(n=3\).}
+\input{tables/per_class_aggregate_linear}
+\end{table}
+
+\begin{table}[H]\centering\small
+\caption{MLP official-test per-class metrics, mean \(\pm\) sample SD, \(n=3\).}
+\input{tables/per_class_aggregate_mlp}
+\end{table}
+
+\begin{table}[H]\centering\small
+\caption{CNN official-test per-class metrics, mean \(\pm\) sample SD, \(n=3\).}
+\input{tables/per_class_aggregate_cnn}
+\end{table}
+
+\begin{table}[H]\centering\small
+\caption{GRU official-test per-class metrics, mean \(\pm\) sample SD, \(n=3\).}
+\input{tables/per_class_aggregate_rnn}
+\end{table}
+
+\begin{table}[H]\centering\small
+\caption{Transformer official-test per-class metrics, mean \(\pm\) sample SD, \(n=3\).}
+\input{tables/per_class_aggregate_transformer}
+\end{table}
+
+\FloatBarrier
+\section{Detailed Verification and Reproduction Notes}
+\label{app:verification}
+The saved-output audit of 24 October 2026 verified 382 files and 61 completed
+stages in the original CPU evaluation profile, independently recomputing metrics
+from 300,000 prediction rows across 30 evaluations. Class order, argmax labels,
+support, confusion counts, gallery selection and sample IDs agree. Mean negative
+log true-class probability matches the saved cross-entropy within \(10^{-6}\).
+The replay agreement supports using the CPU evaluations of the T4-selected
+checkpoints; it is not evidence of bitwise equivalence on every platform.
+
+The retained Windows timing profile, \texttt{cpu-f7208f3550fc}, contains all
+15 checkpoint identities and 100 raw batch timings per run. Its session and
+per-run records are copied into the source package. The original CPU evaluation
+profile, \texttt{cpu-0bd6ba8e08e9}, explicitly skipped GPU timing. A separate
+Colab timing summary appeared in an intermediate report without its raw session
+records; this final document uses the retained Windows measurements instead.
+No new inference or training was run to construct the final tables.
+
+Report-generation checks on 26 October compare all classification aggregates
+with the retained evaluation summary, verify checkpoint hashes, inspect official
+IDX/gzip identities and class counts, regenerate figures from saved outputs,
+and check LaTeX references and layout. The example preprocessing batch is newly
+regenerated data, clearly separated from original training history.
+
+Source line endings deserve care: the committed split JSON and the Windows
+checkout can have different byte hashes because of LF/CRLF conversion while
+parsing to the same indices. Provenance comparisons use the recorded committed
+blob identity and semantic membership, rather than silently relabeling an
+unrelated checkout-file hash.
+
+The editable content is organized under \texttt{sections/}, \texttt{tables/}
+and \texttt{figures/}. The \texttt{evidence/} directory retains effective
+configs, per-run/class aggregates, raw Windows timing samples, resource hashes
+and figure selections. The \texttt{reproduction/} directory provides the
+pinned-source reconstruction helper and standalone Colab evaluation/timing
+notebooks. Together, these records distinguish original measurements from
+later report-generation checks.

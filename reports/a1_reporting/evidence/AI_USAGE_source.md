@@ -1,0 +1,362 @@
+# AI Usage Log
+
+## 2026-08-29 - Project planning and repository design
+
+- Tool/model: OpenAI Codex 5.6 Sol
+- Used by: Tạ Tuấn Khải
+- Stage: Project planning
+- Purpose: Analyze the handbook and plan repository/GitHub Pages structure
+- Affected sections: Repository structure, project plan, GitHub Pages structure
+- Prompt summary: Requested help interpreting the assignment and planning work
+- AI contribution: Summarized requirements and proposed the initial structure
+- Human verification: Compared the suggestions with the official handbook
+- Responsible member: Tạ Tuấn Khải
+- Verification sources: Course handbook and official GitHub documentation
+
+## 2026-09-04 - Experiment planning and repository integration
+
+- Tool/model: OpenAI Codex; exact model identifier for this interaction not recorded
+- Used by: Tạ Tuấn Khải
+- Stage: Assignment 1 planning and development setup
+- Purpose: Define shared interfaces, prepare Python experiment configuration, and reconcile project documentation with the existing repository
+- Affected sections: Python package setup, configurations, shared interfaces, command-line entry point, tests, developer documentation, project plan, README and GitHub Pages
+- Prompt summary: Requested an implementation-ready folder structure, Python-only experiment configs, seed values, updated responsibilities for Thiên/Khoa/Khải, and repairs preserving earlier team/course information.
+- AI contribution: Proposed file organization and contracts; added development utilities and pending implementation entry points; updated role/seed records and documentation; retained draft status for decisions not yet approved
+- Human verification: Pending team review of the diff, commands, configuration, and assignment alignment; automated development checks do not establish correctness of unimplemented ML functions
+- Automated verification: Python syntax checks passed; 31 tests passed and 5 ML tests remained explicitly skipped. Editable package installation and installed-package checks passed in a separate temporary directory using Python 3.12.14. GitHub-hosted CI and ML training were not run.
+- Responsible member: Tạ Tuấn Khải; module owners Nguyễn Hạo Thiên and Nguyễn Anh Khoa review their assigned interfaces and requirements
+- Verification sources: Existing repository history and member/course details, user-confirmed roles and seeds, and the course handbook retained for requirement checks
+- Experimental status: No dataset preparation, model training, or benchmark measurements are claimed from this assistance
+
+## 2026-09-06 - Exploratory Data Analysis requirements and leakage constraints
+
+- Tool: Gemini 3.8 Flash
+- Used by: Nguyễn Hạo Thiên
+- Stage: Assignment 1 data exploration and protocol design
+- Purpose: Technical clarification of EDA scope for Fashion-MNIST and guidelines for data leakage prevention.
+- Affected files/sections:
+  - `src/dlbench/a1/data/eda.py`
+  - Report Part 1 (Problem and Data Description, EDA narrative)
+- Prompt summary: Inquired what EDA means within the assignment context, what specific checks are required for Fashion-MNIST, and why it must be performed before model training.
+- AI contribution: Clarified required analytical components (class balance, shape/dtype verification, pixel range bounds, and representative grid visualizations) and emphasized that normalization statistics must be computed strictly on the training partition to prevent leakage.
+- Student verification: Audited Fashion-MNIST class labels against Zalando's official specifications, confirmed all 10 classes are evenly represented, and reviewed the handbook Section 3.1 and 13 data requirements.
+- Responsible member: Nguyễn Hạo Thiên
+- Sources used for verification: Course Project Handbook CO3133 (Semester-261) Section 3.1, 10, and 13.
+
+## 2026-09-06 - State saving requirements for training resumption
+
+- Tool: Gemini 3.8 Flash
+- Used by: Nguyễn Anh Khoa
+- Stage: Assignment 1 project initial implementation
+- Purpose: Technical clarification for training resumption state requirements
+- Affected files/sections:
+  - `src/dlbench/a1/trainer.py`
+  - `src/dlbench/a1/checkpoint.py`
+- Prompt summary: Inquired why optimizer, scheduler, and RNG states must be persisted alongside model weights for training resumption, and where state restoration should be executed.
+- AI contribution: Explained the functional difference between `best.pt` (inference/evaluation artifact) and `last.pt` (execution resumption artifact), detailing why unpersisted optimizer momentum and RNG states disrupt training dynamics, and recommended decoupling state loading from state application to avoid side effects in I/O modules.
+- Student verification: Reviewed PyTorch state persistence mechanics (`optimizer.state_dict()` and `torch.get_rng_state()`), designed optional empty payload support (`{}`) for runs without learning rate schedulers to pass schema validation safely.
+- Responsible member: Nguyễn Anh Khoa
+- Sources used for verification: Official [PyTorch documentation](https://docs.pytorch.org/tutorials/beginner/saving_loading_models.html#saving-loading-a-general-checkpoint-for-inference-and-or-resuming-training) on saving and loading models across general checkpoints.
+
+## 2026-09-06 - Test generation for metrics and checkpointing logic
+
+- Tool: Gemini 3.8 Flash
+- Used by: Nguyễn Anh Khoa
+- Stage: Assignment 1 project initial implementation
+- Purpose: Test generation and validation framework design for shared classification metrics, parameter counting, and atomic checkpoint management.
+- Affected files/sections:
+  - `src/dlbench/a1/metrics.py`
+  - `src/dlbench/a1/checkpoint.py`
+  - `tests/test_metrics.py`
+  - `tests/test_checkpoint.py`
+- Prompt summary: Requested test suites for classification metrics and checkpoint functions.
+- AI contribution: Provided unit test templates covering edge cases (`zero_division=0`, non-finite metric handling, tie-breaking hierarchies, atomic temporary file replacement).
+- Student verification: Verified mathematical formulations for hand-calculated Macro-F1 scores, verified required dictionary keys against `contracts.py`, and confirmed all test cases pass cleanly with `python -m unittest discover -s tests -v` on Python.
+- Responsible member: Nguyễn Anh Khoa
+- Sources used for verification:
+  - Official documentation for `torch.save`, `torch.load`, `sklearn.metrics.accuracy_score`, `sklearn.metrics.f1_score`, and `torch.numel`.
+  - Course Project Handbook CO3133 (Semester-261).
+
+## 2026-09-06 - Steps to train a DL model
+
+- Tool: Gemini 3.8 Flash
+- Used by: Nguyễn Anh Khoa
+- Stage: Assignment 1 Training logic implementation
+- Purpose: Clarification of canonical deep learning training step sequences inside an epoch loop.
+- Affected files/sections:
+  - `src/dlbench/a1/engine.py` (`train_one_epoch`)
+- Prompt summary: Inquired about the standard step sequence required to train a deep learning model within a single epoch loop.
+- AI contribution: Outlined the canonical PyTorch execution order: setting `model.train()`, transferring tensors to device, clearing gradients (`optimizer.zero_grad()`), executing forward pass to compute logits, calculating loss with unnormalized logits, running backpropagation (`loss.backward()`), updating weights (`optimizer.step()`), and accumulating sample-weighted loss.
+- Student verification: Implemented the step sequence inside `train_one_epoch`, confirmed logits are passed directly to `CrossEntropyLoss` without softmax, and verified via unit tests that parameter tensors mutate post-update.
+- Responsible member: Nguyễn Anh Khoa
+- Sources used for verification:
+  - Official [PyTorch tutorial](https://docs.pytorch.org/tutorials/beginner/introyt/trainingyt.html) on model training step lifecycle.
+
+## 2026-09-07 - Stratified dataset splitting and manifest persistence
+
+- Tool: Gemini 3.8 Flash
+- Used by: Nguyễn Hạo Thiên
+- Stage: Assignment 1 data pipeline implementation
+- Purpose: Design and verification of deterministic stratified splitting logic adhering to the `SplitManifest` contract.
+- Affected files/sections:
+  - `src/dlbench/a1/data/split.py`
+  - `configs/a1/splits/fashion_mnist_split.json`
+- Prompt summary: Requested implementation checking for `create_split`, `validate_split`, `save_split`, and `load_split` using a fixed split seed.
+- AI contribution: Finished class-proportional stratified partitioning over official training indices using `numpy.random.default_rng(split_seed=36)`, added assertions to verify index disjointness and full partition coverage, and structured atomic JSON serialization that refuses silent overwriting of existing split files.
+- Student verification: Executed `split.py` via `test_pipeline.py`, confirmed the generation of `configs/a1/splits/fashion_mnist_split.json`, verified that official test indices ($0\dots9{,}999$) are strictly isolated in a separate namespace, and validated index counts against `SplitManifest` attributes in `contracts.py`.
+- Responsible member: Nguyễn Hạo Thiên
+- Sources used for verification:
+  - `dlbench/a1/contracts.py` (`SplitManifest` definition)
+  - Official NumPy documentation on `Generator.shuffle` and random sampling reproducibility.
+
+## 2026-09-07 - DataLoader construction and batch contract implementation
+
+- Tool: Gemini 3.8 Flash
+- Used by: Nguyễn Hạo Thiên
+- Stage: Assignment 1 data pipeline implementation and verification
+- Purpose: Build reproducible PyTorch DataLoaders adhering to the shared Batch and DataLoaders contract.
+- Affected files/sections:
+  - `src/dlbench/a1/data/loaders.py`
+  - `test_pipeline.py`
+- Prompt summary: Requested implementation check for `collate_samples` and `build_dataloaders`.
+- AI contribution: Successfully fixed `collate_samples` to stack images and labels while preserving sample IDs, set up `build_dataloaders` with a dedicated run-seeded `torch.Generator` and `seed_worker` for training, configured deterministic evaluation loaders without shuffling, added safe smoke subset handling.
+- Student verification: Created `test_pipeline.py` to check the code. Verified `loaders.py` imports and interfaces against `contracts.py`; executed `test_pipeline.py` to confirm batch collation outputs match expected dimensions (`[16, 1, 28, 28]` float32 tensors, `int64` labels, and aligned `sample_ids` string lists) for train, validation, and test loaders.
+- Responsible member: Nguyễn Hạo Thiên
+- Sources used for verification:
+  - `dlbench/a1/contracts.py` (`Batch`, `DataLoaders`)
+  - PyTorch documentation for `torch.utils.data.DataLoader` (worker initialization, generators, and collation mechanics).
+
+## 2026-09-07 - MLP test creation and coverage expansion
+
+- Tool/model: GitHub Copilot; exact model identifier for this interaction not recorded
+- Used by: Nguyễn Anh Khoa
+- Stage: Assignment 1 MLP implementation
+- Purpose: Create and expand unit tests for the MLP classifier, including output dimensions, flattening behavior, dropout, parameter counts, supported activations, training updates, and missing or invalid parameters.
+- Affected files/sections:
+  - `src/dlbench/a1/models/mlp.py`
+  - `src/dlbench/a1/metrics.py`
+  - `tests/test_mlp.py`
+- Prompt summary: Requested additional tests for the MLP, with emphasis on dimensions, dropout logic, parameter counts, and missing parameters.
+- AI contribution: Added focused `unittest` cases for image and flattened inputs, exact linear-layer dimensions, dropout behavior in training and evaluation modes, parameter-count consistency, supported activations, gradient updates, and constructor validation.
+- Student verification: Reviewed the tests against the current MLP implementation and ran `venv/Scripts/python.exe -m unittest -v tests.test_mlp`; all tests passed.
+- Responsible member: Nguyễn Anh Khoa
+- Sources used for verification: Existing MLP implementation, parameter-count helper, repository test conventions, and PyTorch module behavior.
+
+## 2026-09-08 - Trainer test generation and training-loop coverage
+
+- Tool/model: GitHub Copilot; OpenAI ChatGPT 5.6 Luna
+- Used by: Nguyễn Anh Khoa
+- Stage: Assignment 1 trainer implementation
+- Purpose: Generate tests for trainer calculations, actual loss reduction, checkpoint evaluation, early stopping, and periodic checkpoint saving.
+- Affected files/sections:
+  - `src/dlbench/a1/trainer.py`
+  - `tests/test_trainer.py`
+- Prompt summary: Requested trainer tests that verify calculations using real training loss, evaluate checkpoint behavior, and early stopping/checkpoint frequency logic.
+- AI contribution: Added tests for real two-epoch loss reduction using a deterministic model and DataLoader, validation/test checkpoint loader selection, checkpoint configuration and split-hash mismatch rejection, optimizer settings, validation metric calculations, early stopping monitors, patience, and save frequency.
+- Student verification: Reviewed the tests against the trainer and checkpoint contracts and ran `python -m unittest -v tests.test_trainer`.
+- Responsible member: Nguyễn Anh Khoa
+- Sources used for verification: Existing trainer, engine, checkpoint, contract, and artifact interfaces; PyTorch optimizer and loss behavior.
+
+
+## 2026-09-08 - GitHub Pages visual redesign
+
+- Tool/model: OpenAI Codex; exact model identifier not recorded
+- Used by / responsible member: Tạ Tuấn Khải
+- Purpose: Redesign the research portfolio and assignment pages while preserving confirmed team roles, split seed 36 and run seeds 69420, 67, 69
+- Affected sections: docs site configuration, layouts, styles, interactive conceptual architecture diagrams, assignment pages and experiment-contract presentation
+- AI contribution: Authored site design and frontend code; reorganized existing content; corrected two stale four-seed references in the contract to three run seeds
+- Human verification: Pending team review of content, accessibility, course alignment and the deployed GitHub Pages build
+- Verification scope: Local preview checks are documented with the delivered update; they do not verify the hosted Jekyll build or ML implementations
+- Experimental status: No model training, evaluation or measured benchmark results were generated or claimed
+
+### Readability revision requested on 2026-09-08
+
+- User feedback: Enlarge small text, make interactive controls obvious, brighten backgrounds and emphasize important figures and labels.
+- Changes: Stronger typography and contrast; visible link/button treatments; highlighted counts and seeds; clearer member cards; model tags now navigate to and open the corresponding A1 model details.
+- Scope: Presentation and navigation only. Experiment choices and measured-results status are unchanged.
+- Verification: Local responsive, navigation, keyboard and readability checks; human review and hosted GitHub Pages verification remain pending.
+
+## 2026-09-09 - Optimizer support expansion and RMSprop validation
+
+- Tool/model: GitHub Copilot
+- Used by: Nguyễn Anh Khoa
+- Stage: Assignment 1 trainer and configuration validation
+- Purpose: Expand optimizer support beyond the initially allowed set and reconcile the trainer with the configuration validator, including re-checking RMSprop handling.
+- Affected files/sections:
+  - `src/dlbench/a1/trainer.py`
+  - `src/dlbench/common/config.py`
+  - `tests/test_trainer.py`
+- Prompt summary: Requested support for `rmsprop` plus several common optimizers, then re-checked the RMSprop behavior to ensure validator and implementation stay aligned.
+- AI contribution: Updated trainer optimizer creation to support `rmsprop`, `adagrad`, `adadelta`, `adamax`, and `nadam`, while preserving existing Adam/AdamW/SGD behavior and consistent error messages for unsupported values. Added/updated unit tests to verify `rmsprop` is accepted and unknown optimizers are rejected with the proper error text.
+- Student verification: Reviewed the validator and trainer together to ensure the supported set matches the implementation, then ran `python -m unittest tests.test_trainer tests.test_config tests.test_checkpoint` and confirmed all tests passed.
+- Responsible member: Nguyễn Anh Khoa
+- Sources used for verification: PyTorch optimizer APIs for supported optimizers, the project’s validator contract, and the repository test suite.
+
+## 2026-09-09 - Artifact and provenance design
+
+- Tool/model: OpenAI Codex 5.6 Sol
+- Used by: Tạ Tuấn Khải
+- Stage: C03 notebook exploration
+- Purpose: Design safe run directories and reproducibility artifacts before source implementation
+- Affected sections: Run ID validation, JSON writing, source snapshots, Git metadata, split provenance, normalization provenance, and SHA-256 hashing
+- Prompt summary: Requested step-by-step explanations and notebook experiments for artifact persistence
+- AI contribution: Explained non-overwriting file operations, safe run identifiers, canonical JSON hashing, file hashing, source snapshots, and metadata validation order
+- Human verification: Executed each notebook experiment and confirmed the expected success or rejection behavior
+- Responsible member: Tạ Tuấn Khải
+- Verification sources: Python standard library behavior, temporary-directory experiments, and project configuration files
+
+
+## 2026-09-10 - Artifact implementation and testing
+
+- Tool/model: OpenAI Codex 5.6 Sol
+- Used by: Tạ Tuấn Khải
+- Stage: C03 implementation
+- Purpose: Implement run-directory creation and reproducibility metadata persistence
+- Affected sections: `src/dlbench/common/artifacts.py` and `tests/test_artifacts.py`
+- Prompt summary: Requested implementation guidance based on the completed notebook experiments and help diagnosing failing tests
+- AI contribution: Reviewed helper functions, identified incomplete metadata writing, suggested validation and serialization order, and explained test and dependency failures
+- Human verification: Wrote the implementation, ran the artifact tests and complete unit-test suite, and inspected the Git diff
+- Verification results:
+  - `python -m unittest discover -s tests -v` — 89 tests run: 86 passed and 3 skipped; no failures or errors
+  - The three skips correspond to existing model/split TODOs unrelated to C03
+  - `git diff --check` — passed
+- Responsible member: Tạ Tuấn Khải
+- Verification sources: `tests/test_artifacts.py`, local unit-test output, project configuration files, and Git diff inspection
+- Experiment impact: No training runs or benchmark measurements were performed as part of this work
+
+## 2026-09-12 - Trainer tests and scheduler integration
+
+- Tool/model: Gemini 3.1 Pro (High)
+- Used by: Nguyễn Anh Khoa
+- Stage: Assignment 1 trainer and MLP testing
+- Purpose: Add tests for scheduler logic and MLP end-to-end training integration, and fix checkpoint evaluation metadata saving.
+- Affected files/sections:
+  - `tests/test_trainer.py`
+  - `src/dlbench/a1/trainer.py`
+- Prompt summary: Requested adding tests to test the scheduler and trainer for the MLP model, and then fix the `save_run_metadata` call in `evaluate_checkpoint` along with adding test coverage for it.
+- AI contribution: Added unit tests for various PyTorch learning rate schedulers (`StepLR`, `ExponentialLR`, `CosineAnnealingLR`, `ReduceLROnPlateau`, `PolynomialLR`) and an end-to-end `smoke=True` integration test for the MLP trainer. Fixed a bug in `evaluate_checkpoint` where `save_run_metadata` lacked a `run_dir` argument by supplying a temporary directory, preventing side effects during evaluation. Added assertions to test that `save_run_metadata` is called correctly.
+- Student verification: Verified that the tests passed successfully in the virtual environment without causing file system side effects or metadata corruption. 
+- Responsible member: Nguyễn Anh Khoa
+- Sources used for verification: Existing trainer logic, Python `tempfile` module documentation, and project `test_trainer.py` file.
+
+## 2026-09-13 - History, metrics and shared provenance helpers
+
+- Tool/model: OpenAI Codex (GPT-6)
+- Used by: Tạ Tuấn Khải
+- Stage: C03 implementation
+- Purpose: Complete history and metrics writers and provide shared data-provenance hashing
+- Affected sections: `src/dlbench/common/artifacts.py`, `tests/test_artifacts.py`, and `docs/artifact-api.md`
+- Prompt summary: Requested implementation of `append_history()`, `save_metrics()`, and `compute_data_provenance()` to support trainer integration
+- AI contribution: Implemented the helpers and regression tests; added CSV schema and epoch validation, finite-value checks, non-overwriting metrics output, and shared split/statistics hashing
+- Human verification: Notebook walkthrough and manual review are planned; implementation will be checked step by step by the responsible member
+- Automated verification: AI executed the local test suite — 97 tests run, 94 passed and 3 existing tests skipped; `git diff --check` reported no whitespace errors
+- Responsible member: Tạ Tuấn Khải
+- Verification sources: Repository source code, artifact tests, local test output, and Git diff
+- Experiment impact: No training runs or benchmark measurements were performed
+
+## 2026-09-14 - Handbook v2 reconciliation
+
+- Tool/model: OpenAI Codex; exact model identifier not recorded for this entry
+- Used by: Tạ Tuấn Khải
+- Stage: Requirements and submission planning
+- Purpose: Compare the revised handbook with the previous PDF and update affected project documentation
+- Affected sections: `docs/handbook-v2-update.md`, `PROJECT_PLAN.md`, `README.md`, `docs/a1.md`, `docs/a1-experiment-contract.md`, and `reports/a1/report.md`
+- Prompt summary: Requested updates based on handbook v2; explicitly excluded assessment of group-registration timing
+- AI contribution: Compared extracted document text, visually inspected registration/submission pages, and updated workbook registration and Final PDF naming/submission guidance; preserved technical requirements, team seeds and ownership
+- Human verification: Pending review by the responsible member; no registration or submission completion is asserted
+- Responsible member: Tạ Tuấn Khải
+- Verification sources: User-provided `handbook-ene.pdf` and `handbook-ene-v2.pdf` (Revision 14 September 2026), especially sections 1.1-1.2, 4.1, 7.1 and 7.4; repository documentation
+- Experiment impact: Documentation only; no source/config changes, training, benchmark measurements, workbook edits or LMS submissions
+
+## 2026-09-16 - Extra test addition
+
+- Tool/model: Gemini 3.8 Flash
+- Used by: Nguyễn Hạo Thiên
+- Stage: Assignment 1 validation and regression coverage
+- Purpose: Add one extra test to cover an uncovered edge case and confirm the implementation remains consistent with the project contract.
+- Affected files/sections:
+  - Additional regression coverage for the current implementation
+  - Validation of the relevant contract behavior
+- Prompt summary: Requested one extra test for an uncovered edge case and confirmation that the implementation still satisfies the expected behavior.
+- AI contribution: Added an extra regression test covering the missing edge case and validating the intended contract behavior.
+- Human verification: Reviewed the test against the implementation and confirmed it matches the expected project behavior.
+- Responsible member: Nguyễn Hạo Thiên
+- Verification sources: Local test execution, repository diff, and Git commit reference `b92fae6`
+- Commit reference: `b92fae6`
+- Experimental status: Regression test addition only; no model training or benchmark measurements were performed.
+
+## 2026-09-16 - Config refactor and `download` handling
+
+- Tool/model: Gemini 3.8 Flash
+- Used by: Nguyễn Hạo Thiên
+- Stage: Assignment 1 data/config review
+- Purpose: Include the `download` configuration flag in the dataset setup and explain how to refactor the configuration structure without breaking the current project contract.
+- Affected files/sections:
+  - `configs/a1/protocol.py`
+  - `src/dlbench/common/config.py`
+  - `src/dlbench/a1/data/dataset.py`
+  - `src/dlbench/a1/data/loaders.py`
+- Prompt summary: Requested that the AI include the `download` setting in the config and explain how to refactor the config into clearer sections for dataset, run, training, and model parameters while staying compatible with the current codebase.
+- AI contribution: Added the `download` option to the config-driven dataset path and explained a refactoring strategy based on nested, explicit sections such as `data`, `run`, `training`, and `model`, while keeping a compatibility layer for older keys until the contracts are fully migrated. The guidance also emphasized preserving deterministic behavior, preventing accidental downloads during validation, and keeping normalization statistics computed from the training split only.
+- Human verification: Reviewed the repo’s current config structure and verified that the actual data pipeline uses a config dictionary that can be extended cleanly without breaking the existing interfaces.
+- Responsible member: Nguyễn Hạo Thiên
+- Verification sources: Repository config files, dataset implementation, loader validation, and local runtime checks for config loading and DataLoader construction
+- Experiment impact: Documentation and configuration guidance only; no training or benchmark measurements were performed.
+
+## 2026-09-17 - C04 CLI integration review and split-path alignment
+
+- Tool/model: OpenAI Codex; exact model identifier not recorded for this entry
+- Used by: Tạ Tuấn Khải
+- Stage: C04 CLI integration and pre-commit review
+- Purpose: Verify CLI resume/evaluation controls and align the configured split path with the committed manifest
+- Affected sections: `src/dlbench/a1/cli.py`, `tests/test_cli.py`, `tests/test_config.py`, and `configs/a1/protocol.py`
+- Prompt summary: Requested branch review before committing and separation of CLI changes from handbook documentation
+- AI contribution: Reviewed AI-assisted CLI dispatch, resume and smoke-evaluation changes, checked tests and split-path alignment, and prepared scoped commits
+- Human verification: Responsible member review and real-data end-to-end verification remain pending; automated checks do not establish a completed benchmark
+- Automated verification: Local unit-test suite ran 171 tests: 168 passed and 3 skipped; `git diff --check` passed during pre-commit review
+- Responsible member: Tạ Tuấn Khải
+- Verification sources: Repository diff, CLI/config tests, trainer interfaces, committed split manifest and local test output
+- Experiment impact: No training or benchmark measurements performed; split seed and manifest contents unchanged. CLI tests use fake backends, not real-data training.
+
+## 2026-09-21 - Saved-run analysis and inference benchmark tooling
+
+- Tool/model: OpenAI Codex
+- Used by: Tạ Tuấn Khải
+- Stage: A1 draft analysis and benchmark preparation
+- Purpose: Analyze saved validation histories and implement repeatable forward-only timing
+- Affected sections: `analysis.py`, `benchmark.py`, `scripts/postprocess_run.py`, analysis/benchmark tests, and `docs/a1-analysis-benchmark.md`
+- Prompt summary: Requested analysis and benchmarking of the supplied training runs
+- AI contribution: Implemented provenance-checked learning curves, validated prediction export, fixed-class confusion/error records, per-run comparison export, timing utilities and tests; generated curves for four supplied runs without changing their artifacts
+- Human verification: Pending review by Khải and the A/B module owners; Colab checkpoint re-evaluation and T4 timing remain to be performed
+- Automated verification: Synthetic CPU tests cover artifact validation, output protection, confusion counts, median/throughput calculations, and model-mode restoration; saved-run checks were executed on the four selected supplied runs
+- Responsible member: Tạ Tuấn Khải
+- Verification sources: Saved config/metadata/history/metrics and source snapshots, repository interfaces, local tests
+- Experiment impact: No full dataset training or official test evaluation; no GPU performance results were produced. Existing single-seed validation results remain unchanged.
+
+## 2026-09-22 - Benchmark analysis notebook creation
+
+- Tool/model: Gemini 3.1 Pro (High)
+- Used by: Nguyễn Anh Khoa
+- Stage: A1 Analysis and Benchmark Visualization
+- Purpose: Create a standalone Jupyter notebook to process and visualize benchmark results and validation errors across multiple runs.
+- Affected sections: `notebooks/benchmark_analysis.ipynb`
+- Prompt summary: Requested a flexible notebook to process any number of runs, use shared analysis logic, display learning curves, plot confusion matrices, benchmark charts (latency/throughput with values on bars), and a misclassification gallery.
+- AI contribution: Wrote a Colab-compatible notebook that fetches checkpoint data, runs `postprocess_run.py`, uses `compare_runs` for CSV generation, and generates adaptive plots and gallery images with metadata overlay.
+- Human verification: Pending execution and review of the notebook in a Colab environment.
+- Responsible member: Nguyễn Anh Khoa
+- Verification sources: Visual inspection of the notebook source and generated matplotlib images.
+- Experiment impact: Generated analysis and visualization code only. No training or core library source was modified.
+
+## 2026-10-19 - Transformer implementation support and verification
+
+- Tool/model: OpenAI Codex (exact model identifier not recorded)
+- Used by: Tạ Tuấn Khải
+- Stage: A1 Final, C05 Transformer implementation
+- Purpose: Understand and implement patch-token self-attention, then check the model against the shared training contract
+- Affected sections: `src/dlbench/a1/models/transformer.py` and `tests/test_model_contract.py` (commit `162a1ef`)
+- Prompt summary: Requested step-by-step teaching of Transformer tensor operations, followed by complete Transformer tests, code formatting, and guidance for a smoke run
+- AI contribution: Explained patch extraction, projection, positional embeddings, multi-head attention, residual blocks and mean pooling; wrote contract tests, supplied a four-image overfit test, and formatted the model and test files
+- Human contribution and verification: Khải implemented the model, inserted the overfit test, ran the full unit-test suite (`216 tests`, `OK`, `3 skipped`), trained a 64-sample smoke run through the shared trainer, and re-evaluated its saved best checkpoint on validation; the checkpoint metrics matched `metrics.json`
+- Responsible member: Tạ Tuấn Khải; reviewer Nguyễn Hạo Thiên has not yet approved this branch
+- Verification sources: Local test output; smoke run `a1_transformer_smoke_seed69420_20261019-081935_10d1c3` and its `history.csv`, `metrics.json`, `best.pt`, and metadata
+- Experiment impact: Smoke-only validation on a small subset, with a dirty Git working tree; no full-budget three-seed runs, official test evaluation, or final benchmark claim

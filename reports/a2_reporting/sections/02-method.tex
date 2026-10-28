@@ -1,0 +1,65 @@
+\section{Methodology}
+\subsection{Implemented pipeline}
+The common pipeline keeps data conversion, objective and scoring consistent across models. Figure~\ref{fig:pipeline} shows the main flow; test data enters only the final evaluation stage of a completed run.
+\begin{figure}[H]\centering
+\begin{tikzpicture}[node distance=4 mm,box/.style={draw,rounded corners,align=center,text width=25 mm,minimum height=16 mm,font=\small},>=Latex]
+\node[box](a){RGB and\linebreak polygons};
+\node[box,right=of a](b){Rasterize;\linebreak video split};
+\node[box,right=of b](c){Letterbox;\linebreak normalize};
+\node[box,right=of c](d){U-Net or\linebreak SegFormer};
+\node[box,right=of d](e){Train CE+Dice;\linebreak validate};
+\node[box,below=7 mm of e](f){Select best;\linebreak evaluate test};
+\draw[->](a)--(b);\draw[->](b)--(c);\draw[->](c)--(d);\draw[->](d)--(e);\draw[->](e)--(f);
+\end{tikzpicture}
+\caption{Shared segmentation workflow. Test scores do not select the training epoch.}\label{fig:pipeline}
+\end{figure}
+This separation makes the S0/S1 experiment a change to training RGB color augmentation while preserving the mask and evaluation conventions.
+
+\subsection{Scratch U-Net baseline}
+The compact U-Net follows an encoder--decoder design with skip connections\cite{unet}. The implemented version has four downsampling stages and channel widths 16,32,64,128,256. Each block contains two bias-free $3\times 3$ convolutions, eight-group Group Normalization and ReLU. Downsampling uses $2\times 2$ max pooling. The decoder upsamples bilinearly with \cls{align_corners=false}, concatenates encoder features, and applies another two-convolution block. A $1\times 1$ head produces 17 logits per pixel.
+
+All 1,964,369 parameter elements are trainable, with zero frozen parameters. The model is initialized from scratch. Its completed run supplies the initial architecture baseline and the only model test result in the current snapshot.
+
+\subsection{Pretrained SegFormer-B0 and full fine-tuning}
+SegFormer combines a hierarchical Transformer encoder with a lightweight multilayer-perceptron decoder\cite{segformer}. The implementation loads \path{nvidia/segformer-b0-finetuned-ade-512-512}, pinned to revision \path{489d5cd81a0b59fab9b7ea758d3548ebe99677da}. The pretrained encoder and compatible decoder weights are retained, while the 150-class ADE20K classifier is replaced by a newly initialized 17-class classifier.
+
+The complete model is fine-tuned end to end: encoder, decoder and classifier parameters all receive updates. Total and trainable counts are both 3,718,513; frozen count is zero. Pretrained initialization therefore does not imply a frozen backbone. Lower-resolution raw logits are bilinearly interpolated to the 512-canvas target before computing loss and argmax predictions.
+
+S0 and S1 are initialized independently from the same checkpoint and seed 69420. Only S0 currently has main-run metadata, so equality of the two actual main initial-state hashes cannot yet be established from this snapshot. The setup checks this equality once both main-run records exist; the earlier synthetic authoring check is separate from that future run-level check.
+
+\subsection{Objective and evaluation metrics}
+Training minimizes the sum of multiclass cross-entropy and foreground soft Dice loss, each with coefficient 1:
+\begin{equation}
+\mathcal L=\mathcal L_{\mathrm{CE}}+\frac{1}{|C_B|}\sum_{c\in C_B}\left(1-\frac{2\sum_{i\in V_B}p_{ic}y_{ic}+\epsilon}{\sum_{i\in V_B}(p_{ic}+y_{ic})+\epsilon}\right).
+\end{equation}
+Here $V_B$ is the set of valid pixels in a batch, $C_B$ contains foreground classes with target support in that batch, $p_{ic}$ is the softmax probability, $y_{ic}$ is the one-hot target and $\epsilon=10^{-6}$. Cross-entropy ignores 255. A batch with no foreground contributes zero Dice loss; an all-ignore batch is skipped for optimization. Logged epoch loss is a valid-pixel-weighted average of batch objectives, not a Dice score calculated from the epoch confusion matrix.
+
+For hard predictions, the evaluator accumulates one 17-by 17 confusion matrix across the whole partition. For class $c$,
+\begin{equation}
+\operatorname{IoU}_c=\frac{TP_c}{TP_c+FP_c+FN_c},\qquad
+\operatorname{Dice}_c=\frac{2TP_c}{2TP_c+FP_c+FN_c}.
+\end{equation}
+Rows are ground truth and columns are predictions. Foreground mIoU/Dice average IDs 1--16; trash mIoU averages IDs 9--16. All-class metrics include background. Undefined denominators are omitted and the number of defined classes is recorded. All 16 foreground classes have defined IoU in the reported held-out scores, including classes with zero intersection. Pixel accuracy divides the confusion diagonal by all valid pixels.
+
+\subsection{Training budget, checkpointing and environment}
+Both model families use AdamW, weight decay 0.01, batch 4, up to 40 epochs, patience 8, FP 32, no learning-rate scheduler and no mixed precision. U-Net learning rate is $10^{-3}$; SegFormer uses $6\times 10^{-5}$. Training seed 69420 is distinct from split seed 36. The training loader shuffles with a separate generator seeded by run seed plus epoch; validation/test are unshuffled.
+
+The best checkpoint maximizes validation foreground mIoU; a tie uses lower validation loss, then the earlier epoch. Each completed epoch saves model, AdamW state, random-number states, history, best selection and early-stopping counter. Resume restores this state; an incomplete epoch is repeated. The U-Net continuation belongs to the same experiment and is not an independent seed.
+
+The supplied runs/pilots record a Tesla T4 with 14.56 GiB memory, Python 3.13.16, PyTorch 2.11.0+cu 130, torchvision 0.26.0+cu 130 and NumPy 2.1.3. Pillow 12.3.0 and Transformers 4.57.6 are pinned. TF 32 is disabled and CUDA deterministic algorithms use warning-only mode for the bilinear-backward limitation. These settings and saved RNG state do not promise cross-runtime GPU bitwise identity.
+
+\subsection{Controlled factor and current execution status}
+S0 disables color jitter. S1 applies it to training RGB with probability 0.5: brightness, contrast and saturation factors are sampled in $[0.9,1.1]$, hue shift in $[-0.01,0.01]$, with shuffled operation order. Masks are unchanged. A seed/epoch/image-specific random stream keeps augmentation separate from model and sampling randomness. There is no geometric augmentation; held-out images are unaugmented.
+
+The paired setup locks both configurations and their numerical environment before main training or test evaluation. S0/S1 share architecture, pretrained revision, seed, split, normalization, optimizer, learning rate, loss and budget. Run name and train color switch are their only treatment differences. Table~\ref{tab:status} distinguishes planned settings from completed execution.
+\begin{table}[H]\centering\small
+\caption{Experiment status at the supplied 28 October snapshot.}\label{tab:status}
+\begin{tabularx}{\textwidth}{lYY}\toprule
+Configuration & Completed evidence & Status of remaining work\\\midrule
+U: scratch U-Net &23 epochs, early stopping; best 15; validation and test scored & Main/test complete for seed 69420\\
+S0: pretrained B0, color off &20-step pilot;15 main epochs; best-so-far 15 & Main incomplete; no test result\\
+S1: pretrained B0, color on &20-step pilot; frozen configuration & Main not started in supplied snapshot\\
+Constant background & Metrics derived analytically from held-out supports & No trainable model or inference run\\\bottomrule
+\end{tabularx}
+\end{table}
+The S0/S1 hypothesis is that mild color changes improve held-out foreground overlap. It cannot yet be tested because S1 has no main-training result. U versus S0 is a descriptive comparison of model configurations: architecture, initialization and learning rate change together, and the current training completion states differ. It does not isolate the causal effect of pretraining.

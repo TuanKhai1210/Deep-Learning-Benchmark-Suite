@@ -1,0 +1,20 @@
+{
+  "verified_at": "2026-10-24T23:24:55+07:00",
+  "notebook_schema_syntax_passed": true,
+  "no_training_or_dataset_evaluation_calls": true,
+  "real_checkpoints_benchmarked_on_local_cpu": 15,
+  "cpu_threads": 2,
+  "warmup_per_run": 20,
+  "measured_forwards_per_run": 100,
+  "derived_summary_rows": 10,
+  "derived_per_run_rows": 30,
+  "all_timing_means_positive": true,
+  "quality_metrics_preserved": true,
+  "source_summaries_and_ledger_unchanged": true,
+  "cache_reuse_without_remeasurement": true,
+  "local_measurement_profile": "C:\\Users\\tuank\\Documents\\ChatGPT\\DL\\analysis\\a1-timing-only-2026-10-24\\local_cpu_validation\\cpu-f7208f3550fc",
+  "local_measurement_zip": "C:\\Users\\tuank\\Documents\\ChatGPT\\DL\\analysis\\a1-timing-only-2026-10-24\\local_cpu_validation\\cpu-f7208f3550fc.zip",
+  "validation_or_test_rerun": false,
+  "training_performed": false,
+  "scope": "Actual forward-only timing on this Windows CPU, not Colab CPU or GPU measurements."
+}

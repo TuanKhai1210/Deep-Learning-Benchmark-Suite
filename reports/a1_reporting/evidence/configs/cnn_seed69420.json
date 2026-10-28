@@ -1,0 +1,119 @@
+{
+  "protocol": {
+    "id": "a1-v0",
+    "status": "frozen",
+    "approved_by": [
+      "Nguyễn Hạo Thiên",
+      "Nguyễn Anh Khoa",
+      "Tạ Tuấn Khải"
+    ]
+  },
+  "data": {
+    "dataset": "fashion_mnist",
+    "root": "data",
+    "split_seed": 36,
+    "train_size": 50000,
+    "validation_size": 10000,
+    "test_size": 10000,
+    "stratified": true,
+    "split_file": "configs/a1/splits/fashion_mnist_split.json",
+    "download": true
+  },
+  "preprocessing": {
+    "image_size": [
+      28,
+      28
+    ],
+    "channels": 1,
+    "mean": [
+      0.28585961086061534
+    ],
+    "std": [
+      0.352790375749525
+    ],
+    "augmentations": [
+      {
+        "name": "random_crop",
+        "size": [
+          28,
+          28
+        ],
+        "padding": 2,
+        "padding_mode": "constant",
+        "fill": 0
+      }
+    ]
+  },
+  "evaluation": {
+    "metrics": [
+      "accuracy",
+      "macro_f1"
+    ],
+    "labels": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "zero_division": 0
+  },
+  "checkpoint": {
+    "monitor": "val_macro_f1",
+    "mode": "max",
+    "tie_breaker": [
+      "val_loss_min",
+      "earlier_epoch"
+    ]
+  },
+  "budget": {
+    "max_epochs": 100,
+    "tuning_trials_per_model": 1,
+    "run_seeds": [
+      69420,
+      67,
+      69
+    ]
+  },
+  "timing": {
+    "device": "cuda",
+    "batch_size": 64,
+    "warmup_steps": 20,
+    "measurement_steps": 100,
+    "precision": "float32",
+    "scope": "forward_only"
+  },
+  "training": {
+    "batch_size": 64,
+    "optimizer": "adam",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0,
+    "early_stopping_patience": 0
+  },
+  "model": {
+    "name": "cnn",
+    "parameters": {
+      "num_classes": 10,
+      "channels": [
+        32,
+        64
+      ],
+      "dropout": 0.1
+    }
+  },
+  "run": {
+    "seed": 69420,
+    "device": "cuda",
+    "output_root": "/content/drive/MyDrive/dlbench_a1_main/main",
+    "mode": "main"
+  },
+  "_sources": {
+    "model_config": "/content/deep-learning-benchmark-suite/configs/a1/models/cnn.py",
+    "protocol_config": "/content/deep-learning-benchmark-suite/configs/a1/protocol.py"
+  }
+}

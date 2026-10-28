@@ -1,0 +1,22 @@
+Across 15 Fashion-MNIST training runs, the custom Transformer achieves the highest
+mean test accuracy and macro-F1, 91.267\% and 91.234\%, narrowly ahead of the
+custom CNN at 90.690\% and 90.726\%.
+
+The comparison uses five architecture families, one persisted stratified split and
+three seeds per configuration. Selected checkpoints are evaluated on the official
+10,000-image test source, with mean and sample standard deviation reported across seeds.
+
+The CNN offers close predictive performance with about 72.9\% fewer parameters
+than the Transformer and lower observed training-loop cost. Separately measured
+Windows CPU inference favors different trade-offs; the model choice depends on
+quality, size and the intended runtime.
+
+All classifiers use shared preprocessing and metrics, while their representations
+range from flattened pixels to spatial feature maps, image rows and patch tokens.
+The study reports validation/test metrics, exact parameter counts, learning curves,
+T4 train-and-validation loop times, explicitly labeled CPU timing, confusion
+matrices and selected successes/failures. Shirt and related upper-body categories
+remain difficult across models. Small seed count, different training policies and
+separate timing environments prevent a causal or universal ranking of model families.
+Effective configurations, run/checkpoint identities, verification records and
+reconstruction instructions accompany the editable report source.
