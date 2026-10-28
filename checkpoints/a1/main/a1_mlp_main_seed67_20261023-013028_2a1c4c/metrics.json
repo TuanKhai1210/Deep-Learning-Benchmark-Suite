@@ -1,0 +1,9 @@
+{
+  "eval_split": "validation",
+  "val_loss": 0.2648518743515015,
+  "val_accuracy": 0.9038,
+  "val_macro_f1": 0.9033328551208036,
+  "epoch": 79,
+  "timing_scope": "fit",
+  "timing_units": "seconds"
+}

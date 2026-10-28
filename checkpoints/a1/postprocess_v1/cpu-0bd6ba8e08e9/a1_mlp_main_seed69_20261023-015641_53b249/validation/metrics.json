@@ -1,0 +1,28 @@
+{
+  "run_id": "a1_mlp_main_seed69_20261023-015641_53b249",
+  "model": "mlp",
+  "seed": 69,
+  "eval_split": "validation",
+  "device": "cpu",
+  "checkpoint_sha256": "12c54166b669b461ea85fe94afe671aa6929589c6b454c3dd8a71810ad793aba",
+  "metrics": {
+    "loss": 0.26431652617454526,
+    "accuracy": 0.9047,
+    "macro_f1": 0.9041804680374443,
+    "num_samples": 10000
+  },
+  "validation_replay": {
+    "deltas": {
+      "loss": -8.392333994411416e-09,
+      "accuracy": 0.0,
+      "macro_f1": 0.0
+    },
+    "absolute_tolerances": {
+      "loss": 1e-05,
+      "accuracy": 0.000100000001,
+      "macro_f1": 0.0002
+    },
+    "relative_tolerance": 1e-05,
+    "status": "passed"
+  }
+}

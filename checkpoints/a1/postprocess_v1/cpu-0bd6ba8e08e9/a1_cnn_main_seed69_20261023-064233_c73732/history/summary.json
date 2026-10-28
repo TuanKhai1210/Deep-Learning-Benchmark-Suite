@@ -1,0 +1,39 @@
+{
+  "run_id": "a1_cnn_main_seed69_20261023-064233_c73732",
+  "source_run": "/content/drive/MyDrive/dlbench_a1_main/main/a1_cnn_main_seed69_20261023-064233_c73732",
+  "model": "cnn",
+  "seed": 69,
+  "run_mode": "main",
+  "eval_split": "validation",
+  "git_revision": "a8539bee778d99e2902a1dd36aa157c6ebb3a42c",
+  "git_dirty": false,
+  "split_hash": "e4a776305b2a1b5c392ba196d023de004f47124e8f831495b9733c48e72c25e6",
+  "statistics_hash": "e47b863cb866cdc61613bb88d772d02f8aedc0a21fa56b79dee27b27d341381e",
+  "completed_epochs": 100,
+  "best_epoch_zero_based": 80,
+  "metrics": {
+    "eval_split": "validation",
+    "val_loss": 0.2408301728248596,
+    "val_accuracy": 0.9155,
+    "val_macro_f1": 0.9154775191383384,
+    "epoch": 80,
+    "timing_scope": "fit",
+    "timing_units": "seconds"
+  },
+  "training_config": {
+    "batch_size": 64,
+    "optimizer": "adam",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0,
+    "early_stopping_patience": 0
+  },
+  "epoch_seconds_sum": 2012.164186000824,
+  "timing_note": "Sum of recorded epoch times; not inference timing or complete fit wall time.",
+  "artifact_sha256": {
+    "config.json": "ed10d66781efee1e917cf0253142ccff3274e958c1578abdb8cb75dcd869302c",
+    "metadata.json": "c71520ecae1fa2288bbdd79ffcbbc5827a52f08ccb4029a72e08d9a93ad66be0",
+    "metrics.json": "09e2ad536635f3f5ceac88e3b38ee79de16356c8534b0d3afe393265b68d7247",
+    "history.csv": "8acd945ff073d2fb30214f7af875e805c716e56b27246c94affa002e0289a4ea"
+  },
+  "limitations": "Single-run validation results. No test claims or multi-seed uncertainty. Confusion/error plots require predictions."
+}

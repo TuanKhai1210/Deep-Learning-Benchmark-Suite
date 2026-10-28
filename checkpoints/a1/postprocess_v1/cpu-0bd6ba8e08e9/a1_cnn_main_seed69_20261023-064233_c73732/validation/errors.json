@@ -1,0 +1,5222 @@
+{
+  "eval_split": "validation",
+  "labels": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "class_names": [
+    "T-shirt/top",
+    "Trouser",
+    "Pullover",
+    "Dress",
+    "Coat",
+    "Sandal",
+    "Shirt",
+    "Sneaker",
+    "Bag",
+    "Ankle boot"
+  ],
+  "num_samples": 10000,
+  "confusion_counts": [
+    [
+      866,
+      0,
+      18,
+      23,
+      3,
+      1,
+      87,
+      0,
+      2,
+      0
+    ],
+    [
+      0,
+      985,
+      1,
+      12,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      15,
+      0,
+      888,
+      7,
+      46,
+      0,
+      44,
+      0,
+      0,
+      0
+    ],
+    [
+      20,
+      7,
+      4,
+      910,
+      28,
+      0,
+      29,
+      0,
+      2,
+      0
+    ],
+    [
+      1,
+      1,
+      39,
+      24,
+      864,
+      0,
+      69,
+      0,
+      2,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      966,
+      0,
+      21,
+      2,
+      11
+    ],
+    [
+      100,
+      2,
+      53,
+      31,
+      50,
+      0,
+      760,
+      0,
+      4,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      18,
+      0,
+      954,
+      0,
+      28
+    ],
+    [
+      2,
+      0,
+      0,
+      0,
+      1,
+      5,
+      6,
+      0,
+      986,
+      0
+    ],
+    [
+      0,
+      1,
+      0,
+      0,
+      0,
+      6,
+      0,
+      16,
+      1,
+      976
+    ]
+  ],
+  "errors": [
+    {
+      "sample_id": "fashion_mnist:official_train:35816",
+      "target": 7,
+      "predicted_label": 5,
+      "confidence": 0.9996060729026794
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:5427",
+      "target": 9,
+      "predicted_label": 7,
+      "confidence": 0.9995692372322083
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:1106",
+      "target": 7,
+      "predicted_label": 9,
+      "confidence": 0.9990532994270325
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:49664",
+      "target": 0,
+      "predicted_label": 3,
+      "confidence": 0.9989712238311768
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:40753",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.9987280964851379
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:29278",
+      "target": 9,
+      "predicted_label": 7,
+      "confidence": 0.998724639415741
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:28341",
+      "target": 0,
+      "predicted_label": 3,
+      "confidence": 0.9986836314201355
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:58758",
+      "target": 9,
+      "predicted_label": 7,
+      "confidence": 0.9981988072395325
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:42365",
+      "target": 7,
+      "predicted_label": 9,
+      "confidence": 0.9978957176208496
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:56712",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.9977990984916687
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:26226",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.9969961643218994
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:57962",
+      "target": 9,
+      "predicted_label": 5,
+      "confidence": 0.9962852001190186
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:18628",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.9955653548240662
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:40187",
+      "target": 2,
+      "predicted_label": 0,
+      "confidence": 0.9953183531761169
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:43694",
+      "target": 0,
+      "predicted_label": 3,
+      "confidence": 0.9949719905853271
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:11874",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.99413001537323
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:24752",
+      "target": 8,
+      "predicted_label": 5,
+      "confidence": 0.9931532144546509
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:20643",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.992938756942749
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:43286",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.9922953844070435
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:30744",
+      "target": 7,
+      "predicted_label": 9,
+      "confidence": 0.9915041327476501
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:28284",
+      "target": 9,
+      "predicted_label": 7,
+      "confidence": 0.9912595152854919
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:42013",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.9905824661254883
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:26765",
+      "target": 9,
+      "predicted_label": 5,
+      "confidence": 0.9902856945991516
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:43703",
+      "target": 0,
+      "predicted_label": 3,
+      "confidence": 0.9895802140235901
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:43992",
+      "target": 7,
+      "predicted_label": 9,
+      "confidence": 0.9892304539680481
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:35103",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.9878823757171631
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:35321",
+      "target": 0,
+      "predicted_label": 3,
+      "confidence": 0.987536609172821
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:32070",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.9872283935546875
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:59298",
+      "target": 6,
+      "predicted_label": 3,
+      "confidence": 0.9868379235267639
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:8829",
+      "target": 5,
+      "predicted_label": 7,
+      "confidence": 0.985834538936615
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:35505",
+      "target": 3,
+      "predicted_label": 6,
+      "confidence": 0.9849099516868591
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:25372",
+      "target": 7,
+      "predicted_label": 9,
+      "confidence": 0.9838623404502869
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:35562",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.9834369421005249
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:25955",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.982756495475769
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:33781",
+      "target": 0,
+      "predicted_label": 5,
+      "confidence": 0.9814712405204773
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:40824",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.9804577231407166
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:9724",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.9795379042625427
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:11865",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.9788636565208435
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:502",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.978840708732605
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:14321",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.9776665568351746
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:10220",
+      "target": 7,
+      "predicted_label": 9,
+      "confidence": 0.9767382740974426
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:53921",
+      "target": 8,
+      "predicted_label": 5,
+      "confidence": 0.9765164256095886
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:8127",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.9758334755897522
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:8344",
+      "target": 5,
+      "predicted_label": 7,
+      "confidence": 0.9756830930709839
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:12385",
+      "target": 0,
+      "predicted_label": 3,
+      "confidence": 0.9753152132034302
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:33503",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.9736647009849548
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:27091",
+      "target": 7,
+      "predicted_label": 9,
+      "confidence": 0.973066508769989
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:6847",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.9729787111282349
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:16003",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.9726517796516418
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:36049",
+      "target": 6,
+      "predicted_label": 3,
+      "confidence": 0.971644937992096
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:15475",
+      "target": 7,
+      "predicted_label": 5,
+      "confidence": 0.9702615737915039
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:56058",
+      "target": 8,
+      "predicted_label": 5,
+      "confidence": 0.9690626859664917
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:15826",
+      "target": 2,
+      "predicted_label": 3,
+      "confidence": 0.9688276648521423
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:23545",
+      "target": 3,
+      "predicted_label": 1,
+      "confidence": 0.9687713980674744
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:57068",
+      "target": 5,
+      "predicted_label": 7,
+      "confidence": 0.968106746673584
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:55352",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.9669991135597229
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:8881",
+      "target": 3,
+      "predicted_label": 6,
+      "confidence": 0.9662855267524719
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:36771",
+      "target": 0,
+      "predicted_label": 3,
+      "confidence": 0.9661538004875183
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:5560",
+      "target": 1,
+      "predicted_label": 3,
+      "confidence": 0.9656200408935547
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:4618",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.9653788208961487
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:30918",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.964733898639679
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:41513",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.9645405411720276
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:18007",
+      "target": 0,
+      "predicted_label": 3,
+      "confidence": 0.9642253518104553
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:30959",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.9627543687820435
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:18176",
+      "target": 1,
+      "predicted_label": 3,
+      "confidence": 0.9624779224395752
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:12881",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.9610783457756042
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:4887",
+      "target": 7,
+      "predicted_label": 5,
+      "confidence": 0.9602929353713989
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:7165",
+      "target": 6,
+      "predicted_label": 3,
+      "confidence": 0.9602720141410828
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:9556",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.9584264159202576
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:4014",
+      "target": 5,
+      "predicted_label": 7,
+      "confidence": 0.9581468105316162
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:59566",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.9565080404281616
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:33520",
+      "target": 2,
+      "predicted_label": 0,
+      "confidence": 0.9550485610961914
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:25789",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.9507454633712769
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:21344",
+      "target": 7,
+      "predicted_label": 9,
+      "confidence": 0.9501290917396545
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:2616",
+      "target": 9,
+      "predicted_label": 8,
+      "confidence": 0.949941098690033
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:41510",
+      "target": 3,
+      "predicted_label": 0,
+      "confidence": 0.9466875791549683
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:31199",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.9460261464118958
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:17551",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.9453234076499939
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:8582",
+      "target": 8,
+      "predicted_label": 0,
+      "confidence": 0.9443768858909607
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:17836",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.9436551332473755
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:46259",
+      "target": 3,
+      "predicted_label": 4,
+      "confidence": 0.9414793252944946
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:22868",
+      "target": 5,
+      "predicted_label": 7,
+      "confidence": 0.9407756924629211
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:15881",
+      "target": 4,
+      "predicted_label": 3,
+      "confidence": 0.93747478723526
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:26305",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.9363127946853638
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:56442",
+      "target": 5,
+      "predicted_label": 9,
+      "confidence": 0.936160683631897
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:7190",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.9335524439811707
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:9083",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.933171808719635
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:57497",
+      "target": 5,
+      "predicted_label": 7,
+      "confidence": 0.9331668019294739
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:21681",
+      "target": 3,
+      "predicted_label": 4,
+      "confidence": 0.9322265386581421
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:48312",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.9310027956962585
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:27095",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.9309064149856567
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:3880",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.9305402040481567
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:4292",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.9302002191543579
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:46613",
+      "target": 0,
+      "predicted_label": 2,
+      "confidence": 0.9297650456428528
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:17721",
+      "target": 5,
+      "predicted_label": 9,
+      "confidence": 0.9288540482521057
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:2479",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.9267252683639526
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:57995",
+      "target": 9,
+      "predicted_label": 7,
+      "confidence": 0.926047146320343
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:43984",
+      "target": 2,
+      "predicted_label": 3,
+      "confidence": 0.925860583782196
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:48535",
+      "target": 3,
+      "predicted_label": 0,
+      "confidence": 0.924239456653595
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:35472",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.9216693639755249
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:47545",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.9212626814842224
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:29154",
+      "target": 6,
+      "predicted_label": 3,
+      "confidence": 0.9207562804222107
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:14070",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.9199851751327515
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:27500",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.9195371270179749
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:23366",
+      "target": 5,
+      "predicted_label": 7,
+      "confidence": 0.9175708293914795
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:26011",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.9172527194023132
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:12744",
+      "target": 3,
+      "predicted_label": 2,
+      "confidence": 0.9151434898376465
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:49125",
+      "target": 5,
+      "predicted_label": 7,
+      "confidence": 0.9150131344795227
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:31278",
+      "target": 9,
+      "predicted_label": 7,
+      "confidence": 0.9137847423553467
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:45236",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.9129982590675354
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:20701",
+      "target": 2,
+      "predicted_label": 3,
+      "confidence": 0.9127451181411743
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:33982",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.9123775362968445
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:25260",
+      "target": 9,
+      "predicted_label": 7,
+      "confidence": 0.9117498993873596
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:16131",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.9105535745620728
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:38076",
+      "target": 0,
+      "predicted_label": 3,
+      "confidence": 0.9098606705665588
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:30512",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.9097981452941895
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:15345",
+      "target": 4,
+      "predicted_label": 3,
+      "confidence": 0.9096554517745972
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:18133",
+      "target": 1,
+      "predicted_label": 3,
+      "confidence": 0.9087917804718018
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:3566",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.9075695276260376
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:1091",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.9074214100837708
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:2213",
+      "target": 0,
+      "predicted_label": 3,
+      "confidence": 0.907383918762207
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:1642",
+      "target": 6,
+      "predicted_label": 3,
+      "confidence": 0.9066282510757446
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:48090",
+      "target": 7,
+      "predicted_label": 9,
+      "confidence": 0.9046788811683655
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:1337",
+      "target": 5,
+      "predicted_label": 7,
+      "confidence": 0.9030908942222595
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:2259",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.9030498266220093
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:30132",
+      "target": 2,
+      "predicted_label": 0,
+      "confidence": 0.9028777480125427
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:39009",
+      "target": 5,
+      "predicted_label": 8,
+      "confidence": 0.902440071105957
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:32066",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.902206540107727
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:3598",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.9020841121673584
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:30245",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.9012558460235596
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:16843",
+      "target": 5,
+      "predicted_label": 7,
+      "confidence": 0.8994322419166565
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:20651",
+      "target": 9,
+      "predicted_label": 7,
+      "confidence": 0.8961308002471924
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:27417",
+      "target": 7,
+      "predicted_label": 5,
+      "confidence": 0.8941542506217957
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:17122",
+      "target": 3,
+      "predicted_label": 0,
+      "confidence": 0.892602264881134
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:33699",
+      "target": 0,
+      "predicted_label": 3,
+      "confidence": 0.8919243216514587
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:2991",
+      "target": 7,
+      "predicted_label": 9,
+      "confidence": 0.8918851613998413
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:8031",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.8912791609764099
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:3337",
+      "target": 7,
+      "predicted_label": 9,
+      "confidence": 0.8908941745758057
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:3589",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.88998943567276
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:22212",
+      "target": 6,
+      "predicted_label": 3,
+      "confidence": 0.8894624710083008
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:18027",
+      "target": 9,
+      "predicted_label": 5,
+      "confidence": 0.8888346552848816
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:22485",
+      "target": 5,
+      "predicted_label": 7,
+      "confidence": 0.887353241443634
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:28179",
+      "target": 1,
+      "predicted_label": 3,
+      "confidence": 0.8854370713233948
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:17120",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.8851988315582275
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:28711",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.8850643634796143
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:42878",
+      "target": 0,
+      "predicted_label": 3,
+      "confidence": 0.8837946653366089
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:58316",
+      "target": 6,
+      "predicted_label": 3,
+      "confidence": 0.8823985457420349
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:18157",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.8819230794906616
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:9521",
+      "target": 7,
+      "predicted_label": 5,
+      "confidence": 0.8810835480690002
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:22504",
+      "target": 5,
+      "predicted_label": 9,
+      "confidence": 0.8790048360824585
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:34248",
+      "target": 5,
+      "predicted_label": 7,
+      "confidence": 0.8781844973564148
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:49634",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.8778855204582214
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:11820",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.8772960305213928
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:36642",
+      "target": 6,
+      "predicted_label": 3,
+      "confidence": 0.8771215677261353
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:14490",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.8770880699157715
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:51482",
+      "target": 9,
+      "predicted_label": 7,
+      "confidence": 0.8757905960083008
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:26018",
+      "target": 3,
+      "predicted_label": 0,
+      "confidence": 0.8745653033256531
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:1483",
+      "target": 3,
+      "predicted_label": 6,
+      "confidence": 0.8738278150558472
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:15722",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.8726956248283386
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:34080",
+      "target": 5,
+      "predicted_label": 9,
+      "confidence": 0.871616780757904
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:54147",
+      "target": 0,
+      "predicted_label": 2,
+      "confidence": 0.8709635734558105
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:56091",
+      "target": 1,
+      "predicted_label": 3,
+      "confidence": 0.8699325919151306
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:46949",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.8678491115570068
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:16369",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.8663365840911865
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:7426",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.865260124206543
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:47166",
+      "target": 3,
+      "predicted_label": 6,
+      "confidence": 0.8650717735290527
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:44766",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.8633566498756409
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:53066",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.8630818128585815
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:27578",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.8611688017845154
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:21139",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.8605912327766418
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:8912",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.8591716885566711
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:40372",
+      "target": 7,
+      "predicted_label": 5,
+      "confidence": 0.8586639165878296
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:23660",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.8585913777351379
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:30993",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.8580737709999084
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:33985",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.8579500913619995
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:29566",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.8569665551185608
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:22750",
+      "target": 0,
+      "predicted_label": 2,
+      "confidence": 0.8551042079925537
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:54549",
+      "target": 0,
+      "predicted_label": 3,
+      "confidence": 0.8528662919998169
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:58483",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.8523885607719421
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:54038",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.852372944355011
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:35796",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.8523715138435364
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:21493",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.8523035645484924
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:8698",
+      "target": 7,
+      "predicted_label": 5,
+      "confidence": 0.8515218496322632
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:37486",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.8508174419403076
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:19370",
+      "target": 4,
+      "predicted_label": 3,
+      "confidence": 0.8506431579589844
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:23077",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.8505194783210754
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:9816",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.8502773642539978
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:17456",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.8499488234519958
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:32555",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.8491442799568176
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:51727",
+      "target": 4,
+      "predicted_label": 3,
+      "confidence": 0.8482818007469177
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:18112",
+      "target": 3,
+      "predicted_label": 8,
+      "confidence": 0.8480480313301086
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:48058",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.8474431037902832
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:21548",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.8455806970596313
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:20818",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.84220290184021
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:13026",
+      "target": 6,
+      "predicted_label": 3,
+      "confidence": 0.8414954543113708
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:49129",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.8405166268348694
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:48961",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.8389264941215515
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:37308",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.8371020555496216
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:26116",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.8368619680404663
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:18180",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.8360187411308289
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:29216",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.8347301483154297
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:38631",
+      "target": 6,
+      "predicted_label": 3,
+      "confidence": 0.8342315554618835
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:28886",
+      "target": 0,
+      "predicted_label": 2,
+      "confidence": 0.8338849544525146
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:318",
+      "target": 3,
+      "predicted_label": 0,
+      "confidence": 0.8335082530975342
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:39621",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.8332178592681885
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:50651",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.8322962522506714
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:53920",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.8316242694854736
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:1123",
+      "target": 7,
+      "predicted_label": 9,
+      "confidence": 0.830998957157135
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:3042",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.8306793570518494
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:29646",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.8302310705184937
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:37824",
+      "target": 9,
+      "predicted_label": 5,
+      "confidence": 0.8301339149475098
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:22189",
+      "target": 7,
+      "predicted_label": 5,
+      "confidence": 0.8264479041099548
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:53180",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.8263809680938721
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:36240",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.8258723020553589
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:42342",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.8257223963737488
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:27829",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.8248215913772583
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:46360",
+      "target": 5,
+      "predicted_label": 7,
+      "confidence": 0.8239712119102478
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:40455",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.8234995007514954
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:19334",
+      "target": 6,
+      "predicted_label": 3,
+      "confidence": 0.8229066729545593
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:51652",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.8225282430648804
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:29411",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.822415828704834
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:27623",
+      "target": 1,
+      "predicted_label": 3,
+      "confidence": 0.8223695158958435
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:17037",
+      "target": 3,
+      "predicted_label": 1,
+      "confidence": 0.821378231048584
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:50597",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.8201754093170166
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:57558",
+      "target": 4,
+      "predicted_label": 3,
+      "confidence": 0.8197275996208191
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:39944",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.8170523643493652
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:26432",
+      "target": 0,
+      "predicted_label": 2,
+      "confidence": 0.8158490657806396
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:29325",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.8147478699684143
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:49398",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.8142566680908203
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:58054",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.8136478662490845
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:24055",
+      "target": 3,
+      "predicted_label": 6,
+      "confidence": 0.8122481107711792
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:1617",
+      "target": 4,
+      "predicted_label": 3,
+      "confidence": 0.8119919896125793
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:52759",
+      "target": 3,
+      "predicted_label": 6,
+      "confidence": 0.8080374002456665
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:30342",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.8077958226203918
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:39742",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.8069881796836853
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:29474",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.8051310181617737
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:31532",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.8039519190788269
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:22876",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.803769052028656
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:57268",
+      "target": 3,
+      "predicted_label": 8,
+      "confidence": 0.8023775815963745
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:36759",
+      "target": 3,
+      "predicted_label": 6,
+      "confidence": 0.8022436499595642
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:23102",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.8013516068458557
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:49414",
+      "target": 9,
+      "predicted_label": 7,
+      "confidence": 0.8012791275978088
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:2279",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.8012115359306335
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:46165",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.8011512756347656
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:29421",
+      "target": 4,
+      "predicted_label": 3,
+      "confidence": 0.8010029792785645
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:48917",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.800031840801239
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:6717",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.7989336848258972
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:12737",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.7982946038246155
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:31059",
+      "target": 5,
+      "predicted_label": 7,
+      "confidence": 0.7976351976394653
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:14888",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.7969826459884644
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:53612",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.7969289422035217
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:49396",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.7952529191970825
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:41525",
+      "target": 4,
+      "predicted_label": 3,
+      "confidence": 0.7948035597801208
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:18732",
+      "target": 9,
+      "predicted_label": 5,
+      "confidence": 0.7945118546485901
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:43336",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.7936248183250427
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:13417",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.7935057282447815
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:21445",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.7933599948883057
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:41062",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.7914276719093323
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:54578",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.7898708581924438
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:19832",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.7892411351203918
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:57629",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.7882588505744934
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:59460",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.7878987789154053
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:24805",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.7878034114837646
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:22788",
+      "target": 5,
+      "predicted_label": 9,
+      "confidence": 0.787464439868927
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:23881",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.7860236763954163
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:15745",
+      "target": 1,
+      "predicted_label": 6,
+      "confidence": 0.7859386205673218
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:22781",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.7846193313598633
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:58843",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.7845649123191833
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:41597",
+      "target": 3,
+      "predicted_label": 4,
+      "confidence": 0.7843401432037354
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:18887",
+      "target": 5,
+      "predicted_label": 9,
+      "confidence": 0.7835339903831482
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:23079",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.7835061550140381
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:45930",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.7828637361526489
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:13245",
+      "target": 3,
+      "predicted_label": 4,
+      "confidence": 0.7816588282585144
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:27609",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.781545102596283
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:53103",
+      "target": 5,
+      "predicted_label": 7,
+      "confidence": 0.7811601758003235
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:28131",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.7806952595710754
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:48942",
+      "target": 6,
+      "predicted_label": 3,
+      "confidence": 0.7803940176963806
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:11633",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.7801313400268555
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:6711",
+      "target": 3,
+      "predicted_label": 4,
+      "confidence": 0.7797091603279114
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:32052",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.7793022394180298
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:45080",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.7791661620140076
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:17532",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.7708626985549927
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:24638",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.7700697183609009
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:15788",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.7695087194442749
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:27551",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.7689200043678284
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:23126",
+      "target": 7,
+      "predicted_label": 9,
+      "confidence": 0.7685009241104126
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:19815",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.7679802179336548
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:23023",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.7677544355392456
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:58533",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.7675138115882874
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:5997",
+      "target": 6,
+      "predicted_label": 3,
+      "confidence": 0.7660391330718994
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:40831",
+      "target": 3,
+      "predicted_label": 4,
+      "confidence": 0.7656628489494324
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:32992",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.7656288146972656
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:22630",
+      "target": 3,
+      "predicted_label": 0,
+      "confidence": 0.7639044523239136
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:17188",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.763890266418457
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:35366",
+      "target": 4,
+      "predicted_label": 3,
+      "confidence": 0.7624988555908203
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:48651",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.7617214918136597
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:8043",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.7612402439117432
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:54086",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.758230447769165
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:15233",
+      "target": 3,
+      "predicted_label": 6,
+      "confidence": 0.7564011812210083
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:9913",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.7558465003967285
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:14843",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.755071222782135
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:46237",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.7545100450515747
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:38703",
+      "target": 1,
+      "predicted_label": 3,
+      "confidence": 0.7536171078681946
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:18729",
+      "target": 3,
+      "predicted_label": 1,
+      "confidence": 0.7520591020584106
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:12587",
+      "target": 2,
+      "predicted_label": 0,
+      "confidence": 0.7502434253692627
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:37604",
+      "target": 9,
+      "predicted_label": 7,
+      "confidence": 0.7498870491981506
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:36812",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.747866153717041
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:16053",
+      "target": 4,
+      "predicted_label": 3,
+      "confidence": 0.7477543354034424
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:6867",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.7471441030502319
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:55159",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.7461807727813721
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:3291",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.746134877204895
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:56246",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.7446251511573792
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:12144",
+      "target": 3,
+      "predicted_label": 4,
+      "confidence": 0.7436312437057495
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:44129",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.7433152198791504
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:36976",
+      "target": 8,
+      "predicted_label": 6,
+      "confidence": 0.7431999444961548
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:53257",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.7424343228340149
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:51075",
+      "target": 3,
+      "predicted_label": 4,
+      "confidence": 0.741854190826416
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:22010",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.7416490912437439
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:55325",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.7414231300354004
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:7637",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.7409846186637878
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:34632",
+      "target": 1,
+      "predicted_label": 3,
+      "confidence": 0.7385672330856323
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:30409",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.738319993019104
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:33357",
+      "target": 5,
+      "predicted_label": 9,
+      "confidence": 0.7376660704612732
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:7457",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.7376367449760437
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:34256",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.7375586032867432
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:11081",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.7369089126586914
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:45795",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.73563551902771
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:33279",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.7355257272720337
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:3175",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.7344555258750916
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:28792",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.7339472770690918
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:33638",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.732503354549408
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:3866",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.7324790358543396
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:339",
+      "target": 4,
+      "predicted_label": 0,
+      "confidence": 0.7307423949241638
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:17257",
+      "target": 3,
+      "predicted_label": 0,
+      "confidence": 0.730675458908081
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:28544",
+      "target": 7,
+      "predicted_label": 5,
+      "confidence": 0.7297371625900269
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:50113",
+      "target": 7,
+      "predicted_label": 9,
+      "confidence": 0.7297316789627075
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:29929",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.7295235991477966
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:16971",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.7278875112533569
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:53201",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.7275531888008118
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:50863",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.7271857857704163
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:21907",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.7269342541694641
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:27270",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.726626455783844
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:29642",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.7260939478874207
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:10023",
+      "target": 3,
+      "predicted_label": 6,
+      "confidence": 0.7248911261558533
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:30162",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.7242606282234192
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:35659",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.7242389917373657
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:28524",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.7238645553588867
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:13082",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.7228473424911499
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:40903",
+      "target": 7,
+      "predicted_label": 9,
+      "confidence": 0.7223821878433228
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:24743",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.7222703695297241
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:51114",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.7215170860290527
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:43054",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.7214449644088745
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:12028",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.7212331891059875
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:21771",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.7204684019088745
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:33862",
+      "target": 3,
+      "predicted_label": 6,
+      "confidence": 0.7203353643417358
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:20420",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.7202585935592651
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:21073",
+      "target": 3,
+      "predicted_label": 4,
+      "confidence": 0.7199894189834595
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:5059",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.7193227410316467
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:44543",
+      "target": 7,
+      "predicted_label": 9,
+      "confidence": 0.7191187143325806
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:13449",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.7188325524330139
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:33778",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.7188248038291931
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:45345",
+      "target": 9,
+      "predicted_label": 5,
+      "confidence": 0.7186483144760132
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:47638",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.7180379033088684
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:25641",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.7176685929298401
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:17394",
+      "target": 5,
+      "predicted_label": 7,
+      "confidence": 0.7158531546592712
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:9209",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.7145558595657349
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:14635",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.7143571972846985
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:45551",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.7136217355728149
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:53973",
+      "target": 0,
+      "predicted_label": 2,
+      "confidence": 0.7134808897972107
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:24455",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.7133166193962097
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:10974",
+      "target": 3,
+      "predicted_label": 0,
+      "confidence": 0.7115281224250793
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:30181",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.7114967703819275
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:9539",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.7113327980041504
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:18200",
+      "target": 3,
+      "predicted_label": 6,
+      "confidence": 0.711227536201477
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:12460",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.7106756567955017
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:5546",
+      "target": 0,
+      "predicted_label": 2,
+      "confidence": 0.7097815275192261
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:58656",
+      "target": 9,
+      "predicted_label": 7,
+      "confidence": 0.7087153792381287
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:37755",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.7077291011810303
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:14273",
+      "target": 3,
+      "predicted_label": 4,
+      "confidence": 0.7070308327674866
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:13880",
+      "target": 5,
+      "predicted_label": 7,
+      "confidence": 0.7067187428474426
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:54118",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.706421434879303
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:27350",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.7059259414672852
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:49079",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.7058290839195251
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:35616",
+      "target": 4,
+      "predicted_label": 3,
+      "confidence": 0.7053962349891663
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:57230",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.7047346234321594
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:22411",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.7030266523361206
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:14699",
+      "target": 3,
+      "predicted_label": 6,
+      "confidence": 0.7017834186553955
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:53509",
+      "target": 3,
+      "predicted_label": 6,
+      "confidence": 0.7014032006263733
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:15406",
+      "target": 7,
+      "predicted_label": 5,
+      "confidence": 0.7013794779777527
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:24727",
+      "target": 3,
+      "predicted_label": 6,
+      "confidence": 0.7006593346595764
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:42760",
+      "target": 7,
+      "predicted_label": 9,
+      "confidence": 0.6995647549629211
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:3228",
+      "target": 3,
+      "predicted_label": 4,
+      "confidence": 0.6963392496109009
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:1277",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.6961430907249451
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:20071",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.6961262226104736
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:23225",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.6953355669975281
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:13385",
+      "target": 3,
+      "predicted_label": 4,
+      "confidence": 0.6944642663002014
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:35210",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.6935909390449524
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:48495",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.6935029029846191
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:3401",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.6923291683197021
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:54797",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.6919506192207336
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:3940",
+      "target": 1,
+      "predicted_label": 3,
+      "confidence": 0.6917611956596375
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:41156",
+      "target": 2,
+      "predicted_label": 0,
+      "confidence": 0.691585123538971
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:6003",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.6912357211112976
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:30552",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.6906530857086182
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:36376",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.689822256565094
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:2829",
+      "target": 3,
+      "predicted_label": 4,
+      "confidence": 0.689444899559021
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:5996",
+      "target": 8,
+      "predicted_label": 6,
+      "confidence": 0.6885581016540527
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:44748",
+      "target": 0,
+      "predicted_label": 3,
+      "confidence": 0.6884679794311523
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:8813",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.6881879568099976
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:51496",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.6873915791511536
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:37448",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.686387300491333
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:58727",
+      "target": 3,
+      "predicted_label": 4,
+      "confidence": 0.6860218644142151
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:2898",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.6859937310218811
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:30211",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.6858002543449402
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:26265",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.6857477426528931
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:48756",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.6847789883613586
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:433",
+      "target": 4,
+      "predicted_label": 3,
+      "confidence": 0.6843106150627136
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:19023",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.6842630505561829
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:58038",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.6838029026985168
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:31669",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.6830458045005798
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:14203",
+      "target": 4,
+      "predicted_label": 3,
+      "confidence": 0.6826175451278687
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:21792",
+      "target": 3,
+      "predicted_label": 6,
+      "confidence": 0.6823881268501282
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:32110",
+      "target": 1,
+      "predicted_label": 3,
+      "confidence": 0.6820473670959473
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:31756",
+      "target": 7,
+      "predicted_label": 9,
+      "confidence": 0.6817846298217773
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:17570",
+      "target": 5,
+      "predicted_label": 9,
+      "confidence": 0.6807005405426025
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:45805",
+      "target": 5,
+      "predicted_label": 7,
+      "confidence": 0.6805907487869263
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:51587",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.680457353591919
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:36533",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.6800934672355652
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:22002",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.6795526742935181
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:18966",
+      "target": 3,
+      "predicted_label": 0,
+      "confidence": 0.6788795590400696
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:27503",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.6788764595985413
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:13177",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.6788725852966309
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:58610",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.6785070300102234
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:31119",
+      "target": 3,
+      "predicted_label": 2,
+      "confidence": 0.6782723069190979
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:4808",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.6782444715499878
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:22553",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.677973747253418
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:37546",
+      "target": 7,
+      "predicted_label": 9,
+      "confidence": 0.6775246858596802
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:15268",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.6775028705596924
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:14067",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.6769896745681763
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:49995",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.6768426299095154
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:6301",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.6768067479133606
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:45517",
+      "target": 7,
+      "predicted_label": 9,
+      "confidence": 0.676252543926239
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:54627",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.6741744875907898
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:53010",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.6726771593093872
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:1338",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.6723516583442688
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:52632",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.6720960736274719
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:40156",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.6720870733261108
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:2078",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.6717888116836548
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:6941",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.6716296672821045
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:42385",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.6706435084342957
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:33588",
+      "target": 3,
+      "predicted_label": 4,
+      "confidence": 0.6669602990150452
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:3858",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.6669581532478333
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:6626",
+      "target": 9,
+      "predicted_label": 7,
+      "confidence": 0.6669505834579468
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:52566",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.6667624711990356
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:12364",
+      "target": 4,
+      "predicted_label": 3,
+      "confidence": 0.666495144367218
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:5415",
+      "target": 6,
+      "predicted_label": 8,
+      "confidence": 0.6650235652923584
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:17999",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.6642485857009888
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:30417",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.6636096835136414
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:14018",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.6627880930900574
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:50994",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.6623796820640564
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:24067",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.6623156666755676
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:50923",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.6618946194648743
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:11416",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.6615811586380005
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:25435",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.6610980033874512
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:17661",
+      "target": 4,
+      "predicted_label": 3,
+      "confidence": 0.6608136296272278
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:34795",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.66035395860672
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:19735",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.6602793335914612
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:2010",
+      "target": 8,
+      "predicted_label": 5,
+      "confidence": 0.660248339176178
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:31614",
+      "target": 7,
+      "predicted_label": 9,
+      "confidence": 0.6595784425735474
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:25402",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.659433126449585
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:22552",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.6586734652519226
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:9831",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.6585968732833862
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:1150",
+      "target": 3,
+      "predicted_label": 4,
+      "confidence": 0.6583840847015381
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:15260",
+      "target": 0,
+      "predicted_label": 3,
+      "confidence": 0.6580936312675476
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:39953",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.6577109098434448
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:10320",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.657283365726471
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:18854",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.6559886932373047
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:7425",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.6559325456619263
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:45718",
+      "target": 7,
+      "predicted_label": 9,
+      "confidence": 0.655249297618866
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:41953",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.6552138328552246
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:58160",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.6549014449119568
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:51964",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.6538574695587158
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:2239",
+      "target": 2,
+      "predicted_label": 0,
+      "confidence": 0.65336674451828
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:54352",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.6528299450874329
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:39798",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.6516339778900146
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:4950",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.6497684121131897
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:56127",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.6471375823020935
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:52700",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.6465441584587097
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:22761",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.6459356546401978
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:57739",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.6449653506278992
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:15060",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.6440855264663696
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:17124",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.6436493992805481
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:27434",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.643434464931488
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:2595",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.640771746635437
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:42039",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.6406294703483582
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:11379",
+      "target": 7,
+      "predicted_label": 5,
+      "confidence": 0.6385905742645264
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:495",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.6379779577255249
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:25419",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.6375840306282043
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:55620",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.637403666973114
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:28004",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.6370008587837219
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:56509",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.6355204582214355
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:47776",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.634924054145813
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:17444",
+      "target": 3,
+      "predicted_label": 4,
+      "confidence": 0.634307324886322
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:22886",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.6337490677833557
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:9459",
+      "target": 2,
+      "predicted_label": 3,
+      "confidence": 0.6335979700088501
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:42164",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.6335043907165527
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:5373",
+      "target": 3,
+      "predicted_label": 0,
+      "confidence": 0.633378803730011
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:29603",
+      "target": 1,
+      "predicted_label": 2,
+      "confidence": 0.6326552629470825
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:16188",
+      "target": 6,
+      "predicted_label": 3,
+      "confidence": 0.6318632960319519
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:53326",
+      "target": 2,
+      "predicted_label": 0,
+      "confidence": 0.6303401589393616
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:59619",
+      "target": 0,
+      "predicted_label": 4,
+      "confidence": 0.6300693154335022
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:59334",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.6298540830612183
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:56842",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.6294881105422974
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:21515",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.6294264793395996
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:28653",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.6288372278213501
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:37146",
+      "target": 0,
+      "predicted_label": 2,
+      "confidence": 0.628373920917511
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:972",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.6273722648620605
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:57335",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.6263015866279602
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:22057",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.6251577734947205
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:51218",
+      "target": 5,
+      "predicted_label": 7,
+      "confidence": 0.6241512894630432
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:56076",
+      "target": 6,
+      "predicted_label": 3,
+      "confidence": 0.6231268644332886
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:21871",
+      "target": 3,
+      "predicted_label": 6,
+      "confidence": 0.6229915022850037
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:36065",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.6229914426803589
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:54714",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.6226785778999329
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:16091",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.622170090675354
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:57473",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.6209601759910583
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:52903",
+      "target": 3,
+      "predicted_label": 6,
+      "confidence": 0.6200302839279175
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:14195",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.6194844841957092
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:6694",
+      "target": 7,
+      "predicted_label": 5,
+      "confidence": 0.6189122796058655
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:45888",
+      "target": 3,
+      "predicted_label": 0,
+      "confidence": 0.618759274482727
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:14445",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.6183519959449768
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:5741",
+      "target": 7,
+      "predicted_label": 9,
+      "confidence": 0.6181283593177795
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:242",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.618046760559082
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:38904",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.6173592805862427
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:52298",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.6172328591346741
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:40794",
+      "target": 0,
+      "predicted_label": 2,
+      "confidence": 0.6151930093765259
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:14511",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.613533616065979
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:29166",
+      "target": 3,
+      "predicted_label": 4,
+      "confidence": 0.6133012771606445
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:51598",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.6123918890953064
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:55367",
+      "target": 4,
+      "predicted_label": 8,
+      "confidence": 0.6118143200874329
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:23872",
+      "target": 1,
+      "predicted_label": 4,
+      "confidence": 0.6115359663963318
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:27167",
+      "target": 0,
+      "predicted_label": 2,
+      "confidence": 0.6107581257820129
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:18005",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.6097819209098816
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:17217",
+      "target": 3,
+      "predicted_label": 6,
+      "confidence": 0.6081717014312744
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:9092",
+      "target": 3,
+      "predicted_label": 4,
+      "confidence": 0.6080053448677063
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:25416",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.6078038811683655
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:44073",
+      "target": 6,
+      "predicted_label": 8,
+      "confidence": 0.6069644689559937
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:41295",
+      "target": 6,
+      "predicted_label": 3,
+      "confidence": 0.6066583395004272
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:16739",
+      "target": 3,
+      "predicted_label": 0,
+      "confidence": 0.6057101488113403
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:12968",
+      "target": 6,
+      "predicted_label": 3,
+      "confidence": 0.6051025986671448
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:53397",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.6042386293411255
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:32924",
+      "target": 3,
+      "predicted_label": 4,
+      "confidence": 0.6041786074638367
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:52751",
+      "target": 8,
+      "predicted_label": 6,
+      "confidence": 0.6017248034477234
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:26196",
+      "target": 3,
+      "predicted_label": 0,
+      "confidence": 0.6011518836021423
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:47798",
+      "target": 6,
+      "predicted_label": 3,
+      "confidence": 0.6007127165794373
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:39525",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.5985877513885498
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:2611",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.5982244610786438
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:19260",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.5977474451065063
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:8623",
+      "target": 7,
+      "predicted_label": 5,
+      "confidence": 0.5976626873016357
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:47469",
+      "target": 7,
+      "predicted_label": 9,
+      "confidence": 0.5972844958305359
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:25997",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.5971298813819885
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:44357",
+      "target": 8,
+      "predicted_label": 5,
+      "confidence": 0.5969049334526062
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:49888",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.5967850089073181
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:950",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.5965020060539246
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:50471",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.5963645577430725
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:29031",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.5952289700508118
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:21916",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.5948610305786133
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:44422",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.5927309393882751
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:37313",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.5923540592193604
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:19154",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.5919495224952698
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:25787",
+      "target": 3,
+      "predicted_label": 6,
+      "confidence": 0.5908867716789246
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:13133",
+      "target": 3,
+      "predicted_label": 6,
+      "confidence": 0.5907058715820312
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:58019",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.590363085269928
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:51550",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.590242862701416
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:14728",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.5896848440170288
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:35661",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.588994562625885
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:45449",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.5887155532836914
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:49944",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.5887030959129333
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:5833",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.5886417627334595
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:38627",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.5874213576316833
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:40002",
+      "target": 3,
+      "predicted_label": 4,
+      "confidence": 0.5868324041366577
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:17340",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.5863791108131409
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:36688",
+      "target": 2,
+      "predicted_label": 0,
+      "confidence": 0.5857682824134827
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:2935",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.584115207195282
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:15450",
+      "target": 8,
+      "predicted_label": 4,
+      "confidence": 0.5840256214141846
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:5413",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.5837447047233582
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:18607",
+      "target": 9,
+      "predicted_label": 7,
+      "confidence": 0.5823004245758057
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:43820",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.5822229981422424
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:33300",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.5818537473678589
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:13582",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.5812773704528809
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:11814",
+      "target": 2,
+      "predicted_label": 3,
+      "confidence": 0.5811793208122253
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:59741",
+      "target": 2,
+      "predicted_label": 0,
+      "confidence": 0.5772218108177185
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:19701",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.5764300227165222
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:35646",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.5760689377784729
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:59163",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.5759167075157166
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:55784",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.5757109522819519
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:17144",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.574718713760376
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:28490",
+      "target": 3,
+      "predicted_label": 6,
+      "confidence": 0.5745882391929626
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:8116",
+      "target": 8,
+      "predicted_label": 6,
+      "confidence": 0.5733184814453125
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:44051",
+      "target": 5,
+      "predicted_label": 9,
+      "confidence": 0.5732502937316895
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:27338",
+      "target": 6,
+      "predicted_label": 3,
+      "confidence": 0.5718323588371277
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:30825",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.5713770985603333
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:45465",
+      "target": 3,
+      "predicted_label": 0,
+      "confidence": 0.5709313154220581
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:43736",
+      "target": 0,
+      "predicted_label": 2,
+      "confidence": 0.5699939727783203
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:8060",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.5697399377822876
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:29390",
+      "target": 6,
+      "predicted_label": 3,
+      "confidence": 0.5694845914840698
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:12678",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.5688702464103699
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:55729",
+      "target": 6,
+      "predicted_label": 3,
+      "confidence": 0.5687562227249146
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:42024",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.5682234764099121
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:23449",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.567283570766449
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:46220",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.5672355890274048
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:44986",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.5671887993812561
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:8272",
+      "target": 7,
+      "predicted_label": 5,
+      "confidence": 0.567123293876648
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:40971",
+      "target": 7,
+      "predicted_label": 9,
+      "confidence": 0.5671170949935913
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:40492",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.5669476389884949
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:27194",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.5663809776306152
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:3731",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.5658217668533325
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:23998",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.5652102828025818
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:3225",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.5650022625923157
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:51004",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.5647761225700378
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:51260",
+      "target": 3,
+      "predicted_label": 6,
+      "confidence": 0.564505934715271
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:19809",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.5634250640869141
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:17486",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.5632665157318115
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:41735",
+      "target": 3,
+      "predicted_label": 6,
+      "confidence": 0.5618540644645691
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:1787",
+      "target": 3,
+      "predicted_label": 0,
+      "confidence": 0.561585009098053
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:29625",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.5609560608863831
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:1600",
+      "target": 3,
+      "predicted_label": 0,
+      "confidence": 0.5603365302085876
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:52544",
+      "target": 2,
+      "predicted_label": 0,
+      "confidence": 0.5571334362030029
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:51234",
+      "target": 3,
+      "predicted_label": 0,
+      "confidence": 0.5568953156471252
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:23017",
+      "target": 9,
+      "predicted_label": 7,
+      "confidence": 0.5558878183364868
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:36305",
+      "target": 9,
+      "predicted_label": 7,
+      "confidence": 0.5549518465995789
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:18236",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.5546104907989502
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:7908",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.5540485978126526
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:56059",
+      "target": 7,
+      "predicted_label": 9,
+      "confidence": 0.5539867877960205
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:53530",
+      "target": 6,
+      "predicted_label": 3,
+      "confidence": 0.5530786514282227
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:713",
+      "target": 7,
+      "predicted_label": 5,
+      "confidence": 0.5525517463684082
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:26601",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.5525051355361938
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:35136",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.5514624118804932
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:39170",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.5508281588554382
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:16482",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.5491307377815247
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:49030",
+      "target": 4,
+      "predicted_label": 3,
+      "confidence": 0.5482141971588135
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:16442",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.5477884411811829
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:21095",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.5477880835533142
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:27173",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.546593189239502
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:35262",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.5463899970054626
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:42014",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.5458223223686218
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:20932",
+      "target": 5,
+      "predicted_label": 7,
+      "confidence": 0.5456125736236572
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:58418",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.5448784232139587
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:29135",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.5445826649665833
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:6175",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.544550359249115
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:10611",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.5444688200950623
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:58522",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.544352650642395
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:13902",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.5440756678581238
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:58875",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.5440530180931091
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:17348",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.5439437627792358
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:27245",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.5439432263374329
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:16065",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.5433698296546936
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:24763",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.5430967807769775
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:2571",
+      "target": 7,
+      "predicted_label": 9,
+      "confidence": 0.54281085729599
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:21286",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.5423805713653564
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:24003",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.5412172675132751
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:25930",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.5410518050193787
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:34884",
+      "target": 4,
+      "predicted_label": 3,
+      "confidence": 0.5402094125747681
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:52351",
+      "target": 4,
+      "predicted_label": 3,
+      "confidence": 0.5385262370109558
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:7548",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.5384599566459656
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:14532",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.5380028486251831
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:54589",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.5379761457443237
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:11583",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.5363491773605347
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:36498",
+      "target": 7,
+      "predicted_label": 9,
+      "confidence": 0.5352733135223389
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:49265",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.53474360704422
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:59917",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.5342046022415161
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:38691",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.5341045260429382
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:8154",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.5337767004966736
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:16729",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.5334638357162476
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:26867",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.5333674550056458
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:17630",
+      "target": 5,
+      "predicted_label": 9,
+      "confidence": 0.5331209897994995
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:53685",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.5329689383506775
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:3415",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.5318470597267151
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:5188",
+      "target": 1,
+      "predicted_label": 3,
+      "confidence": 0.5301740169525146
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:31857",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.5297843217849731
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:42996",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.5274093151092529
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:9910",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.5261256694793701
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:18347",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.5260616540908813
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:44950",
+      "target": 7,
+      "predicted_label": 5,
+      "confidence": 0.5256736278533936
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:44500",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.5253828167915344
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:12410",
+      "target": 0,
+      "predicted_label": 3,
+      "confidence": 0.5252456068992615
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:45156",
+      "target": 2,
+      "predicted_label": 0,
+      "confidence": 0.5251253843307495
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:21245",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.524797797203064
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:31982",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.5240154266357422
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:10725",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.5234450101852417
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:7694",
+      "target": 0,
+      "predicted_label": 3,
+      "confidence": 0.5221741795539856
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:37585",
+      "target": 0,
+      "predicted_label": 2,
+      "confidence": 0.5193207859992981
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:11299",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.5188243389129639
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:10768",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.5187057256698608
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:59705",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.5183669924736023
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:44416",
+      "target": 6,
+      "predicted_label": 3,
+      "confidence": 0.5181182026863098
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:46861",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.5173116326332092
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:54107",
+      "target": 3,
+      "predicted_label": 4,
+      "confidence": 0.5159926414489746
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:39599",
+      "target": 2,
+      "predicted_label": 0,
+      "confidence": 0.5159628391265869
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:29384",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.5156934261322021
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:51507",
+      "target": 3,
+      "predicted_label": 6,
+      "confidence": 0.5151610970497131
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:50707",
+      "target": 5,
+      "predicted_label": 7,
+      "confidence": 0.5142226815223694
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:1796",
+      "target": 6,
+      "predicted_label": 8,
+      "confidence": 0.5139467716217041
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:42126",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.5139264464378357
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:39425",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.5133702754974365
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:57691",
+      "target": 5,
+      "predicted_label": 8,
+      "confidence": 0.5124368071556091
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:4346",
+      "target": 7,
+      "predicted_label": 5,
+      "confidence": 0.5122165679931641
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:33030",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.5121005773544312
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:59590",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.5104303956031799
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:5319",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.5098336338996887
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:20173",
+      "target": 0,
+      "predicted_label": 2,
+      "confidence": 0.5096279978752136
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:58951",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.5086870789527893
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:54610",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.5084190368652344
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:42314",
+      "target": 0,
+      "predicted_label": 2,
+      "confidence": 0.5081736445426941
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:6153",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.5072369575500488
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:50626",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.5071697235107422
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:51769",
+      "target": 8,
+      "predicted_label": 0,
+      "confidence": 0.506649374961853
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:30283",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.506519615650177
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:14284",
+      "target": 3,
+      "predicted_label": 4,
+      "confidence": 0.5058780312538147
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:26542",
+      "target": 4,
+      "predicted_label": 3,
+      "confidence": 0.5054994821548462
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:12360",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.5052588582038879
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:6404",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.5045368075370789
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:8877",
+      "target": 5,
+      "predicted_label": 9,
+      "confidence": 0.5044420957565308
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:40481",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.5025680661201477
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:33048",
+      "target": 2,
+      "predicted_label": 0,
+      "confidence": 0.5025275945663452
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:55865",
+      "target": 3,
+      "predicted_label": 4,
+      "confidence": 0.5020058155059814
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:17767",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.5017016530036926
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:35222",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.4996761977672577
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:50853",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.49886396527290344
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:32025",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.49875831604003906
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:39724",
+      "target": 3,
+      "predicted_label": 6,
+      "confidence": 0.49873945116996765
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:20638",
+      "target": 3,
+      "predicted_label": 0,
+      "confidence": 0.4980524778366089
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:2713",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.49775564670562744
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:12311",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.49693337082862854
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:59768",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.4969022274017334
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:28836",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.4967174530029297
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:8969",
+      "target": 8,
+      "predicted_label": 6,
+      "confidence": 0.4962083101272583
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:29281",
+      "target": 4,
+      "predicted_label": 3,
+      "confidence": 0.49475812911987305
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:52871",
+      "target": 0,
+      "predicted_label": 3,
+      "confidence": 0.49411940574645996
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:59560",
+      "target": 3,
+      "predicted_label": 2,
+      "confidence": 0.49322980642318726
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:11027",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.49182894825935364
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:57003",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.4913502037525177
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:40935",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.49133506417274475
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:14015",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.49103280901908875
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:49987",
+      "target": 0,
+      "predicted_label": 3,
+      "confidence": 0.4899880290031433
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:33089",
+      "target": 0,
+      "predicted_label": 2,
+      "confidence": 0.48937585949897766
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:14731",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.4863646328449249
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:14267",
+      "target": 0,
+      "predicted_label": 3,
+      "confidence": 0.48614534735679626
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:42799",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.4857570230960846
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:49870",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.4839296042919159
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:1722",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.48143455386161804
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:59637",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.4810256361961365
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:5963",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.4809928238391876
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:14280",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.48056477308273315
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:8393",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.48010265827178955
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:24345",
+      "target": 4,
+      "predicted_label": 8,
+      "confidence": 0.4791364073753357
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:24244",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.4785100817680359
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:40845",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.4769291281700134
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:22605",
+      "target": 0,
+      "predicted_label": 8,
+      "confidence": 0.4767908751964569
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:42993",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.47616302967071533
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:23272",
+      "target": 3,
+      "predicted_label": 4,
+      "confidence": 0.4761565625667572
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:37435",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.475952684879303
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:32141",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.47511184215545654
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:49002",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.47372710704803467
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:9185",
+      "target": 3,
+      "predicted_label": 1,
+      "confidence": 0.4734232425689697
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:53944",
+      "target": 2,
+      "predicted_label": 0,
+      "confidence": 0.4732635021209717
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:8959",
+      "target": 3,
+      "predicted_label": 4,
+      "confidence": 0.4729079604148865
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:3618",
+      "target": 4,
+      "predicted_label": 3,
+      "confidence": 0.47071486711502075
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:18844",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.4689098000526428
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:35525",
+      "target": 6,
+      "predicted_label": 3,
+      "confidence": 0.4682207703590393
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:17664",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.46771469712257385
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:34924",
+      "target": 3,
+      "predicted_label": 4,
+      "confidence": 0.46766698360443115
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:54822",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.46578723192214966
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:48745",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.4656260907649994
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:17654",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.4655691385269165
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:39516",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.46527284383773804
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:50550",
+      "target": 2,
+      "predicted_label": 3,
+      "confidence": 0.4632960557937622
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:44728",
+      "target": 3,
+      "predicted_label": 0,
+      "confidence": 0.4630082845687866
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:50381",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.46221286058425903
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:353",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.46206483244895935
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:48046",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.4617106318473816
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:2255",
+      "target": 3,
+      "predicted_label": 4,
+      "confidence": 0.45896807312965393
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:39298",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.45806100964546204
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:15865",
+      "target": 3,
+      "predicted_label": 1,
+      "confidence": 0.4574272334575653
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:43563",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.45722612738609314
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:35701",
+      "target": 4,
+      "predicted_label": 2,
+      "confidence": 0.4566439092159271
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:36831",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.45616692304611206
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:20177",
+      "target": 0,
+      "predicted_label": 8,
+      "confidence": 0.45310840010643005
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:18058",
+      "target": 6,
+      "predicted_label": 8,
+      "confidence": 0.4529425799846649
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:41347",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.452136754989624
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:34790",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.45182493329048157
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:48364",
+      "target": 0,
+      "predicted_label": 3,
+      "confidence": 0.45031043887138367
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:31691",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.4407932162284851
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:37606",
+      "target": 3,
+      "predicted_label": 0,
+      "confidence": 0.4386970102787018
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:14074",
+      "target": 4,
+      "predicted_label": 3,
+      "confidence": 0.4365321099758148
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:58343",
+      "target": 6,
+      "predicted_label": 3,
+      "confidence": 0.4352823793888092
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:11036",
+      "target": 0,
+      "predicted_label": 2,
+      "confidence": 0.43341585993766785
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:46149",
+      "target": 6,
+      "predicted_label": 4,
+      "confidence": 0.4311898946762085
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:40336",
+      "target": 6,
+      "predicted_label": 3,
+      "confidence": 0.4301416277885437
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:34487",
+      "target": 3,
+      "predicted_label": 1,
+      "confidence": 0.42980119585990906
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:5980",
+      "target": 6,
+      "predicted_label": 3,
+      "confidence": 0.4261026978492737
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:820",
+      "target": 6,
+      "predicted_label": 0,
+      "confidence": 0.42603206634521484
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:38826",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.42263263463974
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:53167",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.4222547709941864
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:4",
+      "target": 0,
+      "predicted_label": 3,
+      "confidence": 0.4206133782863617
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:40873",
+      "target": 4,
+      "predicted_label": 6,
+      "confidence": 0.42005833983421326
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:25304",
+      "target": 3,
+      "predicted_label": 1,
+      "confidence": 0.41893014311790466
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:1727",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.41873618960380554
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:29046",
+      "target": 0,
+      "predicted_label": 2,
+      "confidence": 0.41640612483024597
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:8718",
+      "target": 0,
+      "predicted_label": 2,
+      "confidence": 0.4158780574798584
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:38849",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.4158567786216736
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:18481",
+      "target": 3,
+      "predicted_label": 6,
+      "confidence": 0.4113159477710724
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:18530",
+      "target": 9,
+      "predicted_label": 1,
+      "confidence": 0.4111729860305786
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:26701",
+      "target": 4,
+      "predicted_label": 3,
+      "confidence": 0.40991640090942383
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:51477",
+      "target": 6,
+      "predicted_label": 3,
+      "confidence": 0.4097992181777954
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:17059",
+      "target": 3,
+      "predicted_label": 6,
+      "confidence": 0.40846869349479675
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:40813",
+      "target": 4,
+      "predicted_label": 3,
+      "confidence": 0.4067258834838867
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:22704",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.40571120381355286
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:27128",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.4044042229652405
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:6449",
+      "target": 6,
+      "predicted_label": 3,
+      "confidence": 0.403522253036499
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:51621",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.40295177698135376
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:47320",
+      "target": 2,
+      "predicted_label": 0,
+      "confidence": 0.3992556631565094
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:30849",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.3932344317436218
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:44257",
+      "target": 2,
+      "predicted_label": 6,
+      "confidence": 0.3927786648273468
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:34518",
+      "target": 1,
+      "predicted_label": 3,
+      "confidence": 0.38903456926345825
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:12997",
+      "target": 3,
+      "predicted_label": 6,
+      "confidence": 0.3879817724227905
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:6730",
+      "target": 2,
+      "predicted_label": 3,
+      "confidence": 0.38721218705177307
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:25523",
+      "target": 0,
+      "predicted_label": 4,
+      "confidence": 0.3862500786781311
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:33703",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.3848554193973541
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:28002",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.3840372860431671
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:41917",
+      "target": 0,
+      "predicted_label": 4,
+      "confidence": 0.38351887464523315
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:6935",
+      "target": 6,
+      "predicted_label": 3,
+      "confidence": 0.37902888655662537
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:58774",
+      "target": 0,
+      "predicted_label": 3,
+      "confidence": 0.36918845772743225
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:34822",
+      "target": 2,
+      "predicted_label": 4,
+      "confidence": 0.3629341423511505
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:15956",
+      "target": 7,
+      "predicted_label": 5,
+      "confidence": 0.35994723439216614
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:38787",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.35739225149154663
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:19382",
+      "target": 6,
+      "predicted_label": 3,
+      "confidence": 0.3563980460166931
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:45578",
+      "target": 6,
+      "predicted_label": 1,
+      "confidence": 0.3436650037765503
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:18688",
+      "target": 0,
+      "predicted_label": 6,
+      "confidence": 0.34261730313301086
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:16515",
+      "target": 4,
+      "predicted_label": 1,
+      "confidence": 0.3385448455810547
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:19587",
+      "target": 8,
+      "predicted_label": 6,
+      "confidence": 0.33548998832702637
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:35388",
+      "target": 3,
+      "predicted_label": 2,
+      "confidence": 0.32944557070732117
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:52306",
+      "target": 3,
+      "predicted_label": 6,
+      "confidence": 0.3249204158782959
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:43325",
+      "target": 6,
+      "predicted_label": 2,
+      "confidence": 0.3206542730331421
+    },
+    {
+      "sample_id": "fashion_mnist:official_train:37650",
+      "target": 6,
+      "predicted_label": 1,
+      "confidence": 0.2783944010734558
+    }
+  ]
+}

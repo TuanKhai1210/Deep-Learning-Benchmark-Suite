@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "protocol_id": "a1-v0",
+  "model_name": "mlp",
+  "run_seed": 69,
+  "run_mode": "main",
+  "git_revision": "a8539bee778d99e2902a1dd36aa157c6ebb3a42c",
+  "git_dirty": false,
+  "code_state": "clean",
+  "split": {
+    "file": "configs/a1/splits/fashion_mnist_split.json",
+    "sha256": "e4a776305b2a1b5c392ba196d023de004f47124e8f831495b9733c48e72c25e6"
+  },
+  "normalization": {
+    "mean": [
+      0.28585961086061534
+    ],
+    "std": [
+      0.352790375749525
+    ],
+    "sha256": "e47b863cb866cdc61613bb88d772d02f8aedc0a21fa56b79dee27b27d341381e"
+  },
+  "sources": {
+    "model_config": {
+      "snapshot": "sources/model_config.py",
+      "sha256": "d6b249370a1501058018c1737a98c42474082f09b221ee2a83aea534eb19ee74"
+    },
+    "protocol_config": {
+      "snapshot": "sources/protocol_config.py",
+      "sha256": "f3eb84567653d612538df8b3bd36fc6d0ba53c3a886558da8b19a1e4636e3d1b"
+    }
+  }
+}

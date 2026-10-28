@@ -1,0 +1,15 @@
+{
+  "run_id": "a1_linear_main_seed67_20261023-003924_612a81",
+  "model": "linear",
+  "seed": 67,
+  "eval_split": "test",
+  "device": "cpu",
+  "checkpoint_sha256": "0c04f49cc0cb933838d8112b09409588a675338b215fbc34e430d217006325d8",
+  "metrics": {
+    "loss": 0.6081067151069641,
+    "accuracy": 0.7833,
+    "macro_f1": 0.7847816171213291,
+    "num_samples": 10000
+  },
+  "validation_replay": null
+}

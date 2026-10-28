@@ -1,0 +1,58 @@
+{
+  "identity": {
+    "profile": {
+      "version": "a1-postprocess-20261024-v1",
+      "processor_sha256": "6668b16dee6aa449b31b908adb77fac6754bd2b962643492e4d4ce299373d86c",
+      "device": "cpu",
+      "benchmark_requested": true,
+      "cpu_threads": 2,
+      "environment": {
+        "python_version": "3.13.16",
+        "torch_version": "2.11.0+cpu",
+        "numpy_version": "2.1.3",
+        "deterministic_algorithms": true,
+        "cuda_available": false,
+        "torch_cuda_version": null,
+        "os": "Linux",
+        "os_release": "6.6.122+",
+        "machine": "x86_64",
+        "processor": "x86_64",
+        "torchvision_version": "0.26.0+cpu",
+        "gpus": [],
+        "precision": {
+          "float32_matmul_precision": "highest",
+          "cuda_matmul_allow_tf32": null
+        },
+        "cudnn": {
+          "available": false,
+          "enabled": true,
+          "version": null,
+          "allow_tf32": null,
+          "benchmark": null,
+          "deterministic": null
+        }
+      }
+    },
+    "run_id": "a1_transformer_main_seed67_20261024-030332_1727fa",
+    "inputs": {
+      "config.json": "7c155327a8208e6e1a7590fad2f99e729b159cfd8df0af3d6c86e803a70b9dbf",
+      "metadata.json": "c6ff07229d9daad1bb9f615173bc1340689cc9a7d974437bfd4d1e9a104a08bb",
+      "metrics.json": "b71cad3c9e6d3c4b97cceb5a45264650aba8fb46141baa532d65ec6f80d16249",
+      "history.csv": "af8e9431fd38618697112f35499ee03762b04f0e6eb13b054fcbb37b39460952",
+      "best.pt": "3f4af9d6dc127bbff5fc7e5545d0a89e3d2f8b497f9ac9b45f1f36ea74679914",
+      "sources/model_config.py": "ec9f0f75aeb7cb5ef653c06bb406dbf2d05674dd9b654569b6fd7964d0da7687",
+      "sources/protocol_config.py": "f3eb84567653d612538df8b3bd36fc6d0ba53c3a886558da8b19a1e4636e3d1b"
+    }
+  },
+  "files": {
+    "confusion_test.png": "9245b381df5e54bca3eb685dfa597eadd4af080794292fd9d49d5106d219edad",
+    "errors.json": "fbdb0375eeb46b736327b49e028ca8d55ca7e38b2dd81cdab87da034ef5b0d6a",
+    "gallery_correct.png": "26f0032e6954c9d70a0cd22625a1e2e0ba937f318372c7bf73c5818fd94735d1",
+    "gallery_difficult_correct.png": "75d6c4946d84eae5a5622b1e75a6ca34757e805a1a9476032752995ab1397ad0",
+    "gallery_errors.png": "c611c04a5acfaf8fd4d27900c1146e85461dc42e484fab1b58a443dfb0d172bd",
+    "gallery_selection.json": "dcd1af23bb7b56ca02435f24e09ec71de3954ce414776534fca9762dde6c89bd",
+    "metrics.json": "8a0e14fbe4cf3b7bc91fb99fe0d0f2c415f52b307255a68547b6ccf3ce6bc397",
+    "per_class.csv": "15c0c397636935a59c5ff4642ddd45038938b10c608a51a278ccd3e32aa25d6d",
+    "predictions_test.csv": "4da843c54f74a2bd9acca1ab9d40b62d860545c94fbe98ed4230b2fe86c2288e"
+  }
+}

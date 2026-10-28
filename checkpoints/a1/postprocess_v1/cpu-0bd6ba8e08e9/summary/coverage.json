@@ -1,0 +1,8 @@
+{
+  "runs": 15,
+  "evaluation_rows": 30,
+  "sample_sd_ddof": 1,
+  "training_epoch_seconds_sum": 26079.97403383255,
+  "training_time_note": "Train+validation loop sum from old histories, not total fit time or measured inference.",
+  "test_policy": "Saved best checkpoints only. No tuning or seed selection from test results."
+}

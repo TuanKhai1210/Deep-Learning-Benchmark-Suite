@@ -1,0 +1,51 @@
+{
+  "identity": {
+    "profile": {
+      "version": "a1-postprocess-20261024-v1",
+      "processor_sha256": "6668b16dee6aa449b31b908adb77fac6754bd2b962643492e4d4ce299373d86c",
+      "device": "cpu",
+      "benchmark_requested": true,
+      "cpu_threads": 2,
+      "environment": {
+        "python_version": "3.13.16",
+        "torch_version": "2.11.0+cpu",
+        "numpy_version": "2.1.3",
+        "deterministic_algorithms": true,
+        "cuda_available": false,
+        "torch_cuda_version": null,
+        "os": "Linux",
+        "os_release": "6.6.122+",
+        "machine": "x86_64",
+        "processor": "x86_64",
+        "torchvision_version": "0.26.0+cpu",
+        "gpus": [],
+        "precision": {
+          "float32_matmul_precision": "highest",
+          "cuda_matmul_allow_tf32": null
+        },
+        "cudnn": {
+          "available": false,
+          "enabled": true,
+          "version": null,
+          "allow_tf32": null,
+          "benchmark": null,
+          "deterministic": null
+        }
+      }
+    },
+    "run_id": "a1_linear_main_seed67_20261023-003924_612a81",
+    "inputs": {
+      "config.json": "dd57800f9775d742f652eb158a955064175dd5c5380cd9b42834b2f4ff1848c9",
+      "metadata.json": "d467bc54c6e5adf2aa6126895dcd0850c93124598d2b8bcf51a69a0a3fb7d860",
+      "metrics.json": "99aef9c1591348f06b4b819ea2c19d3c72af536ccfe6131cacdbbb97e89694ef",
+      "history.csv": "5708e9eadc22a585595898b81f51b9cd6554655a28c43344c53c7892bfb54ab3",
+      "best.pt": "0c04f49cc0cb933838d8112b09409588a675338b215fbc34e430d217006325d8",
+      "sources/model_config.py": "224ff4daed9f2f7ef78c5b1a81ad160db1b0a4d0a4333a14da8091908d2f3b98",
+      "sources/protocol_config.py": "f3eb84567653d612538df8b3bd36fc6d0ba53c3a886558da8b19a1e4636e3d1b"
+    }
+  },
+  "files": {
+    "learning_curves.png": "4cde1689bc7a29887fdf7e5adb0ba66e3d452b6309bbc7ae2b75ea82618005bb",
+    "summary.json": "e77475576255a7b89e70c9203c1dbc4b2a2c56a0098595e259412f84f76057a9"
+  }
+}
