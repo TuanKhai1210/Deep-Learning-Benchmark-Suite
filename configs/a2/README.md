@@ -1,8 +1,11 @@
 # Assignment 2 configuration status
 
 The team proposes **TrashCan 1.0 Material semantic segmentation**.
-See the [proposal and evidence notes](../../reports/a2/README.md) and
+See the [A2 M2 draft report](../../reports/a2/Tiki-taka_A2_M2_Progress_2026-10-28.pdf),
+[proposal and evidence notes](../../reports/a2/README.md), and
 [project page](../../docs/a2.md).
+Experiment artifacts are organized in the [U-Net Drive folder](https://drive.google.com/drive/folders/1Z1gciMrfAX3pDuHOgkMnsbUoFGTkqpex)
+and [SegFormer Drive folder](https://drive.google.com/drive/folders/1dKtoohwxRteQADWZIaNkajRsN9K6D3gu).
 
 Initial code is available in this feature branch (25 October 2026):
 [implementation and commands](../../docs/a2_initial_code.md) and

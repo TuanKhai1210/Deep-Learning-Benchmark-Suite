@@ -13,9 +13,10 @@
 [Assignment 1](docs/a1.md) ·
 [A1 report](reports/a1/A1-report.pdf) ·
 [A1 slides](reports/a1/A1-presentation.pdf) ·
-[A1 presentation video](https://www.youtube.com/watch?v=w4O4cdzHDUY) ·
+[A1 presentation video](https://www.youtube.com/watch?v=cfNiu5XLi10) ·
 [A1 checkpoints](checkpoints/a1/) ·
 [Assignment 2 proposal](reports/a2/Tiki-taka_A2_TrashCan_Material_Proposal.pdf) ·
+[A2 M2 draft report](reports/a2/Tiki-taka_A2_M2_Progress_2026-10-28.pdf) ·
 [AI usage disclosure](AI_USAGE.md)
 
 </div>
@@ -86,10 +87,13 @@ real-data integration, GPU pilot and main results remain pending.
 
 The team proposes underwater marine-debris semantic segmentation using **TrashCan 1.0 Material**. The proposal retains all 16 foreground categories, adds background (17 output classes), and excludes ambiguous overlap and letterbox padding with ignore ID `255`.
 
+- [A2 M2 draft report PDF](reports/a2/Tiki-taka_A2_M2_Progress_2026-10-28.pdf)
 - [Dataset proposal PDF](reports/a2/Tiki-taka_A2_TrashCan_Material_Proposal.pdf)
 - [Assignment 2 project page](https://tuankhai1210.github.io/Deep-Learning-Benchmark-Suite/a2.html)
 - [Proposal and evidence notes](reports/a2/README.md)
 - [Group working data and EDA evidence](https://drive.google.com/drive/folders/1VwT0UyleGYyF9yrCtXaOwZpnp-ZRrfGD)
+- [U-Net experiment artifacts](https://drive.google.com/drive/folders/1Z1gciMrfAX3pDuHOgkMnsbUoFGTkqpex)
+- [SegFormer experiment artifacts](https://drive.google.com/drive/folders/1dKtoohwxRteQADWZIaNkajRsN9K6D3gu)
 
 Measured preliminary EDA contains **7,212 images**, **12,336 object annotations**, and **312 filename-derived video groups**. The original train/validation split shares **127 video groups**. The new seed-`36` split assigns whole videos: **5,057 / 1,077 / 1,078 images** in train/validation/test, with zero pairwise video-group overlap. Original-split findings remain evidence, not the training partition.
 

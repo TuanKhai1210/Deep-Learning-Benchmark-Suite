@@ -2,6 +2,13 @@
 
 Published in the repository on **7 October 2026**. Group: **Tiki-taka**.
 
+## Milestone 2 draft
+
+[Open the A2 M2 draft report PDF](Tiki-taka_A2_M2_Progress_2026-10-28.pdf).
+
+- [U-Net experiment artifacts](https://drive.google.com/drive/folders/1Z1gciMrfAX3pDuHOgkMnsbUoFGTkqpex)
+- [SegFormer experiment artifacts](https://drive.google.com/drive/folders/1dKtoohwxRteQADWZIaNkajRsN9K6D3gu)
+
 ## Proposal
 
 [Open the proposal PDF](Tiki-taka_A2_TrashCan_Material_Proposal.pdf).
