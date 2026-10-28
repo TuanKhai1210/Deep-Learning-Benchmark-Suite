@@ -1,0 +1,148 @@
+\documentclass[oneside,final,a4paper]{hcmut-report}
+
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,matrix}
+\setlength{\arrayrulewidth}{0.7pt}
+\usepackage{microtype}
+\setlength{\parindent}{0pt}
+\setlength{\emergencystretch}{3em}
+\setlength{\headheight}{44.3pt}
+\captionsetup{labelfont=bf}
+
+
+
+\deptname{Faculty of Computer Science and Engineering}
+\coursename{Deep Learning and Its Applications (CO3133)}
+\reporttype{ASSIGNMENT 1 -- FINAL REPORT}
+\title{From Linear Models to Modern Sequence Models}
+\advisor{Dr. Le Thanh Sach}
+\groupname{Tiki-taka}
+\reportplace{Ho Chi Minh City}
+\reporttime{October, 2026}
+\logofile{hcmut.png}
+
+\newcommand{\classname}{CC01}
+\newcommand{\instructorname}{Dr. Le Thanh Sach}
+\newcommand{\groupinfo}{Tiki-taka}
+
+% Cover layout adapted from the user-supplied OS_CAITOA template.
+\newcommand{\bkcoverpage}{%
+  \thispagestyle{empty}
+  \begin{center}
+    {\bfseries\fontsize{14}{16}\selectfont VIETNAM NATIONAL UNIVERSITY, HO CHI MINH CITY\par}
+    \vspace{0.15cm}
+    {\bfseries\fontsize{14}{16}\selectfont HO CHI MINH CITY UNIVERSITY OF TECHNOLOGY\par}
+    \vspace{0.15cm}
+    {\bfseries\fontsize{14}{16}\selectfont FACULTY OF COMPUTER SCIENCE AND ENGINEERING\par}
+    \vspace{1.1cm}
+    \includegraphics[width=3.2cm]{hcmut.png}
+    \vspace{0.9cm}
+
+    {\bfseries\fontsize{17}{21}\selectfont DEEP LEARNING AND ITS APPLICATIONS\par}
+    {\bfseries\fontsize{15}{19}\selectfont CO3133 -- SEMESTER-261\par}
+    \vspace{0.5cm}
+    {\bfseries\fontsize{16}{20}\selectfont ASSIGNMENT 1 -- FINAL REPORT\par}
+    \vspace{0.45cm}
+    {\bfseries\fontsize{20}{24}\selectfont
+      From Linear Models to Modern Sequence Models:\par
+      A Comparative Study for Image Classification\par}
+    \vspace{0.9cm}
+
+    \begin{tabular}{rl}
+      \textbf{Class:} & \classname \\
+      \textbf{Instructor:} & \instructorname \\
+      \textbf{Group:} & \groupinfo \\
+    \end{tabular}
+    \vspace{0.35cm}
+
+    \begin{tabular}{|c|l|c|}
+      \hline
+      \textbf{No.} & \textbf{Full Name} & \textbf{Student ID} \\
+      \hline
+      1 & Nguyen Anh Khoa & 2452539 \\ \hline
+      2 & Nguyen Hao Thien & 2453194 \\ \hline
+      3 & Ta Tuan Khai & 2452515 \\ \hline
+    \end{tabular}
+    \vfill
+    {\bfseries Ho Chi Minh City, October, 2026}
+  \end{center}
+  \clearpage
+}
+
+\newcommand{\workdistributionpage}{%
+  \thispagestyle{empty}
+  \begin{center}
+    {\bfseries\fontsize{17}{20}\selectfont WORK DISTRIBUTION}
+  \end{center}
+  \vspace{0.6cm}
+  \noindent\textbf{Course:} Deep Learning and Its Applications -- CO3133\par
+  \noindent\textbf{Assignment:} Assignment 1 -- Final Report\par
+  \noindent\textbf{Class:} \classname\par
+  \noindent\textbf{Instructor:} \instructorname\par
+  \noindent\textbf{Group:} \groupinfo\par
+  \vspace{0.7cm}
+  \begin{center}
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabularx}{\textwidth}{|c|>{\raggedright\arraybackslash}X|c|>{\raggedright\arraybackslash}X|c|}
+      \hline
+      \textbf{No.} & \textbf{Name} & \textbf{Student ID} & \textbf{Assigned Tasks} & \textbf{Completion} \\
+      \hline
+      1 & Nguyen Anh Khoa & 2452539 & Shared engine, MLP/GRU, metrics, checkpoints, and timing & 100\% \\ \hline
+      2 & Nguyen Hao Thien & 2453194 & Dataset, EDA, preprocessing, Linear/CNN, and error analysis & 100\% \\ \hline
+      3 & Ta Tuan Khai & 2452515 & Transformer, configurations, artifacts, integration, and report & 100\% \\ \hline
+    \end{tabularx}
+  \end{center}
+  \clearpage
+}
+
+
+\usepackage[section]{placeins}
+\usepackage{needspace}
+\usepackage{xurl}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\makeatletter
+\renewcommand\small{\@setfontsize\small{11pt}{13.2pt}}
+\renewcommand\footnotesize{\@setfontsize\footnotesize{10pt}{12pt}}
+\makeatother
+\captionsetup{font=small,labelfont=bf}
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true,columns=fullflexible}
+\setlength{\textfloatsep}{12pt plus 2pt minus 2pt}
+\setlength{\floatsep}{10pt plus 2pt minus 2pt}
+\setlength{\intextsep}{12pt plus 2pt minus 2pt}
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{5}
+\renewcommand{\topfraction}{.95}
+\renewcommand{\bottomfraction}{.90}
+\renewcommand{\textfraction}{.05}
+\hypersetup{pdftitle={Tiki-taka A1 Final Report: Architecture Comparison on Fashion-MNIST},
+pdfauthor={Nguyen Anh Khoa; Nguyen Hao Thien; Ta Tuan Khai}}
+
+\begin{document}
+\hypersetup{pageanchor=false}
+\bkcoverpage
+\workdistributionpage
+
+\hypersetup{pageanchor=true}
+\pagenumbering{roman}
+\section*{Abstract}
+\addcontentsline{toc}{section}{Abstract}
+\input{sections/00-abstract}
+\clearpage
+\tableofcontents
+\clearpage
+
+\pagenumbering{arabic}
+\input{sections/01-problem-data}
+\clearpage
+\input{sections/02-methodology}
+\clearpage
+\input{sections/03-results}
+\clearpage
+\input{sections/04-supporting}
+\clearpage
+\appendix
+\input{sections/05-appendices}
+\end{document}

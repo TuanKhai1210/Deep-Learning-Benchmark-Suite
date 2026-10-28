@@ -1,0 +1,86 @@
+{
+  "identity": {
+    "version": "a1-timing-only-20261024-v1",
+    "code_sha256": "45002f1fce51eccd68163d6999eddfae051093e691f6f217ae30fdc6d90cf170",
+    "device": "cpu",
+    "cpu_threads": 2,
+    "environment": {
+      "python_version": "3.14.6",
+      "torch_version": "2.13.0+cpu",
+      "numpy_version": "2.5.2",
+      "deterministic_algorithms": true,
+      "cuda_available": false,
+      "torch_cuda_version": null,
+      "os": "Windows",
+      "os_release": "11",
+      "machine": "AMD64",
+      "processor": "Intel64 Family 6 Model 170 Stepping 4, GenuineIntel",
+      "torchvision_version": "0.28.0+cpu",
+      "gpus": [],
+      "precision": {
+        "float32_matmul_precision": "highest",
+        "cuda_matmul_allow_tf32": null
+      },
+      "cudnn": {
+        "available": false,
+        "enabled": true,
+        "version": null,
+        "allow_tf32": null,
+        "benchmark": null,
+        "deterministic": null
+      }
+    },
+    "source_evaluation_profile": "cpu-0bd6ba8e08e9",
+    "source_summary_sha256": "42af700abcaecba0824caef8320e512e9b47dfd9a568cb9659aa3d064582855a"
+  },
+  "environment": {
+    "python_version": "3.14.6",
+    "torch_version": "2.13.0+cpu",
+    "numpy_version": "2.5.2",
+    "deterministic_algorithms": true,
+    "cuda_available": false,
+    "torch_cuda_version": null,
+    "os": "Windows",
+    "os_release": "11",
+    "machine": "AMD64",
+    "processor": "Intel64 Family 6 Model 170 Stepping 4, GenuineIntel",
+    "torchvision_version": "0.28.0+cpu",
+    "gpus": [],
+    "system_ram": {
+      "total_bytes": 16766066688,
+      "total_gb": 15.61
+    },
+    "precision": {
+      "float32_matmul_precision": "highest",
+      "cuda_matmul_allow_tf32": null
+    },
+    "cudnn": {
+      "available": false,
+      "enabled": true,
+      "version": null,
+      "allow_tf32": null,
+      "benchmark": null,
+      "deterministic": null
+    }
+  },
+  "source_ledger": {
+    "git_commit": "a8539bee778d99e2902a1dd36aa157c6ebb3a42c",
+    "split_hash": "e4a776305b2a1b5c392ba196d023de004f47124e8f831495b9733c48e72c25e6",
+    "statistics_hash": "e47b863cb866cdc61613bb88d772d02f8aedc0a21fa56b79dee27b27d341381e",
+    "models": [
+      "linear",
+      "mlp",
+      "cnn",
+      "rnn",
+      "transformer"
+    ],
+    "seeds": [
+      69420,
+      67,
+      69
+    ]
+  },
+  "source_evaluation_profile": "C:\\Users\\tuank\\Downloads\\cpu-0bd6ba8e08e9\\cpu-0bd6ba8e08e9",
+  "training_performed": false,
+  "validation_or_test_rerun": false
+}

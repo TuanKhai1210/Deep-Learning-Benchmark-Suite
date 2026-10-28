@@ -1,0 +1,15 @@
+\begin{table}[H]
+\centering\small
+\caption{Measured metrics at epoch 15. U-Net is a completed run; S0 is a15-epoch partial snapshot. All scores are on a0--1 scale.}\label{tab:metrics}
+\begin{tabular}{lrrr}\toprule
+Metric & U validation & U test & S0 validation \\ \midrule
+Foreground mIoU & 0.053085 & 0.035627 & 0.195336 \\
+Foreground Dice & 0.084369 & 0.058519 & 0.280506 \\
+Trash mIoU & 0.032704 & 0.014652 & 0.137865 \\
+All-class mIoU & 0.103646 & 0.087050 & 0.239732 \\
+All-class Dice & 0.135542 & 0.111123 & 0.321323 \\
+CE + Dice loss & 1.390246 & 1.407840 & 1.134105 \\
+Valid pixels (M) & 176.765 & 186.340 & 176.765 \\
+Ignored pixels (\%) & 37.39 & 34.06 & 37.39 \\
+\bottomrule\end{tabular}
+\end{table}

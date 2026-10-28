@@ -1,0 +1,58 @@
+\section{Limitations and next experiments}
+The evidence covers one completed U-Net run and one partial SegFormer S0 run, each at seed 69420. SegFormer test performance, the S0/S1 augmentation effect and multi-seed variability remain outside the measured results. The current S0 validation lead must not be interpreted as a generalization guarantee or a causal estimate of pretraining.
+
+Video-disjoint membership prevents the measured 127 source video-ID overlaps, but filename-derived IDs do not establish independence of dives, locations or scenes. The semantic conversion ignores cross-class conflicts and discards instance identities. Letterboxing and class imbalance also affect what the reported pixel counts and overlap scores represent. The two zero-IoU S0 validation classes and the U-Net foreground misses remain substantive limitations despite improvements in other classes.
+
+The next steps are sequenced to preserve the comparison:
+\begin{enumerate}
+\item Resume S0 from the saved epoch 15 state until the existing budget or early-stopping condition is reached. Retain the original settings and select best using validation foreground mIoU.
+\item Train S1 from its prescribed pretrained initialization with only train color augmentation changed. Verify equality of the actual main initial-state hashes and compatibility of the numerical environments before interpreting the paired contrast.
+\item Evaluate completed selected checkpoints with the existing fixed test stage, then report the two arms separately. Test results describe the completed configurations and must not guide changes to this pair.
+\item Compare foreground mIoU/Dice and class-level changes; export prediction galleries to inspect foreground omission and rare-category failures. If compute permits, repeat the paired comparison with the prespecified additional seeds 67 and 69 to quantify seed variation.
+\item Measure inference cost using the same device, input shape, precision, batch size and timing definition. Keep those measurements separate from epoch-phase and pilot timings.
+\end{enumerate}
+If runtime resources are limited, executing S0 and S1 in separate sessions with the same pair tag and locked environment preserves the intended factor better than silently changing batch size or resolution in one arm. A deliberate protocol change requires a new pair and separately reported settings.
+
+\section{Conclusion}
+The project has moved beyond implementation setup. It has a verified video-disjoint data pipeline, a completed scratch U-Net training/test experiment, two successful SegFormer GPU pilots, and 15 completed epochs of pretrained SegFormer S0 main training.
+
+U-Net selects epoch 15 after 23 completed epochs and reaches test foreground mIoU 0.035627 and Dice 0.058519. The incomplete S0 run reaches best-so-far validation mIoU 0.195336 at epoch 15, compared with U-Net validation 0.053085. The current S0 result is promising at the configuration level, while large train--validation gaps and persistent rare-class failures show that segmentation quality remains uneven.
+
+This M2 draft establishes current progress, not a completed architecture or augmentation study. Completing S0 and S1, preserving validation-based selection, and then evaluating the selected checkpoints are required before answering whether the planned color augmentation helps. Robustness across seeds and inference-cost trade-offs remain subsequent measurements.
+
+\section{Reproducibility and evidence record}
+\subsection{Source, effective configuration and provenance}
+The supplied U and S0 run records use source revision
+\begin{quote}\small\path{7df323698d1ae4d5122850a54eb38b01609d80f1}\end{quote}
+and source digest
+\begin{quote}\small\path{13ea100cefed8e7bd13c38153ebd3321760804366e2b5a66b47d2076d7e0c503}.\end{quote}
+The manifest canonical digest is
+\begin{quote}\small\path{87905f1a97dd2c04194e049ca61d1a7f3bbe2942e9fe17dc2d737c371cdce943}.\end{quote}
+Canonical manifest hashing excludes its own digest field. The selected U checkpoint SHA-256 is
+\begin{quote}\small\path{05aa0e8acf653eb56b4e3de979850e92687286e43a0cc75d65d63ba783f9cbe8},\end{quote}
+and the current best-so-far S0 checkpoint SHA-256 is
+\begin{quote}\small\path{9e6a881541693f81eba82f16c948160b393b082faad5d52685c7a26598cc862b}.\end{quote}
+The source snapshots and these digests were checked against the supplied bytes during the 28 October report update. This verifies consistency of the archived artifacts; it is not an independent rerun on raw images.
+
+The source repository's shared protocol file deliberately stores draft defaults. At execution, the notebook records a successful matching GPU pilot and the existing approval reference, freezes the run-local configuration, and saves it in the setup ledger, effective configuration and identity. The supplied frozen configurations agree with those records. Thus the draft defaults and frozen effective run settings describe different stages of the same setup procedure, rather than an unresolved contradiction.
+
+The paired ledger also records source/helper hashes, base configurations and numerical-runtime settings. S0 and S1 frozen configs were checked to differ only in run name, color switch and their distinct pilot-evidence references. Separate pilot references record evidence; they are not an experimental treatment.
+
+\subsection{Resume and artifact verification scope}
+The supplied U continuation records a resume at epoch 7 with changes in kernel-release descriptor and total RAM. Its final history/checkpoint and test marker agree through epoch 23 and best 15. The original parent files are not part of that supplied continuation folder, so this report does not claim a new byte-by-byte verification against the absent parent checkpoint. The recovery implementation had separately passed CPU preservation checks when authored.
+
+For S0, the audit verified checkpoint/metadata identities, selected epoch, full 15-epoch history, source-file hashes, configuration and all training/validation confusion-derived aggregate and per-class metrics. S1 verification covers the setup, pilot, manifest and helper bundle. The U validation/test outputs match the previously verified file hashes and confusion-derived metrics. All supplied input hashes remain unchanged.
+
+The accompanying evidence files contain the input hash inventory, numerical verification JSON and CSV histories. Report tables and curves are generated from those audited records. No additional main training, checkpoint inference or test evaluation was run for report preparation.
+
+\section{Academic integrity and AI-use disclosure}
+OpenAI Codex assisted with the segmentation code/notebook implementation, checkpoint/provenance checks, report organization, prose and generation of tables/plots from saved artifacts. During this report update, scripts verified checkpoint metadata, recomputed metrics from existing confusion matrices and rendered the report; they did not train the models, run checkpoint inference or create annotation labels. The numerical training/evaluation outputs were produced by the project runs executed on Colab.
+
+Representative report instructions were to write only through the current progress and distinguish completed U-Net, partial S0 and pilot-only S1. The authors retain responsibility for reviewing the data definitions, interpretations, citations and disclosed AI assistance before submission. No unverified contribution percentage is assigned in this draft.
+
+\begin{thebibliography}{9}
+\bibitem{trashcan} J. Hong, M. Fulton and J. Sattar. \emph{TrashCan: A Semantically-Segmented Dataset towards Visual Detection of Marine Debris}.2020. \url{https://arxiv.org/abs/2007.08097}.
+\bibitem{unet} O. Ronneberger, P. Fischer and T. Brox. \emph{U-Net: Convolutional Networks for Biomedical Image Segmentation}.2015. \url{https://arxiv.org/abs/1505.04597}.
+\bibitem{segformer} E. Xie et al. \emph{SegFormer: Simple and Efficient Design for Semantic Segmentation with Transformers}.2021. \url{https://arxiv.org/abs/2105.15203}.
+\bibitem{project} Tiki-taka. \emph{TrashCan-Material EDA, fixed seed 36 manifest, source snapshots, setup/pilot ledgers and run artifacts}. EDA measured 5 October 2026; supplied training artifacts audited 28 October 2026. Machine-readable evidence accompanies this report source.
+\end{thebibliography}

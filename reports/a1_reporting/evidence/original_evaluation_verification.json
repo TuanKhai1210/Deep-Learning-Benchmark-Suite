@@ -1,0 +1,901 @@
+{
+  "verified_at": "2026-10-24T21:46:17+07:00",
+  "source_root": "C:\\Users\\tuank\\Downloads\\cpu-0bd6ba8e08e9\\cpu-0bd6ba8e08e9",
+  "run_count": 15,
+  "evaluation_count": 30,
+  "prediction_rows_recomputed": 300000,
+  "unique_samples_per_split": 10000,
+  "completion_markers_verified": 61,
+  "source_files": 382,
+  "source_bytes": 95544272,
+  "issues": [],
+  "session": {
+    "identity": {
+      "version": "a1-postprocess-20261024-v1",
+      "processor_sha256": "6668b16dee6aa449b31b908adb77fac6754bd2b962643492e4d4ce299373d86c",
+      "device": "cpu",
+      "benchmark_requested": true,
+      "cpu_threads": 2,
+      "environment": {
+        "python_version": "3.13.16",
+        "torch_version": "2.11.0+cpu",
+        "numpy_version": "2.1.3",
+        "deterministic_algorithms": true,
+        "cuda_available": false,
+        "torch_cuda_version": null,
+        "os": "Linux",
+        "os_release": "6.6.122+",
+        "machine": "x86_64",
+        "processor": "x86_64",
+        "torchvision_version": "0.26.0+cpu",
+        "gpus": [],
+        "precision": {
+          "float32_matmul_precision": "highest",
+          "cuda_matmul_allow_tf32": null
+        },
+        "cudnn": {
+          "available": false,
+          "enabled": true,
+          "version": null,
+          "allow_tf32": null,
+          "benchmark": null,
+          "deterministic": null
+        }
+      }
+    },
+    "environment": {
+      "python_version": "3.13.16",
+      "torch_version": "2.11.0+cpu",
+      "numpy_version": "2.1.3",
+      "deterministic_algorithms": true,
+      "cuda_available": false,
+      "torch_cuda_version": null,
+      "os": "Linux",
+      "os_release": "6.6.122+",
+      "machine": "x86_64",
+      "processor": "x86_64",
+      "torchvision_version": "0.26.0+cpu",
+      "gpus": [],
+      "system_ram": {
+        "total_bytes": 13605830656,
+        "total_gb": 12.67
+      },
+      "precision": {
+        "float32_matmul_precision": "highest",
+        "cuda_matmul_allow_tf32": null
+      },
+      "cudnn": {
+        "available": false,
+        "enabled": true,
+        "version": null,
+        "allow_tf32": null,
+        "benchmark": null,
+        "deterministic": null
+      }
+    },
+    "started_utc": "2026-10-24T14:35:24.841658+00:00",
+    "source_ledger": {
+      "git_commit": "a8539bee778d99e2902a1dd36aa157c6ebb3a42c",
+      "split_hash": "e4a776305b2a1b5c392ba196d023de004f47124e8f831495b9733c48e72c25e6",
+      "statistics_hash": "e47b863cb866cdc61613bb88d772d02f8aedc0a21fa56b79dee27b27d341381e",
+      "models": [
+        "linear",
+        "mlp",
+        "cnn",
+        "rnn",
+        "transformer"
+      ],
+      "seeds": [
+        69420,
+        67,
+        69
+      ]
+    }
+  },
+  "aggregates": [
+    {
+      "model": "linear",
+      "eval_split": "validation",
+      "n": 3,
+      "parameter_count": 7850,
+      "loss_mean": 0.5867257529894511,
+      "loss_sample_sd": 0.00233894557037295,
+      "accuracy_mean": 0.7926666666666666,
+      "accuracy_sample_sd": 0.0017616280348965064,
+      "macro_f1_mean": 0.7925395860909363,
+      "macro_f1_sample_sd": 0.0015901232105281758,
+      "inference_ms_per_image_mean": null
+    },
+    {
+      "model": "linear",
+      "eval_split": "test",
+      "n": 3,
+      "parameter_count": 7850,
+      "loss_mean": 0.6114170841534933,
+      "loss_sample_sd": 0.0029177975809777596,
+      "accuracy_mean": 0.7837666666666667,
+      "accuracy_sample_sd": 0.0028290163190291934,
+      "macro_f1_mean": 0.7842745004733578,
+      "macro_f1_sample_sd": 0.003070569443147146,
+      "inference_ms_per_image_mean": null
+    },
+    {
+      "model": "mlp",
+      "eval_split": "validation",
+      "n": 3,
+      "parameter_count": 235146,
+      "loss_mean": 0.2648751813173294,
+      "loss_sample_sd": 0.0005706650411062709,
+      "accuracy_mean": 0.9033333333333333,
+      "accuracy_sample_sd": 0.001650252505931545,
+      "macro_f1_mean": 0.9028847361332526,
+      "macro_f1_sample_sd": 0.0015685578929666934,
+      "inference_ms_per_image_mean": null
+    },
+    {
+      "model": "mlp",
+      "eval_split": "test",
+      "n": 3,
+      "parameter_count": 235146,
+      "loss_mean": 0.2880636585990588,
+      "loss_sample_sd": 0.0025785165860283004,
+      "accuracy_mean": 0.8972,
+      "accuracy_sample_sd": 0.001044030650891041,
+      "macro_f1_mean": 0.8969816589095828,
+      "macro_f1_sample_sd": 0.0009364981302547477,
+      "inference_ms_per_image_mean": null
+    },
+    {
+      "model": "cnn",
+      "eval_split": "validation",
+      "n": 3,
+      "parameter_count": 28426,
+      "loss_mean": 0.2414793786207835,
+      "loss_sample_sd": 0.0042695160201309534,
+      "accuracy_mean": 0.9154666666666667,
+      "accuracy_sample_sd": 0.0011503622617824775,
+      "macro_f1_mean": 0.9155587377214375,
+      "macro_f1_sample_sd": 0.0005640350925821682,
+      "inference_ms_per_image_mean": null
+    },
+    {
+      "model": "cnn",
+      "eval_split": "test",
+      "n": 3,
+      "parameter_count": 28426,
+      "loss_mean": 0.2642115610957146,
+      "loss_sample_sd": 0.008548606840174586,
+      "accuracy_mean": 0.9069,
+      "accuracy_sample_sd": 0.003235737937472688,
+      "macro_f1_mean": 0.9072605106307035,
+      "macro_f1_sample_sd": 0.002624498645711977,
+      "inference_ms_per_image_mean": null
+    },
+    {
+      "model": "rnn",
+      "eval_split": "validation",
+      "n": 3,
+      "parameter_count": 61962,
+      "loss_mean": 0.26548538639942804,
+      "loss_sample_sd": 0.004377678581373289,
+      "accuracy_mean": 0.9106333333333333,
+      "accuracy_sample_sd": 0.0006110100926607719,
+      "macro_f1_mean": 0.9105518794971755,
+      "macro_f1_sample_sd": 0.0006437948648739001,
+      "inference_ms_per_image_mean": null
+    },
+    {
+      "model": "rnn",
+      "eval_split": "test",
+      "n": 3,
+      "parameter_count": 61962,
+      "loss_mean": 0.28356761398812136,
+      "loss_sample_sd": 0.002350913689559701,
+      "accuracy_mean": 0.9029666666666667,
+      "accuracy_sample_sd": 0.0025540817005987484,
+      "macro_f1_mean": 0.9028124072890367,
+      "macro_f1_sample_sd": 0.0025019161053083513,
+      "inference_ms_per_image_mean": null
+    },
+    {
+      "model": "transformer",
+      "eval_split": "validation",
+      "n": 3,
+      "parameter_count": 104970,
+      "loss_mean": 0.23698801251649856,
+      "loss_sample_sd": 0.0025028562753628067,
+      "accuracy_mean": 0.9158,
+      "accuracy_sample_sd": 0.00026457513110649287,
+      "macro_f1_mean": 0.9154841997375956,
+      "macro_f1_sample_sd": 0.00010594680954695771,
+      "inference_ms_per_image_mean": null
+    },
+    {
+      "model": "transformer",
+      "eval_split": "test",
+      "n": 3,
+      "parameter_count": 104970,
+      "loss_mean": 0.24440035425424575,
+      "loss_sample_sd": 0.004021474038541661,
+      "accuracy_mean": 0.9126666666666666,
+      "accuracy_sample_sd": 0.0023671361036774613,
+      "macro_f1_mean": 0.9123389356890395,
+      "macro_f1_sample_sd": 0.002151380045576667,
+      "inference_ms_per_image_mean": null
+    }
+  ],
+  "validation_replay_deltas": [
+    {
+      "run_id": "a1_linear_main_seed69420_20261023-002758_9761a8",
+      "accuracy": 0.0,
+      "macro_f1": 0.0,
+      "loss": 1.5258788677030566e-09
+    },
+    {
+      "run_id": "a1_linear_main_seed67_20261023-003924_612a81",
+      "accuracy": 0.0,
+      "macro_f1": 0.0,
+      "loss": 2.9611587515354643e-08
+    },
+    {
+      "run_id": "a1_linear_main_seed69_20261023-004922_8fcd80",
+      "accuracy": 0.0,
+      "macro_f1": 0.0,
+      "loss": -6.818771325356465e-09
+    },
+    {
+      "run_id": "a1_mlp_main_seed69420_20261023-005847_49b2dc",
+      "accuracy": 0.0,
+      "macro_f1": 0.0,
+      "loss": 5.698204019743969e-09
+    },
+    {
+      "run_id": "a1_mlp_main_seed67_20261023-013028_2a1c4c",
+      "accuracy": 0.0,
+      "macro_f1": 0.0,
+      "loss": 1.239776614703203e-09
+    },
+    {
+      "run_id": "a1_mlp_main_seed69_20261023-015641_53b249",
+      "accuracy": 0.0,
+      "macro_f1": 0.0,
+      "loss": -8.392333994411416e-09
+    },
+    {
+      "run_id": "a1_cnn_main_seed69420_20261023-022827_cd3858",
+      "accuracy": 0.0,
+      "macro_f1": 0.0,
+      "loss": -8.845329274587144e-09
+    },
+    {
+      "run_id": "a1_cnn_main_seed67_20261023-030133_702c4e",
+      "accuracy": 0.0,
+      "macro_f1": 0.0,
+      "loss": -6.866455071197208e-09
+    },
+    {
+      "run_id": "a1_cnn_main_seed69_20261023-064233_c73732",
+      "accuracy": 0.0,
+      "macro_f1": 0.0,
+      "loss": -1.1348724349158346e-08
+    },
+    {
+      "run_id": "a1_rnn_main_seed69420_20261023-071609_51281c",
+      "accuracy": 0.0,
+      "macro_f1": 0.0,
+      "loss": -1.883506794975176e-09
+    },
+    {
+      "run_id": "a1_rnn_main_seed67_20261023-074850_b7dcdb",
+      "accuracy": 0.0,
+      "macro_f1": 0.0,
+      "loss": 1.6427040117061864e-08
+    },
+    {
+      "run_id": "a1_rnn_main_seed69_20261023-082158_329a4e",
+      "accuracy": 0.0,
+      "macro_f1": 0.0,
+      "loss": -3.840923312736777e-08
+    },
+    {
+      "run_id": "a1_transformer_main_seed69420_20261023-085501_3eb003",
+      "accuracy": 0.0,
+      "macro_f1": 0.0,
+      "loss": -5.602836528062483e-10
+    },
+    {
+      "run_id": "a1_transformer_main_seed67_20261024-030332_1727fa",
+      "accuracy": 0.0,
+      "macro_f1": 0.0,
+      "loss": 2.417564390344573e-08
+    },
+    {
+      "run_id": "a1_transformer_main_seed69_20261024-034117_45d824",
+      "accuracy": 0.0,
+      "macro_f1": 0.0,
+      "loss": -3.015995025945628e-08
+    }
+  ],
+  "top_confusions": [
+    {
+      "model": "linear",
+      "true_class": "Coat",
+      "predicted_class": "Pullover",
+      "mean_errors_per_run": 230.66666666666666
+    },
+    {
+      "model": "linear",
+      "true_class": "Pullover",
+      "predicted_class": "Shirt",
+      "mean_errors_per_run": 187.66666666666666
+    },
+    {
+      "model": "linear",
+      "true_class": "Shirt",
+      "predicted_class": "T-shirt/top",
+      "mean_errors_per_run": 159.66666666666666
+    },
+    {
+      "model": "linear",
+      "true_class": "Coat",
+      "predicted_class": "Shirt",
+      "mean_errors_per_run": 149.66666666666666
+    },
+    {
+      "model": "linear",
+      "true_class": "Shirt",
+      "predicted_class": "Pullover",
+      "mean_errors_per_run": 145.33333333333334
+    },
+    {
+      "model": "mlp",
+      "true_class": "Shirt",
+      "predicted_class": "T-shirt/top",
+      "mean_errors_per_run": 114.33333333333333
+    },
+    {
+      "model": "mlp",
+      "true_class": "T-shirt/top",
+      "predicted_class": "Shirt",
+      "mean_errors_per_run": 106.33333333333333
+    },
+    {
+      "model": "mlp",
+      "true_class": "Pullover",
+      "predicted_class": "Coat",
+      "mean_errors_per_run": 83.66666666666667
+    },
+    {
+      "model": "mlp",
+      "true_class": "Shirt",
+      "predicted_class": "Coat",
+      "mean_errors_per_run": 80
+    },
+    {
+      "model": "mlp",
+      "true_class": "Coat",
+      "predicted_class": "Pullover",
+      "mean_errors_per_run": 71
+    },
+    {
+      "model": "cnn",
+      "true_class": "T-shirt/top",
+      "predicted_class": "Shirt",
+      "mean_errors_per_run": 109
+    },
+    {
+      "model": "cnn",
+      "true_class": "Shirt",
+      "predicted_class": "T-shirt/top",
+      "mean_errors_per_run": 93.33333333333333
+    },
+    {
+      "model": "cnn",
+      "true_class": "Shirt",
+      "predicted_class": "Coat",
+      "mean_errors_per_run": 71.66666666666667
+    },
+    {
+      "model": "cnn",
+      "true_class": "Coat",
+      "predicted_class": "Shirt",
+      "mean_errors_per_run": 64
+    },
+    {
+      "model": "cnn",
+      "true_class": "Pullover",
+      "predicted_class": "Shirt",
+      "mean_errors_per_run": 61
+    },
+    {
+      "model": "rnn",
+      "true_class": "T-shirt/top",
+      "predicted_class": "Shirt",
+      "mean_errors_per_run": 119.33333333333333
+    },
+    {
+      "model": "rnn",
+      "true_class": "Shirt",
+      "predicted_class": "T-shirt/top",
+      "mean_errors_per_run": 101.33333333333333
+    },
+    {
+      "model": "rnn",
+      "true_class": "Coat",
+      "predicted_class": "Pullover",
+      "mean_errors_per_run": 76
+    },
+    {
+      "model": "rnn",
+      "true_class": "Pullover",
+      "predicted_class": "Coat",
+      "mean_errors_per_run": 72.66666666666667
+    },
+    {
+      "model": "rnn",
+      "true_class": "Shirt",
+      "predicted_class": "Coat",
+      "mean_errors_per_run": 64
+    },
+    {
+      "model": "transformer",
+      "true_class": "T-shirt/top",
+      "predicted_class": "Shirt",
+      "mean_errors_per_run": 94
+    },
+    {
+      "model": "transformer",
+      "true_class": "Shirt",
+      "predicted_class": "T-shirt/top",
+      "mean_errors_per_run": 93
+    },
+    {
+      "model": "transformer",
+      "true_class": "Shirt",
+      "predicted_class": "Coat",
+      "mean_errors_per_run": 92.33333333333333
+    },
+    {
+      "model": "transformer",
+      "true_class": "Shirt",
+      "predicted_class": "Pullover",
+      "mean_errors_per_run": 56
+    },
+    {
+      "model": "transformer",
+      "true_class": "Coat",
+      "predicted_class": "Pullover",
+      "mean_errors_per_run": 55.666666666666664
+    }
+  ],
+  "test_per_class": [
+    {
+      "model": "linear",
+      "class_id": 0,
+      "class_name": "T-shirt/top",
+      "precision_mean": 0.7712476320031647,
+      "recall_mean": 0.769,
+      "f1_mean": 0.7699216779189035
+    },
+    {
+      "model": "linear",
+      "class_id": 1,
+      "class_name": "Trouser",
+      "precision_mean": 0.8983401296850682,
+      "recall_mean": 0.8856666666666667,
+      "f1_mean": 0.891493170339422
+    },
+    {
+      "model": "linear",
+      "class_id": 2,
+      "class_name": "Pullover",
+      "precision_mean": 0.6055924635853388,
+      "recall_mean": 0.66,
+      "f1_mean": 0.6307015895231115
+    },
+    {
+      "model": "linear",
+      "class_id": 3,
+      "class_name": "Dress",
+      "precision_mean": 0.7508275521339908,
+      "recall_mean": 0.7903333333333333,
+      "f1_mean": 0.7698701324643081
+    },
+    {
+      "model": "linear",
+      "class_id": 4,
+      "class_name": "Coat",
+      "precision_mean": 0.7148702536295795,
+      "recall_mean": 0.5616666666666666,
+      "f1_mean": 0.628011519139684
+    },
+    {
+      "model": "linear",
+      "class_id": 5,
+      "class_name": "Sandal",
+      "precision_mean": 0.9283959295810637,
+      "recall_mean": 0.8873333333333333,
+      "f1_mean": 0.9072760922039813
+    },
+    {
+      "model": "linear",
+      "class_id": 6,
+      "class_name": "Shirt",
+      "precision_mean": 0.4741301794209876,
+      "recall_mean": 0.518,
+      "f1_mean": 0.49496018655934854
+    },
+    {
+      "model": "linear",
+      "class_id": 7,
+      "class_name": "Sneaker",
+      "precision_mean": 0.8641848747779496,
+      "recall_mean": 0.9353333333333333,
+      "f1_mean": 0.8981155584435287
+    },
+    {
+      "model": "linear",
+      "class_id": 8,
+      "class_name": "Bag",
+      "precision_mean": 0.9327584098133008,
+      "recall_mean": 0.915,
+      "f1_mean": 0.9237774318514252
+    },
+    {
+      "model": "linear",
+      "class_id": 9,
+      "class_name": "Ankle boot",
+      "precision_mean": 0.9427901823955851,
+      "recall_mean": 0.9153333333333333,
+      "f1_mean": 0.9286176462898644
+    },
+    {
+      "model": "mlp",
+      "class_id": 0,
+      "class_name": "T-shirt/top",
+      "precision_mean": 0.8473083820515844,
+      "recall_mean": 0.8453333333333333,
+      "f1_mean": 0.8463172500472838
+    },
+    {
+      "model": "mlp",
+      "class_id": 1,
+      "class_name": "Trouser",
+      "precision_mean": 0.992216182144171,
+      "recall_mean": 0.9766666666666667,
+      "f1_mean": 0.9843775885684242
+    },
+    {
+      "model": "mlp",
+      "class_id": 2,
+      "class_name": "Pullover",
+      "precision_mean": 0.8405806610750348,
+      "recall_mean": 0.8266666666666667,
+      "f1_mean": 0.8334512558612758
+    },
+    {
+      "model": "mlp",
+      "class_id": 3,
+      "class_name": "Dress",
+      "precision_mean": 0.888896729131285,
+      "recall_mean": 0.9066666666666667,
+      "f1_mean": 0.8976914642810038
+    },
+    {
+      "model": "mlp",
+      "class_id": 4,
+      "class_name": "Coat",
+      "precision_mean": 0.8011476014098573,
+      "recall_mean": 0.842,
+      "f1_mean": 0.8210613670708167
+    },
+    {
+      "model": "mlp",
+      "class_id": 5,
+      "class_name": "Sandal",
+      "precision_mean": 0.9761817315672959,
+      "recall_mean": 0.9693333333333333,
+      "f1_mean": 0.9727295894479494
+    },
+    {
+      "model": "mlp",
+      "class_id": 6,
+      "class_name": "Shirt",
+      "precision_mean": 0.7394791353651672,
+      "recall_mean": 0.7053333333333333,
+      "f1_mean": 0.7219314229765248
+    },
+    {
+      "model": "mlp",
+      "class_id": 7,
+      "class_name": "Sneaker",
+      "precision_mean": 0.9418453170905465,
+      "recall_mean": 0.9663333333333333,
+      "f1_mean": 0.9539320445922169
+    },
+    {
+      "model": "mlp",
+      "class_id": 8,
+      "class_name": "Bag",
+      "precision_mean": 0.9730369072602373,
+      "recall_mean": 0.9743333333333333,
+      "f1_mean": 0.9736843112808714
+    },
+    {
+      "model": "mlp",
+      "class_id": 9,
+      "class_name": "Ankle boot",
+      "precision_mean": 0.9700286211121248,
+      "recall_mean": 0.9593333333333333,
+      "f1_mean": 0.9646402949694616
+    },
+    {
+      "model": "cnn",
+      "class_id": 0,
+      "class_name": "T-shirt/top",
+      "precision_mean": 0.8632442561840584,
+      "recall_mean": 0.8426666666666667,
+      "f1_mean": 0.8520766182592306
+    },
+    {
+      "model": "cnn",
+      "class_id": 1,
+      "class_name": "Trouser",
+      "precision_mean": 0.9925509461327336,
+      "recall_mean": 0.9756666666666667,
+      "f1_mean": 0.9840256622336941
+    },
+    {
+      "model": "cnn",
+      "class_id": 2,
+      "class_name": "Pullover",
+      "precision_mean": 0.872805009603494,
+      "recall_mean": 0.872,
+      "f1_mean": 0.872301234175539
+    },
+    {
+      "model": "cnn",
+      "class_id": 3,
+      "class_name": "Dress",
+      "precision_mean": 0.8951338236110646,
+      "recall_mean": 0.892,
+      "f1_mean": 0.8934882641427287
+    },
+    {
+      "model": "cnn",
+      "class_id": 4,
+      "class_name": "Coat",
+      "precision_mean": 0.8533505767556963,
+      "recall_mean": 0.8513333333333333,
+      "f1_mean": 0.8522905945449784
+    },
+    {
+      "model": "cnn",
+      "class_id": 5,
+      "class_name": "Sandal",
+      "precision_mean": 0.9817583873766507,
+      "recall_mean": 0.9663333333333333,
+      "f1_mean": 0.9739212901732256
+    },
+    {
+      "model": "cnn",
+      "class_id": 6,
+      "class_name": "Shirt",
+      "precision_mean": 0.7314858183876873,
+      "recall_mean": 0.7613333333333333,
+      "f1_mean": 0.7446822127481608
+    },
+    {
+      "model": "cnn",
+      "class_id": 7,
+      "class_name": "Sneaker",
+      "precision_mean": 0.9417011967137207,
+      "recall_mean": 0.9656666666666667,
+      "f1_mean": 0.9533142232395357
+    },
+    {
+      "model": "cnn",
+      "class_id": 8,
+      "class_name": "Bag",
+      "precision_mean": 0.983647975428553,
+      "recall_mean": 0.982,
+      "f1_mean": 0.9828179738424492
+    },
+    {
+      "model": "cnn",
+      "class_id": 9,
+      "class_name": "Ankle boot",
+      "precision_mean": 0.9675363163920175,
+      "recall_mean": 0.96,
+      "f1_mean": 0.9636870329474927
+    },
+    {
+      "model": "rnn",
+      "class_id": 0,
+      "class_name": "T-shirt/top",
+      "precision_mean": 0.8539410209492575,
+      "recall_mean": 0.8233333333333334,
+      "f1_mean": 0.8382485622583846
+    },
+    {
+      "model": "rnn",
+      "class_id": 1,
+      "class_name": "Trouser",
+      "precision_mean": 0.9905972123272578,
+      "recall_mean": 0.9813333333333333,
+      "f1_mean": 0.9859352567972955
+    },
+    {
+      "model": "rnn",
+      "class_id": 2,
+      "class_name": "Pullover",
+      "precision_mean": 0.8418849894911775,
+      "recall_mean": 0.8373333333333333,
+      "f1_mean": 0.8395902673456437
+    },
+    {
+      "model": "rnn",
+      "class_id": 3,
+      "class_name": "Dress",
+      "precision_mean": 0.8890701162354705,
+      "recall_mean": 0.9133333333333333,
+      "f1_mean": 0.9009839979352174
+    },
+    {
+      "model": "rnn",
+      "class_id": 4,
+      "class_name": "Coat",
+      "precision_mean": 0.8343020842333944,
+      "recall_mean": 0.846,
+      "f1_mean": 0.8399380571734554
+    },
+    {
+      "model": "rnn",
+      "class_id": 5,
+      "class_name": "Sandal",
+      "precision_mean": 0.9775543286838035,
+      "recall_mean": 0.9726666666666667,
+      "f1_mean": 0.9751032256763198
+    },
+    {
+      "model": "rnn",
+      "class_id": 6,
+      "class_name": "Shirt",
+      "precision_mean": 0.7446377873749331,
+      "recall_mean": 0.7396666666666667,
+      "f1_mean": 0.7421427402417522
+    },
+    {
+      "model": "rnn",
+      "class_id": 7,
+      "class_name": "Sneaker",
+      "precision_mean": 0.9477239701427881,
+      "recall_mean": 0.9723333333333333,
+      "f1_mean": 0.9598653539054863
+    },
+    {
+      "model": "rnn",
+      "class_id": 8,
+      "class_name": "Bag",
+      "precision_mean": 0.9721305352409353,
+      "recall_mean": 0.9866666666666667,
+      "f1_mean": 0.9793318273552186
+    },
+    {
+      "model": "rnn",
+      "class_id": 9,
+      "class_name": "Ankle boot",
+      "precision_mean": 0.9771925875853756,
+      "recall_mean": 0.957,
+      "f1_mean": 0.966984784201594
+    },
+    {
+      "model": "transformer",
+      "class_id": 0,
+      "class_name": "T-shirt/top",
+      "precision_mean": 0.8709978937912239,
+      "recall_mean": 0.855,
+      "f1_mean": 0.8629149618830819
+    },
+    {
+      "model": "transformer",
+      "class_id": 1,
+      "class_name": "Trouser",
+      "precision_mean": 0.9873280201831134,
+      "recall_mean": 0.985,
+      "f1_mean": 0.9861507083175411
+    },
+    {
+      "model": "transformer",
+      "class_id": 2,
+      "class_name": "Pullover",
+      "precision_mean": 0.8637293391314502,
+      "recall_mean": 0.8826666666666667,
+      "f1_mean": 0.8730682952407316
+    },
+    {
+      "model": "transformer",
+      "class_id": 3,
+      "class_name": "Dress",
+      "precision_mean": 0.9103534982925059,
+      "recall_mean": 0.9126666666666667,
+      "f1_mean": 0.9110792665113012
+    },
+    {
+      "model": "transformer",
+      "class_id": 4,
+      "class_name": "Coat",
+      "precision_mean": 0.8305502006794944,
+      "recall_mean": 0.871,
+      "f1_mean": 0.8499194986879987
+    },
+    {
+      "model": "transformer",
+      "class_id": 5,
+      "class_name": "Sandal",
+      "precision_mean": 0.9819639278557114,
+      "recall_mean": 0.98,
+      "f1_mean": 0.980980980980981
+    },
+    {
+      "model": "transformer",
+      "class_id": 6,
+      "class_name": "Shirt",
+      "precision_mean": 0.7719920847414965,
+      "recall_mean": 0.7266666666666667,
+      "f1_mean": 0.7484912680013363
+    },
+    {
+      "model": "transformer",
+      "class_id": 7,
+      "class_name": "Sneaker",
+      "precision_mean": 0.9557868852454764,
+      "recall_mean": 0.9646666666666667,
+      "f1_mean": 0.9601796750367243
+    },
+    {
+      "model": "transformer",
+      "class_id": 8,
+      "class_name": "Bag",
+      "precision_mean": 0.9833552894211577,
+      "recall_mean": 0.9846666666666667,
+      "f1_mean": 0.984010323010323
+    },
+    {
+      "model": "transformer",
+      "class_id": 9,
+      "class_name": "Ankle boot",
+      "precision_mean": 0.9689020550235476,
+      "recall_mean": 0.9643333333333333,
+      "f1_mean": 0.9665943792203749
+    }
+  ],
+  "transformer_cnn_paired": [
+    {
+      "seed": 69420,
+      "transformer_correct_cnn_wrong": 422,
+      "cnn_correct_transformer_wrong": 341,
+      "accuracy_difference_pp": 0.81
+    },
+    {
+      "seed": 67,
+      "transformer_correct_cnn_wrong": 369,
+      "cnn_correct_transformer_wrong": 307,
+      "accuracy_difference_pp": 0.62
+    },
+    {
+      "seed": 69,
+      "transformer_correct_cnn_wrong": 350,
+      "cnn_correct_transformer_wrong": 320,
+      "accuracy_difference_pp": 0.3
+    }
+  ],
+  "gpu_benchmarks_completed": 0,
+  "gpu_benchmarks_skipped": 15,
+  "limits": [
+    "No checkpoint weights were executed in this audit.",
+    "Classification scores/confusions were recomputed from the submitted probabilities and labels.",
+    "Raw pixels were not re-evaluated; gallery IDs/labels/selection and output hashes were checked.",
+    "All quality evaluation in this package used CPU; GPU speed is unknown."
+  ]
+}

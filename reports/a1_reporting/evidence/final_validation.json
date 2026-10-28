@@ -1,0 +1,42 @@
+{
+  "verified_at": "2026-10-26T18:41:01.101709+07:00",
+  "status": "passed",
+  "pages": 45,
+  "quality_runs": 15,
+  "quality_summary_rows": 10,
+  "class_rows": 300,
+  "timing_runs": 15,
+  "raw_batch_timings": 1500,
+  "timing_profile": "cpu-f7208f3550fc, Windows CPU",
+  "rendered_numeric_table_rows_checked": 90,
+  "aggregate_recalculation": "mean/sample SD independently recomputed from retained per-run records",
+  "per_class_reconciliation": "all 30 per-run/split macro-F1 and accuracy values agree with class metrics",
+  "single_source_equivalence": "45/45 pages match after whitespace, ligature and line-end hyphen normalization",
+  "portable_archive_compilation": "passed: source ZIP extracted to a separate directory and compiled; all 45 pages match normalized final text",
+  "undefined_references": 0,
+  "overfull_boxes": 0,
+  "remaining_placeholders": 0,
+  "visual_review": {
+    "date": "2026-10-26",
+    "pages": 45,
+    "method": "All final pages rendered with Poppler and visually inspected in four contact sheets; detailed timing/gallery/disclosure pages also inspected.",
+    "findings": "No clipping, overlapping tables, broken glyphs, unreadable gallery labels or orphan near-empty body pages observed."
+  },
+  "compiler": "Tectonic 0.17.0 Windows MSVC; XeTeX backend",
+  "compiler_notes": [
+    "Fontconfig default-config message is emitted by portable runtime; rendered fonts inspected.",
+    "Upstream anyfontsize.sty comment-byte warning does not introduce U+FFFD in PDF text."
+  ],
+  "source_zip_sha256": "f38db949573d85733662cfe477e20246412eb533b78c31274dd3b4bb58e3684b",
+  "class_sha256": "643e28a2bd3ffd7843dc34ae7241cb48d9ed105d84465b23f3150725716f44be",
+  "template_assets_unchanged": [
+    "hcmut-report.cls",
+    "hcmut.png",
+    "LICENSE.txt",
+    "TEMPLATE_SOURCE.txt"
+  ],
+  "pdf_sha256": "323ad01deed16dd4d89356105ca9ea9dcfe00f21de440c208204a02e912dc078",
+  "model_execution_during_report_authoring": false,
+  "original_artifacts_modified": false,
+  "publication_or_submission_performed": false
+}
