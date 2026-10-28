@@ -1,0 +1,28 @@
+{
+  "run_id": "a1_rnn_main_seed67_20261023-074850_b7dcdb",
+  "model": "rnn",
+  "seed": 67,
+  "eval_split": "validation",
+  "device": "cpu",
+  "checkpoint_sha256": "d376f54ad1348ba44bd99a5e2452de8e241951330251a3e90aae0175c5e623ac",
+  "metrics": {
+    "loss": 0.2666227272987366,
+    "accuracy": 0.9101,
+    "macro_f1": 0.9099249149139894,
+    "num_samples": 10000
+  },
+  "validation_replay": {
+    "deltas": {
+      "loss": 1.6427040117061864e-08,
+      "accuracy": 0.0,
+      "macro_f1": 0.0
+    },
+    "absolute_tolerances": {
+      "loss": 1e-05,
+      "accuracy": 0.000100000001,
+      "macro_f1": 0.0002
+    },
+    "relative_tolerance": 1e-05,
+    "status": "passed"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "identity": {
+    "profile": {
+      "version": "a1-postprocess-20261024-v1",
+      "processor_sha256": "6668b16dee6aa449b31b908adb77fac6754bd2b962643492e4d4ce299373d86c",
+      "device": "cpu",
+      "benchmark_requested": true,
+      "cpu_threads": 2,
+      "environment": {
+        "python_version": "3.13.16",
+        "torch_version": "2.11.0+cpu",
+        "numpy_version": "2.1.3",
+        "deterministic_algorithms": true,
+        "cuda_available": false,
+        "torch_cuda_version": null,
+        "os": "Linux",
+        "os_release": "6.6.122+",
+        "machine": "x86_64",
+        "processor": "x86_64",
+        "torchvision_version": "0.26.0+cpu",
+        "gpus": [],
+        "precision": {
+          "float32_matmul_precision": "highest",
+          "cuda_matmul_allow_tf32": null
+        },
+        "cudnn": {
+          "available": false,
+          "enabled": true,
+          "version": null,
+          "allow_tf32": null,
+          "benchmark": null,
+          "deterministic": null
+        }
+      }
+    },
+    "run_id": "a1_rnn_main_seed69420_20261023-071609_51281c",
+    "inputs": {
+      "config.json": "9523ecbd64159c57c6012a1bd7048bac260c1f888b1a107875f57018fc3ed6ff",
+      "metadata.json": "df0012b12f975ee414b309aef1d2e83e47f68fd84170da00a54b3113a1785009",
+      "metrics.json": "4d1b5b15b86e469a4ddfd5fdd17956197c719c01fb5e168bcfe8a682feea89b2",
+      "history.csv": "4b522ae1c839c56f8fefe682e39524954d08a12c85129c73addb8489a9c5afe2",
+      "best.pt": "c3fdea17d8da8c13b519f0c4941f1043aa0aa710e076f3d27469ae7fb5caf309",
+      "sources/model_config.py": "dd8672aa5b5b1fa98a03fdecf4a358fa4113363643ac40a3d4a063b9adb4068f",
+      "sources/protocol_config.py": "f3eb84567653d612538df8b3bd36fc6d0ba53c3a886558da8b19a1e4636e3d1b"
+    }
+  },
+  "files": {
+    "benchmark.json": "93074551974826ceccaf6c312b7479c8154a9bc3f018f67aa87cfde7ba82ab06"
+  }
+}

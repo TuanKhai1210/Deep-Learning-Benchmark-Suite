@@ -1,0 +1,28 @@
+{
+  "run_id": "a1_cnn_main_seed69_20261023-064233_c73732",
+  "model": "cnn",
+  "seed": 69,
+  "eval_split": "validation",
+  "device": "cpu",
+  "checkpoint_sha256": "28ed70df13e23e2617cec74c1b268b78672f17b4f2baa82d992a6ae48ee56829",
+  "metrics": {
+    "loss": 0.24083016147613526,
+    "accuracy": 0.9155,
+    "macro_f1": 0.9154775191383384,
+    "num_samples": 10000
+  },
+  "validation_replay": {
+    "deltas": {
+      "loss": -1.1348724349158346e-08,
+      "accuracy": 0.0,
+      "macro_f1": 0.0
+    },
+    "absolute_tolerances": {
+      "loss": 1e-05,
+      "accuracy": 0.000100000001,
+      "macro_f1": 0.0002
+    },
+    "relative_tolerance": 1e-05,
+    "status": "passed"
+  }
+}

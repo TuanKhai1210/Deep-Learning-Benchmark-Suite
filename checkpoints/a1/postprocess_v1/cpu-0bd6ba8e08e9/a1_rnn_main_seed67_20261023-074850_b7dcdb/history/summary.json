@@ -1,0 +1,39 @@
+{
+  "run_id": "a1_rnn_main_seed67_20261023-074850_b7dcdb",
+  "source_run": "/content/drive/MyDrive/dlbench_a1_main/main/a1_rnn_main_seed67_20261023-074850_b7dcdb",
+  "model": "rnn",
+  "seed": 67,
+  "run_mode": "main",
+  "eval_split": "validation",
+  "git_revision": "a8539bee778d99e2902a1dd36aa157c6ebb3a42c",
+  "git_dirty": false,
+  "split_hash": "e4a776305b2a1b5c392ba196d023de004f47124e8f831495b9733c48e72c25e6",
+  "statistics_hash": "e47b863cb866cdc61613bb88d772d02f8aedc0a21fa56b79dee27b27d341381e",
+  "completed_epochs": 100,
+  "best_epoch_zero_based": 83,
+  "metrics": {
+    "eval_split": "validation",
+    "val_loss": 0.2666227108716965,
+    "val_accuracy": 0.9101,
+    "val_macro_f1": 0.9099249149139894,
+    "epoch": 83,
+    "timing_scope": "fit",
+    "timing_units": "seconds"
+  },
+  "training_config": {
+    "batch_size": 64,
+    "optimizer": "adam",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0,
+    "early_stopping_patience": 0
+  },
+  "epoch_seconds_sum": 1983.2213530540466,
+  "timing_note": "Sum of recorded epoch times; not inference timing or complete fit wall time.",
+  "artifact_sha256": {
+    "config.json": "30fa03a08ed49d6ecebae4bedca8919abb5faf036ef1939541f91359e099d1ab",
+    "metadata.json": "85280e3ebd0e5389fb526e8f8adc762369b7a79a0735d5eb485b62f8ac8f7d20",
+    "metrics.json": "563a1a57cddfc639ee324e428c9ced9d963141ad300876e146fd3f7569a6fbf0",
+    "history.csv": "b85aa570d7d97ff69d6ec6e9d6186d8f9bddffd50a3fc41217ca2d2ef0fe919b"
+  },
+  "limitations": "Single-run validation results. No test claims or multi-seed uncertainty. Confusion/error plots require predictions."
+}

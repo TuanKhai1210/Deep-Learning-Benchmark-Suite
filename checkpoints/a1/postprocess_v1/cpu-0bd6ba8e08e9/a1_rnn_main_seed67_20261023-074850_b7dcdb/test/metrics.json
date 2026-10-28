@@ -1,0 +1,15 @@
+{
+  "run_id": "a1_rnn_main_seed67_20261023-074850_b7dcdb",
+  "model": "rnn",
+  "seed": 67,
+  "eval_split": "test",
+  "device": "cpu",
+  "checkpoint_sha256": "d376f54ad1348ba44bd99a5e2452de8e241951330251a3e90aae0175c5e623ac",
+  "metrics": {
+    "loss": 0.28611089166998865,
+    "accuracy": 0.905,
+    "macro_f1": 0.904776605832866,
+    "num_samples": 10000
+  },
+  "validation_replay": null
+}

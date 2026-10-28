@@ -1,0 +1,28 @@
+{
+  "run_id": "a1_linear_main_seed69_20261023-004922_8fcd80",
+  "model": "linear",
+  "seed": 69,
+  "eval_split": "validation",
+  "device": "cpu",
+  "checkpoint_sha256": "d17ae2606b28307d78b7be2319e94a758b449dafa3f995b93ce909702065572c",
+  "metrics": {
+    "loss": 0.5871242048740387,
+    "accuracy": 0.7947,
+    "macro_f1": 0.7941562157533568,
+    "num_samples": 10000
+  },
+  "validation_replay": {
+    "deltas": {
+      "loss": -6.818771325356465e-09,
+      "accuracy": 0.0,
+      "macro_f1": 0.0
+    },
+    "absolute_tolerances": {
+      "loss": 1e-05,
+      "accuracy": 0.000100000001,
+      "macro_f1": 0.0002
+    },
+    "relative_tolerance": 1e-05,
+    "status": "passed"
+  }
+}

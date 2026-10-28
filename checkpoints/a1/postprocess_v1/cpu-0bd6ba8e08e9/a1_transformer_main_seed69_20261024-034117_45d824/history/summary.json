@@ -1,0 +1,39 @@
+{
+  "run_id": "a1_transformer_main_seed69_20261024-034117_45d824",
+  "source_run": "/content/drive/MyDrive/dlbench_a1_main/main/a1_transformer_main_seed69_20261024-034117_45d824",
+  "model": "transformer",
+  "seed": 69,
+  "run_mode": "main",
+  "eval_split": "validation",
+  "git_revision": "a8539bee778d99e2902a1dd36aa157c6ebb3a42c",
+  "git_dirty": false,
+  "split_hash": "e4a776305b2a1b5c392ba196d023de004f47124e8f831495b9733c48e72c25e6",
+  "statistics_hash": "e47b863cb866cdc61613bb88d772d02f8aedc0a21fa56b79dee27b27d341381e",
+  "completed_epochs": 100,
+  "best_epoch_zero_based": 99,
+  "metrics": {
+    "eval_split": "validation",
+    "val_loss": 0.2388482411146164,
+    "val_accuracy": 0.9156,
+    "val_macro_f1": 0.9153940231915462,
+    "epoch": 99,
+    "timing_scope": "fit",
+    "timing_units": "seconds"
+  },
+  "training_config": {
+    "batch_size": 64,
+    "optimizer": "adam",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0,
+    "early_stopping_patience": 0
+  },
+  "epoch_seconds_sum": 2287.8194785118103,
+  "timing_note": "Sum of recorded epoch times; not inference timing or complete fit wall time.",
+  "artifact_sha256": {
+    "config.json": "bcd942ff642271d47c5b13424e2859351bf2201ab09d80f06b02c67af9cb326e",
+    "metadata.json": "3c9ca2307f750819d1b09e1a9d41a51537a12205eccb5cd7b7ba0f7ef6649295",
+    "metrics.json": "49155312475704af9a3843a9652a410ca0e8481ae78a8084a4b5834cc055df70",
+    "history.csv": "06758d0ccb437eab8888c9d4b3000a93968f86383520fbd847566e826a08dae7"
+  },
+  "limitations": "Single-run validation results. No test claims or multi-seed uncertainty. Confusion/error plots require predictions."
+}

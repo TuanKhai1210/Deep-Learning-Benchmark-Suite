@@ -1,0 +1,28 @@
+{
+  "run_id": "a1_transformer_main_seed69_20261024-034117_45d824",
+  "model": "transformer",
+  "seed": 69,
+  "eval_split": "validation",
+  "device": "cpu",
+  "checkpoint_sha256": "18deb2c10e3fd378b40b3aa80e72fa3d1737810983d0903c45d875bc66c7b940",
+  "metrics": {
+    "loss": 0.23884821095466613,
+    "accuracy": 0.9156,
+    "macro_f1": 0.9153940231915462,
+    "num_samples": 10000
+  },
+  "validation_replay": {
+    "deltas": {
+      "loss": -3.015995025945628e-08,
+      "accuracy": 0.0,
+      "macro_f1": 0.0
+    },
+    "absolute_tolerances": {
+      "loss": 1e-05,
+      "accuracy": 0.000100000001,
+      "macro_f1": 0.0002
+    },
+    "relative_tolerance": 1e-05,
+    "status": "passed"
+  }
+}

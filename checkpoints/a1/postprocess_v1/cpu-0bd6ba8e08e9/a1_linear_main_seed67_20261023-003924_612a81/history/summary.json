@@ -1,0 +1,50 @@
+{
+  "run_id": "a1_linear_main_seed67_20261023-003924_612a81",
+  "source_run": "/content/drive/MyDrive/dlbench_a1_main/main/a1_linear_main_seed67_20261023-003924_612a81",
+  "model": "linear",
+  "seed": 67,
+  "run_mode": "main",
+  "eval_split": "validation",
+  "git_revision": "a8539bee778d99e2902a1dd36aa157c6ebb3a42c",
+  "git_dirty": false,
+  "split_hash": "e4a776305b2a1b5c392ba196d023de004f47124e8f831495b9733c48e72c25e6",
+  "statistics_hash": "e47b863cb866cdc61613bb88d772d02f8aedc0a21fa56b79dee27b27d341381e",
+  "completed_epochs": 33,
+  "best_epoch_zero_based": 17,
+  "metrics": {
+    "eval_split": "validation",
+    "val_loss": 0.5842131463050843,
+    "val_accuracy": 0.7917,
+    "val_macro_f1": 0.7924851765757952,
+    "epoch": 17,
+    "timing_scope": "fit",
+    "timing_units": "seconds"
+  },
+  "training_config": {
+    "batch_size": 64,
+    "optimizer": "adam",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0,
+    "momentum": 0.9,
+    "early_stopping_patience": 15,
+    "early_stopping_monitor": "macro_f1",
+    "min_delta": 0.001,
+    "save_frequency": 1000,
+    "scheduler": {
+      "name": "cosine",
+      "parameters": {
+        "T_max": 100,
+        "eta_min": 1e-05
+      }
+    }
+  },
+  "epoch_seconds_sum": 597.5578060150146,
+  "timing_note": "Sum of recorded epoch times; not inference timing or complete fit wall time.",
+  "artifact_sha256": {
+    "config.json": "dd57800f9775d742f652eb158a955064175dd5c5380cd9b42834b2f4ff1848c9",
+    "metadata.json": "d467bc54c6e5adf2aa6126895dcd0850c93124598d2b8bcf51a69a0a3fb7d860",
+    "metrics.json": "99aef9c1591348f06b4b819ea2c19d3c72af536ccfe6131cacdbbb97e89694ef",
+    "history.csv": "5708e9eadc22a585595898b81f51b9cd6554655a28c43344c53c7892bfb54ab3"
+  },
+  "limitations": "Single-run validation results. No test claims or multi-seed uncertainty. Confusion/error plots require predictions."
+}

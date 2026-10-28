@@ -1,0 +1,15 @@
+{
+  "run_id": "a1_mlp_main_seed67_20261023-013028_2a1c4c",
+  "model": "mlp",
+  "seed": 67,
+  "eval_split": "test",
+  "device": "cpu",
+  "checkpoint_sha256": "6810c89a4d4ca0f83f46818f8431f0bf7f6608cf6bfa32054e4430852ccc680e",
+  "metrics": {
+    "loss": 0.2851413484334946,
+    "accuracy": 0.8984,
+    "macro_f1": 0.8980623862475496,
+    "num_samples": 10000
+  },
+  "validation_replay": null
+}

@@ -1,0 +1,15 @@
+{
+  "run_id": "a1_transformer_main_seed69420_20261023-085501_3eb003",
+  "model": "transformer",
+  "seed": 69420,
+  "eval_split": "test",
+  "device": "cpu",
+  "checkpoint_sha256": "0dd8a484a87f917fdc0ee6ede0603d3131ba2d6dbc2dd4f087eebec1ccd64554",
+  "metrics": {
+    "loss": 0.24628470809459685,
+    "accuracy": 0.9113,
+    "macro_f1": 0.9111969913881227,
+    "num_samples": 10000
+  },
+  "validation_replay": null
+}

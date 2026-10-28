@@ -1,0 +1,15 @@
+{
+  "run_id": "a1_cnn_main_seed69420_20261023-022827_cd3858",
+  "model": "cnn",
+  "seed": 69420,
+  "eval_split": "test",
+  "device": "cpu",
+  "checkpoint_sha256": "8e6978213187b6c5019c9d08c65efa96e97f92af37af831b739b8b9201282d10",
+  "metrics": {
+    "loss": 0.27405177376270295,
+    "accuracy": 0.9032,
+    "macro_f1": 0.9042313988020375,
+    "num_samples": 10000
+  },
+  "validation_replay": null
+}

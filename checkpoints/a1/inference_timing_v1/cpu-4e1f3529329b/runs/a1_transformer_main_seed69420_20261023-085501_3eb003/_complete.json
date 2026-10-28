@@ -1,0 +1,61 @@
+{
+  "identity": {
+    "session": {
+      "version": "a1-timing-only-20261024-v1",
+      "code_sha256": "45002f1fce51eccd68163d6999eddfae051093e691f6f217ae30fdc6d90cf170",
+      "device": "cpu",
+      "cpu_threads": 2,
+      "environment": {
+        "python_version": "3.13.16",
+        "torch_version": "2.11.0+cu130",
+        "numpy_version": "2.1.3",
+        "deterministic_algorithms": true,
+        "cuda_available": true,
+        "torch_cuda_version": "13.0",
+        "os": "Linux",
+        "os_release": "6.6.122+",
+        "machine": "x86_64",
+        "processor": "x86_64",
+        "torchvision_version": "0.26.0+cu130",
+        "gpus": [
+          {
+            "index": 0,
+            "name": "Tesla T4",
+            "total_memory_bytes": 15637086208,
+            "total_memory_gb": 14.56,
+            "compute_capability": "7.5",
+            "multi_processor_count": 40
+          }
+        ],
+        "precision": {
+          "float32_matmul_precision": "highest",
+          "cuda_matmul_allow_tf32": false
+        },
+        "cudnn": {
+          "available": true,
+          "enabled": true,
+          "version": 92700,
+          "allow_tf32": true,
+          "benchmark": false,
+          "deterministic": false
+        }
+      },
+      "source_evaluation_profile": "cpu-0bd6ba8e08e9",
+      "source_summary_sha256": "42af700abcaecba0824caef8320e512e9b47dfd9a568cb9659aa3d064582855a"
+    },
+    "run_id": "a1_transformer_main_seed69420_20261023-085501_3eb003",
+    "checkpoint_sha256": "0dd8a484a87f917fdc0ee6ede0603d3131ba2d6dbc2dd4f087eebec1ccd64554",
+    "config_sha256": "8529ac0bfe85e214fb3e4ee17a56a34f62e8b754d54ab296cb11b48f9c0d0fab",
+    "effective_timing": {
+      "device": "cpu",
+      "batch_size": 64,
+      "warmup_steps": 20,
+      "measurement_steps": 100,
+      "precision": "float32",
+      "scope": "forward_only"
+    }
+  },
+  "files": {
+    "benchmark.json": "f64b7fa6e339f3ea97cf409a6ba76dde4e36f1f147b32b70d18ba545ba388f97"
+  }
+}
