@@ -1,0 +1,571 @@
+{
+  "verified_date": "2026-11-08",
+  "verified_tests": 9,
+  "aggregate": {
+    "U": {
+      "foreground_miou": {
+        "mean": 0.045195635980639914,
+        "sd": 0.008343163868160567
+      },
+      "foreground_dice": {
+        "mean": 0.07249791514406756,
+        "sd": 0.01211209904445011
+      },
+      "trash_miou": {
+        "mean": 0.017940496919264335,
+        "sd": 0.002881722557938437
+      }
+    },
+    "S0": {
+      "foreground_miou": {
+        "mean": 0.1585614955525186,
+        "sd": 0.024723102493481818
+      },
+      "foreground_dice": {
+        "mean": 0.22808821661977768,
+        "sd": 0.027435571540835528
+      },
+      "trash_miou": {
+        "mean": 0.06597429043611741,
+        "sd": 0.014868519062973153
+      }
+    },
+    "S1": {
+      "foreground_miou": {
+        "mean": 0.15413999142496573,
+        "sd": 0.019426952718357815
+      },
+      "foreground_dice": {
+        "mean": 0.22642310217800893,
+        "sd": 0.022331462741866426
+      },
+      "trash_miou": {
+        "mean": 0.05879091903227452,
+        "sd": 0.0025188573302510372
+      }
+    }
+  },
+  "paired": {
+    "69420": {
+      "test_delta": {
+        "foreground_miou": 0.0037639712834502126,
+        "foreground_dice": 0.0032970721311177398,
+        "trash_miou": -0.003257709839497039
+      },
+      "validation_delta": {
+        "foreground_miou": -0.019532883346302377,
+        "foreground_dice": -0.021747201683771755,
+        "trash_miou": -0.02425308208730237
+      },
+      "meets_proposal_threshold": false
+    },
+    "67": {
+      "test_delta": {
+        "foreground_miou": -0.008701526782518204,
+        "foreground_dice": -0.0070936227849745515,
+        "trash_miou": -0.025759531132319463
+      },
+      "validation_delta": {
+        "foreground_miou": -0.021306678697739972,
+        "foreground_dice": -0.025145500410211685,
+        "trash_miou": 0.008209184574703043
+      },
+      "meets_proposal_threshold": false
+    },
+    "69": {
+      "test_delta": {
+        "foreground_miou": -0.008326956883590614,
+        "foreground_dice": -0.001198792671449428,
+        "trash_miou": 0.007467126760287837
+      },
+      "validation_delta": {
+        "foreground_miou": 0.011570137247226858,
+        "foreground_dice": 0.019173362378278103,
+        "trash_miou": 0.019706679908007868
+      },
+      "meets_proposal_threshold": true
+    }
+  },
+  "checks": {
+    "export_sha": 463,
+    "suite_finished": 1,
+    "all_nine_slots": 1,
+    "manifest_content_hash": 9,
+    "history_epoch_order": 12,
+    "main_run_identity": 12,
+    "identity_hash": 12,
+    "effective_config": 12,
+    "pinned_source": 12,
+    "pinned_manifest": 12,
+    "dataset_contract": 12,
+    "model_and_seed": 9,
+    "main_completion": 9,
+    "fixed_test_image_count": 9,
+    "main_test_split": 9,
+    "test_validation_selected_epoch": 9,
+    "test_marker_identity_and_output_hash": 9,
+    "test_checkpoint_and_membership": 9,
+    "confusion_dimensions": 15,
+    "confusion_integer_counts": 15,
+    "class_identity_support_prediction": 255,
+    "class_iou": 255,
+    "class_dice": 255,
+    "aggregate_foreground_miou": 15,
+    "aggregate_foreground_dice": 15,
+    "aggregate_trash_miou": 15,
+    "aggregate_all_miou": 15,
+    "aggregate_all_dice": 15,
+    "valid_pixel_count": 15,
+    "defined_class_counts": 15,
+    "finite_saved_loss": 15,
+    "metric_records_recomputed": 15,
+    "test_batches": 9,
+    "test_ignore_fraction": 9,
+    "prior_audited_test_metrics": 9,
+    "csv_class_count": 9,
+    "csv_class_identity": 153,
+    "csv_counts": 306,
+    "csv_iou": 153,
+    "csv_dice": 153,
+    "csv_confusion": 9,
+    "summary_epoch_values": 9,
+    "previous_six_unchanged": 6,
+    "pointer_inside_run": 5,
+    "pointer_identity": 5,
+    "checkpoint_selection_and_patience": 3,
+    "main_completed": 3,
+    "checkpoint_zip_crc": 6,
+    "checkpoint_schema": 6,
+    "finite_model_tensor": 944,
+    "checkpoints_loaded_with_weights_only": 6,
+    "checkpoint_history": 6,
+    "checkpoint_identity_and_best": 6,
+    "checkpoint_bad_epochs": 6,
+    "validation_cache_sha": 3,
+    "validation_cache_identity": 3,
+    "validation_membership": 3,
+    "validation_selected_epoch": 3,
+    "validation_true_class_support": 3,
+    "u69_repair_review_matches": 1,
+    "u69_audited_cache_preserved": 8,
+    "extras_file_hash": 9,
+    "extras_checkpoint_binding": 3,
+    "benchmark_protocol": 3,
+    "benchmark_samples": 3,
+    "benchmark_median": 3,
+    "benchmark_gpu": 3,
+    "phase_log_coverage": 3,
+    "phase_log_order_duration": 132,
+    "phase_log_history_match": 132,
+    "segformer_exact_replay": 2,
+    "continuation_parent_inside_suite": 2,
+    "continuation_parent_sha": 10,
+    "continuation_history_prefix": 2,
+    "same_nine_test_sets": 1,
+    "matched_segformer_init": 2,
+    "gallery_same_image_ids": 1,
+    "gallery_source_dimensions": 1,
+    "gallery_identical_rgb_gt": 6,
+    "gallery_color_decoding": 12
+  },
+  "rows": [
+    {
+      "seed": 69420,
+      "model": "U",
+      "runtime": "Colab",
+      "epochs": 23,
+      "best_epoch": 15,
+      "test_metrics": {
+        "foreground_miou": 0.03562666116790716,
+        "foreground_dice": 0.05851879620919702,
+        "trash_miou": 0.014651846361550518
+      },
+      "membership_sha256": "738b95e533e0dc479c247f5a0c62d1298dec6a0d15cc65b88a71b689f1c7e147",
+      "checkpoint_sha256": "05aa0e8acf653eb56b4e3de979850e92687286e43a0cc75d65d63ba783f9cbe8",
+      "test_output_sha256": "5b1c47ae2944f9b5b42f528ae3eed61d5fc7056287422b50583abff8b0648b80",
+      "run_identity_sha256": "c329628f0210982135ee5358bf1ed94d8d247ce4a9a0ce6b31f7d1a6d0049722",
+      "run_id": "59a5534d-4cf3-4cea-91b0-3f09c86dc0e5",
+      "initial_state_sha256": "f9b87aa4c0942e54b37b6a89d2527c632bd58f3f76fccff8ec886685fec60864",
+      "parameter_counts": {
+        "total_params": 1964369,
+        "trainable_params": 1964369,
+        "frozen_params": 0
+      },
+      "experiment_id": "3388af98-da3d-4ce2-a2ec-1fbcd745806f",
+      "source_digest": "13ea100cefed8e7bd13c38153ebd3321760804366e2b5a66b47d2076d7e0c503",
+      "artifact_key": "evidence/runs/69420/U"
+    },
+    {
+      "seed": 69420,
+      "model": "S0",
+      "runtime": "Colab",
+      "epochs": 23,
+      "best_epoch": 15,
+      "test_metrics": {
+        "foreground_miou": 0.13587998455513942,
+        "foreground_dice": 0.20565507165067773,
+        "trash_miou": 0.0640349660108096
+      },
+      "membership_sha256": "738b95e533e0dc479c247f5a0c62d1298dec6a0d15cc65b88a71b689f1c7e147",
+      "checkpoint_sha256": "1dfcd83afce22f1883aecf1299bfaa631b527f1b88f133a8323842ef685b5493",
+      "test_output_sha256": "c6a8d1e775579cff408368934b468f4d3be9c060943dbe871994ab8077f4cb4e",
+      "run_identity_sha256": "b90018f42b5ed8fb8c3d0c4e85fc36c885c275d9e19fd21054a279b92c92c04b",
+      "run_id": "44b2f727-3f38-4d3d-a31f-838db8794106",
+      "initial_state_sha256": "85ab1b51dbdc3590e44df1f6edb0b556a4f6da13f31fe97bead900f97580d7dd",
+      "parameter_counts": {
+        "total_params": 3718513,
+        "trainable_params": 3718513,
+        "frozen_params": 0
+      },
+      "experiment_id": "80cbd699-df00-4502-935a-062f41b34571",
+      "source_digest": "13ea100cefed8e7bd13c38153ebd3321760804366e2b5a66b47d2076d7e0c503",
+      "artifact_key": "evidence/runs/69420/S0"
+    },
+    {
+      "seed": 69420,
+      "model": "S1",
+      "runtime": "Colab",
+      "epochs": 22,
+      "best_epoch": 14,
+      "test_metrics": {
+        "foreground_miou": 0.13964395583858963,
+        "foreground_dice": 0.20895214378179547,
+        "trash_miou": 0.06077725617131256
+      },
+      "membership_sha256": "738b95e533e0dc479c247f5a0c62d1298dec6a0d15cc65b88a71b689f1c7e147",
+      "checkpoint_sha256": "5d6070706d750ae4eb9abce0c7d738364a8c467f99206c4e6b0a591b8a774c82",
+      "test_output_sha256": "4f3ea3ef00fe320fd208c135da7f34b3657beaf511527237da4fda9e3a1c7278",
+      "run_identity_sha256": "7ad67d1a372988d21f404ad3ece69741306d04ec831868b5bf1c7eb6caa9aded",
+      "run_id": "9d2434a5-bba8-4d92-a844-12521d3b9ab8",
+      "initial_state_sha256": "85ab1b51dbdc3590e44df1f6edb0b556a4f6da13f31fe97bead900f97580d7dd",
+      "parameter_counts": {
+        "total_params": 3718513,
+        "trainable_params": 3718513,
+        "frozen_params": 0
+      },
+      "experiment_id": "f75dc280-7dc8-4d59-a0bb-5776460ef82a",
+      "source_digest": "13ea100cefed8e7bd13c38153ebd3321760804366e2b5a66b47d2076d7e0c503",
+      "artifact_key": "evidence/runs/69420/S1"
+    },
+    {
+      "seed": 67,
+      "model": "U",
+      "runtime": "Kaggle",
+      "epochs": 23,
+      "best_epoch": 15,
+      "test_metrics": {
+        "foreground_miou": 0.04901346724031062,
+        "foreground_dice": 0.07911181703321203,
+        "trash_miou": 0.01914560922829031
+      },
+      "membership_sha256": "738b95e533e0dc479c247f5a0c62d1298dec6a0d15cc65b88a71b689f1c7e147",
+      "checkpoint_sha256": "cf6df95b2a789825c4a97608ed6d735a281911fb2e003a231000370367d0d412",
+      "test_output_sha256": "97374001ed5f5e92cfa71a0bda71d9490bcc5b19dea19569d1610a8ce40dc8c2",
+      "run_identity_sha256": "442cce9133d9c30afdd95f9e8d081abeb0beb4a7352b9217daff042243de1f82",
+      "run_id": "520488aa-ac7b-445c-9ead-a888be4c3651",
+      "initial_state_sha256": "b68579c342e380a88abe2ec4aff494ef888ff6be8d5a6eba973ffe81c4f5a9ac",
+      "parameter_counts": {
+        "total_params": 1964369,
+        "trainable_params": 1964369,
+        "frozen_params": 0
+      },
+      "experiment_id": "520488aa-ac7b-445c-9ead-a888be4c3651",
+      "source_digest": "13ea100cefed8e7bd13c38153ebd3321760804366e2b5a66b47d2076d7e0c503",
+      "artifact_key": "evidence/runs/67/U"
+    },
+    {
+      "seed": 67,
+      "model": "S0",
+      "runtime": "Kaggle to Colab",
+      "epochs": 28,
+      "best_epoch": 20,
+      "test_metrics": {
+        "foreground_miou": 0.18491536502066944,
+        "foreground_dice": 0.25867683315932644,
+        "trash_miou": 0.0817173112616951
+      },
+      "membership_sha256": "738b95e533e0dc479c247f5a0c62d1298dec6a0d15cc65b88a71b689f1c7e147",
+      "checkpoint_sha256": "aa669fc9ae93c4435a7b51b6af4a271ce5c43f3adffdc2a65702cc9fa181767d",
+      "test_output_sha256": "54d994f0f09bb918d4df821c95774b9725222ecbf44f6e4bbc4cf9fb4e3fcbc4",
+      "run_identity_sha256": "7297dde0b0112852ba77593d8c81c12f2c1142ffe50e6cda60bbc3f08ccbd17b",
+      "run_id": "73460d50-de2a-4193-9800-5ababaa78dd9",
+      "initial_state_sha256": "1477016cdd8bcd735e91bb78a1d2024a8ee1648cf8b9bd486c559bf48f89cc07",
+      "parameter_counts": {
+        "total_params": 3718513,
+        "trainable_params": 3718513,
+        "frozen_params": 0
+      },
+      "experiment_id": "28808f02-7056-4007-b4de-4a7b0e16d0b4",
+      "source_digest": "13ea100cefed8e7bd13c38153ebd3321760804366e2b5a66b47d2076d7e0c503",
+      "artifact_key": "evidence/runs/67/S0"
+    },
+    {
+      "seed": 67,
+      "model": "S1",
+      "runtime": "Colab",
+      "epochs": 17,
+      "best_epoch": 9,
+      "test_metrics": {
+        "foreground_miou": 0.17621383823815123,
+        "foreground_dice": 0.2515832103743519,
+        "trash_miou": 0.055957780129375634
+      },
+      "membership_sha256": "738b95e533e0dc479c247f5a0c62d1298dec6a0d15cc65b88a71b689f1c7e147",
+      "checkpoint_sha256": "08fbda83ed369adb5ce14d3157fd4ce1549e91e850dbda20c83c1ac10849171b",
+      "test_output_sha256": "081dfaaa06c0e9f6b7db9c826c4ad889be5c1431611c4c76cdbcbf2e76a28ed4",
+      "run_identity_sha256": "860d9f6da8a76fde7b3f21603c4955f28f407a1057c8e76f1502ad8001694aae",
+      "run_id": "5bbb6140-137d-4373-bc65-29a60f461b1b",
+      "initial_state_sha256": "1477016cdd8bcd735e91bb78a1d2024a8ee1648cf8b9bd486c559bf48f89cc07",
+      "parameter_counts": {
+        "total_params": 3718513,
+        "trainable_params": 3718513,
+        "frozen_params": 0
+      },
+      "experiment_id": "5bbb6140-137d-4373-bc65-29a60f461b1b",
+      "source_digest": "13ea100cefed8e7bd13c38153ebd3321760804366e2b5a66b47d2076d7e0c503",
+      "artifact_key": "evidence/runs/67/S1"
+    },
+    {
+      "seed": 69,
+      "model": "U",
+      "runtime": "Colab",
+      "epochs": 20,
+      "best_epoch": 12,
+      "test_metrics": {
+        "foreground_miou": 0.050946779533701976,
+        "foreground_dice": 0.07986313218979361,
+        "trash_miou": 0.020024035167952172
+      },
+      "membership_sha256": "738b95e533e0dc479c247f5a0c62d1298dec6a0d15cc65b88a71b689f1c7e147",
+      "checkpoint_sha256": "aaf72e433d33531039a8acfda3444b6577a1782e038519489547c5fe4afc6b2c",
+      "test_output_sha256": "d94bf1a53cec6fe02ba9d6ce9368a97a7bf1d700b074d1ddc7a8de83d10d970e",
+      "run_identity_sha256": "a5975e77458271fce2933e592db2ee01672a306d3d4001e8f08bf5b7dfd808db",
+      "run_id": "d11fd7e4-a6f2-4afc-8248-85e2653659ab",
+      "initial_state_sha256": "1a1ccae696e529e7b9abf0477bf224bd3dafccb2dbb390c66b06d65b17c4d544",
+      "parameter_counts": {
+        "total_params": 1964369,
+        "trainable_params": 1964369,
+        "frozen_params": 0
+      },
+      "experiment_id": "d11fd7e4-a6f2-4afc-8248-85e2653659ab",
+      "source_digest": "13ea100cefed8e7bd13c38153ebd3321760804366e2b5a66b47d2076d7e0c503",
+      "artifact_key": "evidence/runs/69/U"
+    },
+    {
+      "seed": 69,
+      "model": "S0",
+      "runtime": "Colab",
+      "epochs": 16,
+      "best_epoch": 8,
+      "test_metrics": {
+        "foreground_miou": 0.15488913708174698,
+        "foreground_dice": 0.2199327450493289,
+        "trash_miou": 0.05217059403584752
+      },
+      "membership_sha256": "738b95e533e0dc479c247f5a0c62d1298dec6a0d15cc65b88a71b689f1c7e147",
+      "checkpoint_sha256": "64f1f8cf41ed6b1b43f1b540aac48569ce7a4a17e44ec5418e6893e42039aaf9",
+      "test_output_sha256": "b53bc58c882a4859fcd5c19ffea3d4475a8e619229fe7a818d003412d48fdfcc",
+      "run_identity_sha256": "2921787ca7a0c08eaaaa957877d24cfbd288ff140634f1a10c34f0f9e02983a5",
+      "run_id": "7c6af03c-46bb-4e21-9cb5-81804120f03a",
+      "initial_state_sha256": "cd853dd2f044ce70843258e80439de7ddda036426b7395b1544883a30042fae9",
+      "parameter_counts": {
+        "total_params": 3718513,
+        "trainable_params": 3718513,
+        "frozen_params": 0
+      },
+      "experiment_id": "7c6af03c-46bb-4e21-9cb5-81804120f03a",
+      "source_digest": "13ea100cefed8e7bd13c38153ebd3321760804366e2b5a66b47d2076d7e0c503",
+      "artifact_key": "evidence/runs/69/S0"
+    },
+    {
+      "seed": 69,
+      "model": "S1",
+      "runtime": "Colab",
+      "epochs": 30,
+      "best_epoch": 22,
+      "test_metrics": {
+        "foreground_miou": 0.14656218019815637,
+        "foreground_dice": 0.21873395237787946,
+        "trash_miou": 0.05963772079613536
+      },
+      "membership_sha256": "738b95e533e0dc479c247f5a0c62d1298dec6a0d15cc65b88a71b689f1c7e147",
+      "checkpoint_sha256": "2c2868ab71131ae3f8b5cfd5a13ba8db4dcc564cf3bcdf5d0fdd8a0b75e0df55",
+      "test_output_sha256": "3ad310dfd239ff72f2bf3c497423d9a0b90abd9a9e057a31c6d252a188d68e37",
+      "run_identity_sha256": "b9240687a141138fa6c364267247680b4a0aa43e3e26c62b6bb1510394a41fd5",
+      "run_id": "c6cef0a6-8f34-4f1b-8bf0-a3b422ecbb7f",
+      "initial_state_sha256": "cd853dd2f044ce70843258e80439de7ddda036426b7395b1544883a30042fae9",
+      "parameter_counts": {
+        "total_params": 3718513,
+        "trainable_params": 3718513,
+        "frozen_params": 0
+      },
+      "experiment_id": "e46a2390-6be4-4d8d-929d-0003fe66b421",
+      "source_digest": "13ea100cefed8e7bd13c38153ebd3321760804366e2b5a66b47d2076d7e0c503",
+      "artifact_key": "evidence/runs/69/S1"
+    }
+  ],
+  "compute_seed69": {
+    "U": {
+      "training_hours": 5.687499593496111,
+      "validation_hours": 0.41547550274333084,
+      "batch_ms": 84.97976199998902,
+      "ms_per_image": 21.244940499997256,
+      "parameters": 1964369,
+      "protocol": {
+        "batch_size": 4,
+        "warmup": 10,
+        "repeats": 50,
+        "gallery_count": 6,
+        "precision": "float32",
+        "device": "cuda:0"
+      },
+      "environment": {
+        "python_version": "3.13.16",
+        "torch_version": "2.11.0+cu130",
+        "numpy_version": "2.1.3",
+        "deterministic_algorithms": true,
+        "cuda_available": true,
+        "torch_cuda_version": "13.0",
+        "os": "Linux",
+        "os_release": "6.6.159+",
+        "machine": "x86_64",
+        "processor": "x86_64",
+        "torchvision_version": "0.26.0+cu130",
+        "gpus": [
+          {
+            "index": 0,
+            "name": "Tesla T4",
+            "total_memory_bytes": 15637086208,
+            "total_memory_gb": 14.56,
+            "compute_capability": "7.5",
+            "multi_processor_count": 40
+          }
+        ],
+        "system_ram": {
+          "total_bytes": 13605810176,
+          "total_gb": 12.67
+        },
+        "precision": {
+          "float32_matmul_precision": "highest",
+          "cuda_matmul_allow_tf32": false
+        },
+        "cudnn": {
+          "available": true,
+          "enabled": true,
+          "version": 92700,
+          "allow_tf32": false,
+          "benchmark": false,
+          "deterministic": true
+        }
+      }
+    },
+    "S0": {
+      "training_hours": 4.505476379480834,
+      "validation_hours": 0.2850098559049998,
+      "batch_ms": 110.94502250125515,
+      "ms_per_image": 27.736255625313788,
+      "parameters": 3718513,
+      "protocol": {
+        "batch_size": 4,
+        "warmup": 10,
+        "repeats": 50,
+        "gallery_count": 6,
+        "precision": "float32",
+        "device": "cuda:0"
+      },
+      "environment": {
+        "python_version": "3.13.16",
+        "torch_version": "2.11.0+cu130",
+        "numpy_version": "2.1.3",
+        "deterministic_algorithms": true,
+        "cuda_available": true,
+        "torch_cuda_version": "13.0",
+        "os": "Linux",
+        "os_release": "6.6.159+",
+        "machine": "x86_64",
+        "processor": "x86_64",
+        "torchvision_version": "0.26.0+cu130",
+        "gpus": [
+          {
+            "index": 0,
+            "name": "Tesla T4",
+            "total_memory_bytes": 15637086208,
+            "total_memory_gb": 14.56,
+            "compute_capability": "7.5",
+            "multi_processor_count": 40
+          }
+        ],
+        "system_ram": {
+          "total_bytes": 13605810176,
+          "total_gb": 12.67
+        },
+        "precision": {
+          "float32_matmul_precision": "highest",
+          "cuda_matmul_allow_tf32": false
+        },
+        "cudnn": {
+          "available": true,
+          "enabled": true,
+          "version": 92700,
+          "allow_tf32": false,
+          "benchmark": false,
+          "deterministic": true
+        }
+      }
+    },
+    "S1": {
+      "training_hours": 8.820466056833606,
+      "validation_hours": 0.5363756216952763,
+      "batch_ms": 111.08909399990807,
+      "ms_per_image": 27.772273499977018,
+      "parameters": 3718513,
+      "protocol": {
+        "batch_size": 4,
+        "warmup": 10,
+        "repeats": 50,
+        "gallery_count": 6,
+        "precision": "float32",
+        "device": "cuda:0"
+      },
+      "environment": {
+        "python_version": "3.13.16",
+        "torch_version": "2.11.0+cu130",
+        "numpy_version": "2.1.3",
+        "deterministic_algorithms": true,
+        "cuda_available": true,
+        "torch_cuda_version": "13.0",
+        "os": "Linux",
+        "os_release": "6.6.159+",
+        "machine": "x86_64",
+        "processor": "x86_64",
+        "torchvision_version": "0.26.0+cu130",
+        "gpus": [
+          {
+            "index": 0,
+            "name": "Tesla T4",
+            "total_memory_bytes": 15637086208,
+            "total_memory_gb": 14.56,
+            "compute_capability": "7.5",
+            "multi_processor_count": 40
+          }
+        ],
+        "system_ram": {
+          "total_bytes": 13605810176,
+          "total_gb": 12.67
+        },
+        "precision": {
+          "float32_matmul_precision": "highest",
+          "cuda_matmul_allow_tf32": false
+        },
+        "cudnn": {
+          "available": true,
+          "enabled": true,
+          "version": 92700,
+          "allow_tf32": false,
+          "benchmark": false,
+          "deterministic": true
+        }
+      }
+    }
+  }
+}

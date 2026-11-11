@@ -1,0 +1,213 @@
+{
+  "run_id": "28808f02-7056-4007-b4de-4a7b0e16d0b4",
+  "kind": "main",
+  "identity": {
+    "config": {
+      "protocol": {
+        "version": "a2-initial-v1",
+        "status": "frozen",
+        "approval_reference": "User confirmed instructor approval on 2026-10-26 (Asia/Bangkok)",
+        "pilot_reference": "sha256:bcd38abb294b181a27e6af5554b70869f4df977423fbc74ac80ab06263314165",
+        "cuda_determinism": {
+          "deterministic_algorithms": true,
+          "warn_only": true,
+          "reason": "CUDA bilinear interpolation backward has no strict deterministic implementation"
+        }
+      },
+      "data": {
+        "split_seed": 36,
+        "manifest_sha256": "87905f1a97dd2c04194e049ca61d1a7f3bbe2942e9fe17dc2d737c371cdce943",
+        "num_classes": 17,
+        "ignore_id": 255,
+        "converter": "pillow_native_polygon_union_crossclass_ignore_v1",
+        "pillow_version": "12.3.0"
+      },
+      "preprocessing": {
+        "size": 512,
+        "mean": [
+          0.485,
+          0.456,
+          0.406
+        ],
+        "std": [
+          0.229,
+          0.224,
+          0.225
+        ]
+      },
+      "loss": {
+        "ce_weight": 1.0,
+        "dice_weight": 1.0
+      },
+      "budget": {
+        "batch_size": 4,
+        "epochs": 40,
+        "patience": 8
+      },
+      "model": {
+        "name": "segformer",
+        "checkpoint": "nvidia/segformer-b0-finetuned-ade-512-512",
+        "revision": "489d5cd81a0b59fab9b7ea758d3548ebe99677da"
+      },
+      "training": {
+        "optimizer": "adamw",
+        "lr": 6e-05,
+        "weight_decay": 0.01
+      },
+      "run": {
+        "name": "S0",
+        "seed": 67,
+        "color_jitter": false
+      }
+    },
+    "device": "cuda",
+    "workers": 0,
+    "development": false,
+    "source_digest": "13ea100cefed8e7bd13c38153ebd3321760804366e2b5a66b47d2076d7e0c503",
+    "environment": {
+      "python_version": "3.13.16",
+      "torch_version": "2.11.0+cu130",
+      "numpy_version": "2.1.3",
+      "deterministic_algorithms": true,
+      "cuda_available": true,
+      "torch_cuda_version": "13.0",
+      "os": "Linux",
+      "os_release": "6.18.55+",
+      "machine": "x86_64",
+      "processor": "x86_64",
+      "torchvision_version": "0.26.0+cu130",
+      "gpus": [
+        {
+          "index": 0,
+          "name": "Tesla T4",
+          "total_memory_bytes": 15636037632,
+          "total_memory_gb": 14.56,
+          "compute_capability": "7.5",
+          "multi_processor_count": 40
+        },
+        {
+          "index": 1,
+          "name": "Tesla T4",
+          "total_memory_bytes": 15636037632,
+          "total_memory_gb": 14.56,
+          "compute_capability": "7.5",
+          "multi_processor_count": 40
+        }
+      ],
+      "system_ram": {
+        "total_bytes": 33658159104,
+        "total_gb": 31.35
+      },
+      "precision": {
+        "float32_matmul_precision": "highest",
+        "cuda_matmul_allow_tf32": false
+      },
+      "cudnn": {
+        "available": true,
+        "enabled": true,
+        "version": 92700,
+        "allow_tf32": false,
+        "benchmark": false,
+        "deterministic": true
+      }
+    },
+    "dependencies": {
+      "Pillow": "12.3.0",
+      "transformers": "4.57.6",
+      "huggingface-hub": "0.36.2"
+    },
+    "cpu_threads": 2,
+    "train_membership": "de8c0881370f7168e3abb201103b85340da478a05cf03f063516ef7f1b6e57a5",
+    "validation_membership": "b5801c69c54e0ef191f3b984153e676790d070dcf6f85b2d7bc74a96201a5e73"
+  },
+  "identity_sha256": "da45b8ba648db651b0c9210494e3e8352d5c7de20750e2382f349d2a3fa0e080",
+  "source": {
+    "revision": "7df323698d1ae4d5122850a54eb38b01609d80f1",
+    "status": "verified_embedded_snapshot",
+    "tracked_diff": "",
+    "source_sha256": {
+      "src/dlbench/a2/__init__.py": "725c6ef4f9c6f219a46a259e99cffda45bfddb35682066713c1cdbb31d7a963e",
+      "src/dlbench/a2/cli.py": "a24ab286afa6966cefc89b4e924bf47bdfa4c008dba915ae208460eaa7ca5fbc",
+      "src/dlbench/a2/comparison.py": "78461e39ff8dc4dae06c52fb3ce0354fe6e2a5c9ca6fd832d166ccd97c1d3b92",
+      "src/dlbench/a2/config.py": "cdfedf36447a2b1bc61347e7d4ee75f53748770b7ecb19a79c6daf12b0bffe80",
+      "src/dlbench/a2/converter.py": "a102c558cb97323803bd262baef61dca92e6572a8c8fa9b4eedb77a8576f0d50",
+      "src/dlbench/a2/data.py": "8e38f3e6449b6c9c7c6c425235edfd90b90da2f51c3f9a531508dd8cdefcac4b",
+      "src/dlbench/a2/engine.py": "8f9a6d00b2cfe02eaa648204e452c23a92a597573680373b130645c3bbdf0f71",
+      "src/dlbench/a2/losses.py": "85698eb02f893a643e2fd89370ce1177c2f055dc93b19604965c0f97a6d23fe4",
+      "src/dlbench/a2/metrics.py": "04e947369fffc1b26196aff09700456c48d026b200e0676b3c9a133b00bed43d",
+      "src/dlbench/a2/models/__init__.py": "f96c8426b6966284279f668d552cfc5e1c6c76eca7624ea8d6c17061a6c262f6",
+      "src/dlbench/a2/models/segformer.py": "571cf469302c78292a3c39094dd961512b0ea0ac7685e51b18eceb504b35b780",
+      "src/dlbench/a2/models/unet.py": "cfece5b7156edd2f8809b78f1c249500b80c70f964f15ec621bcd9d82c346f60",
+      "src/dlbench/a2/trainer.py": "b7e2cfc6cc131ab25f7cd4e4a001f71c6a2f46d65aa77af91429c33f1738f326",
+      "configs/a2/protocol.py": "f02307a516a4be2b7d80e3a3fa870c54a17cd62a7267e4157a50410e76658d21",
+      "configs/a2/segformer_off.py": "124f3b4ad13c505cdd874797ad4f0b842b63b1f89f533aa7ed76aaf17d7fb506",
+      "configs/a2/segformer_on.py": "42ed2b17377d0caf77f4d1a270ecb188a098e9c831227a5a8ea4caba5736f2a7",
+      "configs/a2/unet.py": "a93ec8ff69ffbdcda49c30dc25de1e8627c7881354e417867f38b05471314d4f",
+      "src/dlbench/common/__init__.py": "e6ac429d49908586b6d4b6f9caf370d1ac526f18c1df888f1aad32f8bc418f24",
+      "src/dlbench/common/artifacts.py": "9abe7a0e1b40a81fc6ef1c72e0bf588858cfb4f4e332632fc732154be974356c",
+      "src/dlbench/common/config.py": "284bc2109101c445e683de1ab1a43e64759d79ce461a58a5ba3e231af7a76f2a",
+      "src/dlbench/common/reproducibility.py": "342f3b921dc297c8ce347c47a8721a258be7cedf8c44e181ef366cd958e6b5a0"
+    },
+    "source_digest": "13ea100cefed8e7bd13c38153ebd3321760804366e2b5a66b47d2076d7e0c503",
+    "revision_kind": "upstream_reference_for_embedded_files",
+    "live_git_checkout": false
+  },
+  "environment": {
+    "python_version": "3.13.16",
+    "torch_version": "2.11.0+cu130",
+    "numpy_version": "2.1.3",
+    "deterministic_algorithms": true,
+    "cuda_available": true,
+    "torch_cuda_version": "13.0",
+    "os": "Linux",
+    "os_release": "6.18.55+",
+    "machine": "x86_64",
+    "processor": "x86_64",
+    "torchvision_version": "0.26.0+cu130",
+    "gpus": [
+      {
+        "index": 0,
+        "name": "Tesla T4",
+        "total_memory_bytes": 15636037632,
+        "total_memory_gb": 14.56,
+        "compute_capability": "7.5",
+        "multi_processor_count": 40
+      },
+      {
+        "index": 1,
+        "name": "Tesla T4",
+        "total_memory_bytes": 15636037632,
+        "total_memory_gb": 14.56,
+        "compute_capability": "7.5",
+        "multi_processor_count": 40
+      }
+    ],
+    "system_ram": {
+      "total_bytes": 33658159104,
+      "total_gb": 31.35
+    },
+    "precision": {
+      "float32_matmul_precision": "highest",
+      "cuda_matmul_allow_tf32": false
+    },
+    "cudnn": {
+      "available": true,
+      "enabled": true,
+      "version": 92700,
+      "allow_tf32": false,
+      "benchmark": false,
+      "deterministic": true
+    }
+  },
+  "dependencies": {
+    "Pillow": "12.3.0",
+    "transformers": "4.57.6",
+    "huggingface-hub": "0.36.2"
+  },
+  "initial_state_sha256": "1477016cdd8bcd735e91bb78a1d2024a8ee1648cf8b9bd486c559bf48f89cc07",
+  "parameter_counts": {
+    "total_params": 3718513,
+    "trainable_params": 3718513,
+    "frozen_params": 0
+  }
+}

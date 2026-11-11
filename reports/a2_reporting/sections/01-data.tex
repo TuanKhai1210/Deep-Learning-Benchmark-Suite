@@ -1,15 +1,23 @@
 \section{Problem and data description}
-\subsection{Motivation and scope of this draft}
+\subsection{Task and research objectives}
 Underwater debris is difficult to distinguish from marine life and the seafloor because object appearance, scale, illumination and occlusion vary. TrashCan supplies underwater images with object-level annotations for marine debris research\cite{trashcan}. This project converts the polygons into a semantic segmentation task: each valid image pixel receives one class label, without distinguishing separate instances of the same class.
 
 For an RGB image $x\in\mathbb{R}^{H\times W\times 3}$, the model predicts a map $\hat y\in\{0,\ldots,16\}^{H\times W}$. There are \textbf{17 output classes: background plus 16 foreground categories}. The foreground comprises ROV, plant, six animal categories and eight trash categories. Ignore label 255 is excluded from supervision and evaluation.
 
-The research question is whether a pretrained modern segmentation model and modest photometric augmentation improve foreground overlap under a split that separates videos. This M2 draft reports the work completed through 28 October 2026: a completed U-Net experiment, an incomplete S0 SegFormer main run, and successful S0/S1 GPU pilots. It separates those observations from the remaining controlled comparison.
+An underwater image may contain several objects and classes. The task requires the model to locate their boundaries and assign a category at each pixel. Two pieces of plastic receive the same class ID. The remotely operated vehicle (ROV) and marine life are foreground categories alongside trash. Padding and ambiguous cross-class overlap are excluded through the ignore label.
+
+The project asks three questions.
+\begin{enumerate}
+\item Under a fixed video-disjoint split, how do a scratch U-Net and a pretrained SegFormer-B0 compare on foreground and trash overlap? The comparison includes each configuration's architecture, initialization and learning rate.
+\item With the SegFormer architecture and starting weights matched by seed, does mild training RGB color jitter improve trash overlap while preserving foreground quality? The proposal criterion is at least a 1-point gain in validation trash mIoU, with at most a 1-point loss in each of validation foreground mIoU and Dice.
+\item What types of errors persist, and what does each configuration cost to run? We use pixel-level class confusions, aligned test predictions and recorded forward latency under one matched Tesla T4 protocol.
+\end{enumerate}
+The practical work covers polygon-to-mask conversion, splitting by video, a shared training and evaluation engine, nine model--seed runs, and verification of saved results. The criterion in Question 2 is a predeclared validation target. The held-out evaluation tests the selected checkpoints independently of that criterion.
 
 \subsection{Dataset source and provenance}
 The working dataset is TrashCan 1.0 Material. The exploratory data analysis (EDA), measured on 5 October 2026, records 7,212 RGB images,12,336 polygon annotations and 312 filename-derived video groups. There are 3,245 images at $480\times 360$ and 3,967 at $480\times 270$. Source imagery is credited to JAMSTEC and the dataset to Hong, Fulton and Sattar\cite{trashcan}.
 
-The source archive's license file and the annotation JSON license records are retained with the project evidence. The JSON records identify an Attribution-NonCommercial-ShareAlike entry; the archive also contains its own attribution and use statement. The report preserves both records rather than replacing them with an inferred license. Raw images, checkpoints and the large dataset archive are not redistributed in the report source package.
+The archive README credits the dataset authors and asks users to cite the TrashCan paper. Both annotation JSON files list an Attribution-NonCommercial-ShareAlike entry. The example figures use credited frames from the Material version. The report source package contains figures and manifests, with the dataset archive and checkpoint binaries kept separately.
 
 The instructor approved the proposal according to the project owner's confirmation on 26 October 2026. This statement records the confirmation used by the training setup; it is not an independently inspected learning-management-system submission record.
 
@@ -35,6 +43,7 @@ The retained EDA figures provide a visual summary of the same imbalance and grou
 \end{figure}
 The split provides class coverage in every partition while retaining rare classes; it does not remove their statistical uncertainty.
 
+\clearpage
 \subsection{Mask conversion, preprocessing and checks}
 Polygons are rasterized on the native image canvas with Pillow 12.3.0. Same-class polygons are unioned; pixels where different foreground classes overlap receive ignore 255. Out-of-canvas regions are clipped. The EDA found no annotation that rasterized to an empty mask under this converter.
 
@@ -43,6 +52,17 @@ Each image is letterboxed to $512\times 512$ while preserving aspect ratio. RGB 
 The training adapter checks the published manifest digest, source annotation hashes, image dimensions, membership and native target hash. The supplied checks cover 5,057 training and 1,077 validation images. Figure~\ref{fig:qa} reproduces existing EDA annotation checks; it is not a gallery of model predictions.
 At evaluation resolution, ignored pixels include the much larger letterbox padding region as well as native annotation conflicts. For example, U-Net test ignore fraction is 34.06\%; this does not mean that 34.06\% of the native annotations are conflicting.
 \begin{figure}[H]\centering
-\includegraphics[width=.92\textwidth]{images/annotation_qa.png}
+\includegraphics[width=.80\textwidth]{images/annotation_qa.png}
 \caption{Six retained native annotation-QA examples, two per partition. RGB/mask overlays check conversion and alignment; they are ground truth, not inference outputs.}\label{fig:qa}
 \end{figure}
+
+\clearpage
+\subsection{Example training batch and color augmentation}
+Figure~\ref{fig:batch} recreates the first shuffled training batch of epoch 1 for seed 69 with the saved manifest, frozen preprocessing and original data loader. The input tensor is $4\times3\times512\times512$ in channel-first order. The integer target tensor is $4\times512\times512$ and stores one class ID per pixel. Displayed RGB reverses channel normalization.
+
+\begin{figure}[H]\centering
+\includegraphics[width=.97\textwidth]{images/a2_training_batch.png}
+\caption{Regenerated training batch with S0 RGB, S1 RGB and shared semantic targets. Gray is ignore 255, black is background, red is ROV, green is plant, pale green is wood and yellow is fish. Source imagery is from JAMSTEC via TrashCan-Material.}\label{fig:batch}
+\end{figure}
+
+The S1 color operation changes RGB for images 2578, 931 and 5706 in this batch. Image 512 takes the identity branch. All four masks match exactly between S0 and S1, including the wood target in image 931 and the fish target in image 5706. The figure is a replay of the data loader on CPU. The evidence package records the IDs and target hashes in \path{evidence/example_batch.json}.

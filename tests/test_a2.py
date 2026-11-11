@@ -131,6 +131,15 @@ class A2ConfigTests(unittest.TestCase):
     def test_cli_validate(self):
         self.assertEqual(main(["validate-config", "--config", str(ROOT / "configs/a2/unet.py")]), 0)
 
+    @patch("dlbench.a2.eda.run")
+    def test_cli_eda_forwards_original_options(self, run_eda):
+        result = main([
+            "eda", "--dataset-root", "dataset", "--output-dir", "eda_v1",
+            "--seed", "36", "--write-masks",
+        ])
+        self.assertEqual(result, 0)
+        run_eda.assert_called_once_with(Path("dataset"), Path("eda_v1"), 36, True)
+
 
 class A2DataTests(unittest.TestCase):
     def test_converter_union_overlap_order_and_ignore(self):

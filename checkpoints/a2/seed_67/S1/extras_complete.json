@@ -1,0 +1,19 @@
+{
+  "identity": {
+    "checkpoint_sha256": "08fbda83ed369adb5ce14d3157fd4ce1549e91e850dbda20c83c1ac10849171b",
+    "run_identity_sha256": "860d9f6da8a76fde7b3f21603c4955f28f407a1057c8e76f1502ad8001694aae",
+    "protocol": {
+      "batch_size": 4,
+      "warmup": 10,
+      "repeats": 50,
+      "gallery_count": 6,
+      "precision": "float32",
+      "device": "cuda:0"
+    }
+  },
+  "output_sha256": {
+    "inference_benchmark.json": "e3aa92a508122c17794ae49f182326526713786543b39318f31c10a8936fecb7",
+    "prediction_gallery.png": "2df8fafa5d3add0bd98e4a53b344b4b6269a903ecb2c782dc376c112e8543744",
+    "gallery_selection.json": "55649980d9f7828905d5f0d6cfa85148cf81b5b3b04bcf2f5343fe60784f2ef5"
+  }
+}

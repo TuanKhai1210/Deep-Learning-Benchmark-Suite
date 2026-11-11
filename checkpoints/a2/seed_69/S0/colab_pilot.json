@@ -1,0 +1,161 @@
+{
+  "runtime": {
+    "environment": {
+      "python_version": "3.13",
+      "torch_version": "2.11.0+cu130",
+      "numpy_version": "2.1.3",
+      "deterministic_algorithms": true,
+      "cuda_available": true,
+      "torch_cuda_version": "13.0",
+      "os": "Linux",
+      "machine": "x86_64",
+      "torchvision_version": "0.26.0+cu130",
+      "gpus": [
+        {
+          "index": 0,
+          "name": "Tesla T4",
+          "compute_capability": "7.5",
+          "multi_processor_count": 40
+        }
+      ],
+      "system_ram": {},
+      "precision": {
+        "float32_matmul_precision": "highest",
+        "cuda_matmul_allow_tf32": false
+      },
+      "cudnn": {
+        "available": true,
+        "enabled": true,
+        "version": 92700,
+        "allow_tf32": false,
+        "benchmark": false,
+        "deterministic": true
+      }
+    },
+    "dependencies": {
+      "Pillow": "12.3.0",
+      "transformers": "4.57.6",
+      "huggingface-hub": "0.36.2",
+      "tqdm": "4.67.3",
+      "safetensors": "0.8.0"
+    },
+    "cpu_threads": 2,
+    "default_dtype": "torch.float32"
+  },
+  "config_sha256": "ebc1e0bfb874c76ea6606ab08a771d5b1d8f73d4d81704c8156122f6be1e8b25",
+  "pilot": {
+    "kind": "real_batch_gpu_pilot",
+    "device": "cuda",
+    "passed": true,
+    "config_sha256": "ebc1e0bfb874c76ea6606ab08a771d5b1d8f73d4d81704c8156122f6be1e8b25",
+    "code_revision": "7df323698d1ae4d5122850a54eb38b01609d80f1",
+    "steps": 20,
+    "cuda_determinism": {
+      "deterministic_algorithms": true,
+      "warn_only": true,
+      "reason": "CUDA bilinear interpolation backward has no strict deterministic implementation"
+    },
+    "batch_size": 4,
+    "canvas": [
+      512,
+      512
+    ],
+    "image_ids": [
+      2578,
+      512,
+      931,
+      5706
+    ],
+    "losses": [
+      3.792193651199341,
+      3.708505153656006,
+      3.6741461753845215,
+      3.5811245441436768,
+      3.522818088531494,
+      3.5039920806884766,
+      3.4312736988067627,
+      3.452073812484741,
+      3.288313388824463,
+      3.2904398441314697,
+      3.208831310272217,
+      3.3429784774780273,
+      3.1646783351898193,
+      3.0510740280151367,
+      3.14020037651062,
+      3.0761337280273438,
+      2.9995646476745605,
+      3.003699541091919,
+      3.0514466762542725,
+      2.879509687423706
+    ],
+    "train_step_seconds_excluding_io": [
+      0.6681303850000404,
+      0.6631085599999551,
+      0.6635489329999018,
+      0.6683497159999661,
+      0.6657016020001265,
+      0.6695037459999185,
+      0.6681386609998299,
+      0.6791630469999745,
+      0.6846472639999774,
+      0.679918877000091,
+      0.6912925310000446,
+      0.684195986000077,
+      0.6882647789998373,
+      0.6943075080000654,
+      0.6691904720000821,
+      0.6721606230000816,
+      0.673657121000133,
+      0.6733911740000167
+    ],
+    "peak_allocated_bytes": 2121341952,
+    "peak_reserved_bytes": 2927624192,
+    "gpu_total_bytes": 15637086208,
+    "environment": {
+      "python_version": "3.13.16",
+      "torch_version": "2.11.0+cu130",
+      "numpy_version": "2.1.3",
+      "deterministic_algorithms": true,
+      "cuda_available": true,
+      "torch_cuda_version": "13.0",
+      "os": "Linux",
+      "os_release": "6.6.159+",
+      "machine": "x86_64",
+      "processor": "x86_64",
+      "torchvision_version": "0.26.0+cu130",
+      "gpus": [
+        {
+          "index": 0,
+          "name": "Tesla T4",
+          "total_memory_bytes": 15637086208,
+          "total_memory_gb": 14.56,
+          "compute_capability": "7.5",
+          "multi_processor_count": 40
+        }
+      ],
+      "system_ram": {
+        "total_bytes": 13605818368,
+        "total_gb": 12.67
+      },
+      "precision": {
+        "float32_matmul_precision": "highest",
+        "cuda_matmul_allow_tf32": false
+      },
+      "cudnn": {
+        "available": true,
+        "enabled": true,
+        "version": 92700,
+        "allow_tf32": false,
+        "benchmark": false,
+        "deterministic": true
+      }
+    },
+    "parameter_counts": {
+      "total_params": 3718513,
+      "trainable_params": 3718513,
+      "frozen_params": 0
+    },
+    "note": "Fixed-batch loss decrease and capacity check, not full-data overfit or benchmark quality"
+  },
+  "note": "Fresh diagnostic model discarded; frozen checkpoint config/old pilot reference unchanged."
+}
