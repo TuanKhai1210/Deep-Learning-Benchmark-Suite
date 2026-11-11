@@ -1,0 +1,66 @@
+{
+  "split": "train",
+  "seed": 69,
+  "loader_epoch_zero_based": 0,
+  "image_shape": [
+    4,
+    3,
+    512,
+    512
+  ],
+  "mask_shape": [
+    4,
+    512,
+    512
+  ],
+  "all_masks_equal": true,
+  "images": [
+    {
+      "image_id": 2578,
+      "video_id": "vid_000285",
+      "rgb_changed": true,
+      "target_sha256": "b4a4d061620dc141a34c4e6263f8bdefddcd9dc4dc23b12a3ba26f51e29816c6",
+      "classes": [
+        "background",
+        "rov",
+        "plant",
+        "ignore"
+      ]
+    },
+    {
+      "image_id": 512,
+      "video_id": "vid_000285",
+      "rgb_changed": false,
+      "target_sha256": "c2c09fbd14129fdc7872e7872ce11cf7aed13f6c67b5e11c3c403ca66dd09cad",
+      "classes": [
+        "background",
+        "rov",
+        "plant",
+        "ignore"
+      ]
+    },
+    {
+      "image_id": 931,
+      "video_id": "vid_000281",
+      "rgb_changed": true,
+      "target_sha256": "23e01593c51bc6022c99ea8fdd9a0bcda6f1ba41483e4bf3b3befd2deba6b03e",
+      "classes": [
+        "background",
+        "trash_wood",
+        "ignore"
+      ]
+    },
+    {
+      "image_id": 5706,
+      "video_id": "vid_000440",
+      "rgb_changed": true,
+      "target_sha256": "694f48420e1bce51ad5b3b3df44f81cb1c691298acb10fe8a8c80ff82f09517d",
+      "classes": [
+        "background",
+        "animal_fish",
+        "ignore"
+      ]
+    }
+  ],
+  "display": "RGB denormalized; ignore gray and background black"
+}

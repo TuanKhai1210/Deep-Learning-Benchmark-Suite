@@ -1,0 +1,103 @@
+\section{Effective configurations and architectures}
+\label{app:config}
+Table~\ref{tab:full-config} records the settings that distinguish the three configurations. All nine effective JSON snapshots are provided in \path{evidence/runs/}. A paired S0/S1 run changes only the color-jitter switch in the model and training design. The frozen pilot reference and run name identify each execution.
+
+\begin{table}[H]\centering\small
+\caption{Effective experiment settings. Trainable counts exclude buffers.}\label{tab:full-config}
+\begin{tabularx}{\linewidth}{@{}lYYY@{}}\toprule
+Setting & U & S0 & S1 \\ \midrule
+Architecture & Compact U-Net & SegFormer-B0 & SegFormer-B0 \\
+Initialization & Scratch & ADE20K pretrained with new head & Same per-seed state as S0 \\
+Trainable / frozen & 1,964,369 / 0 & 3,718,513 / 0 & 3,718,513 / 0 \\
+Learning rate & $10^{-3}$ & $6\times10^{-5}$ & $6\times10^{-5}$ \\
+Training color jitter & Off & Off & On with probability 0.5 \\
+Output classes & 17 & 17 & 17 \\ \bottomrule
+\end{tabularx}
+\end{table}
+
+The shared budget uses AdamW with weight decay 0.01, batch size 4, up to 40 epochs, patience 8, full 32-bit precision, no scheduler and disabled TF32. The target uses ignore 255 and the loss is CE plus soft Dice with weights 1 and 1. Source and preprocessing are checked against the fixed split manifest before a run. The loader uses zero workers in the recorded run protocol.
+
+The U-Net encoder channels are 16, 32, 64, 128 and 256. Each double-convolution block uses $3\times3$ convolutions, GroupNorm with eight groups and ReLU. The upsampling path concatenates skip features and uses the same block type. The SegFormer encoder has four stages with widths 32, 64, 160 and 256, attention heads 1, 2, 5 and 8, and spatial-reduction ratios 8, 4, 2 and 1\cite{segformerconfig}. The decoder projects each stage to width 256 and uses an aligned fusion head.
+
+\clearpage
+\section{Per-seed results and run provenance}
+\label{app:runs}
+\begingroup
+\setstretch{1.06}
+\setlength{\intextsep}{7pt}
+Table~\ref{tab:final-seed-results} reports the held-out scores. Table~\ref{tab:validation-best} reports validation metrics at the epochs selected for test.
+
+\begin{table}[H]\centering\small
+\caption{Selected validation checkpoints. The three overlap columns are percentages.}\label{tab:validation-best}
+\input{tables/validation_by_seed}
+\end{table}
+
+Table~\ref{tab:provenance} maps the score rows to their checkpoints. See \path{verified_results.json} for full IDs and hashes.
+\begin{table}[H]\centering\small
+\caption{Active run identifier and evaluated checkpoint fingerprint for each result.}\label{tab:provenance}
+\input{tables/run_provenance}
+\end{table}
+
+\begin{table}[H]\centering\small
+\caption{S1 minus S0 validation deltas in percentage points and outcome of the proposal rule. The held-out deltas appear separately in Table~\ref{tab:final-paired-deltas}.}\label{tab:validation-deltas}
+\input{tables/paired_validation}
+\end{table}
+\endgroup
+
+\clearpage
+\section{Additional class-level results}
+\label{app:class}
+The class means and sample standard deviations in Tables~\ref{tab:class-iou} and \ref{tab:class-dice} use the three repeated evaluations of the same 1,078 test images. Pixel support counts each test pixel once. All 17 classes have nonzero target support. The final column of Table~\ref{tab:class-iou} is the mean of the three paired seed differences in IoU.
+
+\begin{table}[H]\centering\footnotesize
+\caption{Held-out per-class IoU, mean $\pm$ sample SD (\%). S1--S0 is in percentage points.}\label{tab:class-iou}
+\input{tables/class_iou}
+\end{table}
+Plastic has the largest IoU decline among trash classes in the paired means. Paper and rubber have low IoU across configurations, and have substantially fewer test pixels than plastic.
+
+\begin{table}[H]\centering\footnotesize
+\caption{Held-out per-class Dice, mean $\pm$ sample SD (\%).}\label{tab:class-dice}
+\input{tables/class_dice}
+\end{table}
+Dice shows the same broad class-level difficulties. The bundled per-run confusion matrices retain the exact counts behind both measures.
+
+\begin{table}[H]\centering\small
+\caption{Percentage of true foreground or trash pixels assigned to background, by seed and model.}\label{tab:appendix-background}
+\input{tables/background_by_seed}
+\end{table}
+Every row shows a higher trash-to-background rate for S1 than for S0, despite the different directions of the trash mIoU changes. The CSV also provides the pixel numerators and denominators.
+
+\clearpage
+\section{Training histories for all nine runs}
+\label{app:curves}
+Figure~\ref{fig:all-curves} shows the saved epoch histories underlying the best-epoch and early-stopping results. Each row uses a common x-axis and each metric uses the same y-scale across seeds. Dots mark the epochs evaluated on test.
+\begin{figure}[H]\centering
+\includegraphics[width=\textwidth]{images/all_seed_curves.png}
+\caption{Train objective and validation foreground mIoU for U, S0 and S1 across all seeds. Curves stop at the last completed epoch.}\label{fig:all-curves}
+\end{figure}
+Both SegFormer configurations reach higher validation foreground mIoU than U at every seed. The differing peak positions explain why early stopping runs for different numbers of epochs under the same patience.
+
+\clearpage
+\section{Verification and continuation notes}
+\label{app:verify}
+The source revision and common dataset identities are listed below. The archive SHA-256 hashes the raw ZIP bytes. The manifest digest hashes its canonical content. The test membership digest binds the ordered test rows.
+\begin{description}
+\item[Source revision] \path{7df323698d1ae4d5122850a54eb38b01609d80f1}
+\item[Archive SHA-256] \path{caf93d992b85343cfc500386c94ca9ffa6c63e2284e04127753a40db8f33ba4c}
+\item[Manifest content digest] \path{87905f1a97dd2c04194e049ca61d1a7f3bbe2942e9fe17dc2d737c371cdce943}
+\item[Test membership digest] \path{738b95e533e0dc479c247f5a0c62d1298dec6a0d15cc65b88a71b689f1c7e147}
+\end{description}
+
+The 8 November audit checked export hashes, test/checkpoint and membership binding, history order, validation checkpoint selection and per-class metrics. The nine test outputs each contain 186,339,960 valid pixels after excluding ignore and padding. Raw test results come from the recorded GPU inference runs. The packaged verifier recomputes metrics from those saved counts.
+
+Table~\ref{tab:continuation} records three execution paths that require care when reading the results.
+\begin{table}[H]\centering\small
+\caption{Continuation and replay evidence. Epochs count within the same experiment.}\label{tab:continuation}
+\begin{tabularx}{\linewidth}{@{}lYY@{}}\toprule
+Run & Recorded event & Evidence treatment \\ \midrule
+S0, seed 67 & Resumed after epoch 7 from Kaggle on Colab and finished at epoch 28. & Retains the common history prefix and seed. Labeled as a mixed runtime. \\
+U, seed 69 & Training ended at epoch 20. Replay of the epoch-12 validation checkpoint changed nine confusion cells. & Half the absolute count difference was five of 176,765,049 valid pixels. The narrow replay receipt is bound to the audited artifacts. Test evaluates the original best checkpoint. \\
+S1, seed 69 & Continued after epochs 21 and 28. Finished at epoch 30 with best epoch 22. & Parent checkpoint hashes and history prefixes preserve one experiment across resumes. \\
+\bottomrule\end{tabularx}
+\end{table}
+The retained validation replay receipt and available raw T4 timing logs are included under the relevant run folders. Model state and optimizer/RNG state are stored separately in the original checkpoint archives. Exact continuation depends on those archives and their numerical runtime settings.

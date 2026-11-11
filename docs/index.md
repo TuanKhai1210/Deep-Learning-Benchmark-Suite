@@ -43,11 +43,11 @@ description: Five neural architectures. One shared protocol. Exploring the trade
       <span class="eyebrow">FASHION-MNIST / IMAGE CLASSIFICATION</span><h3>Foundations &amp;<br>architecture benchmarks</h3><p>Linear to Transformer. Compare five model families under one data and evaluation protocol.</p>
       <div class="card-bottom"><span>Explore Assignment 1</span><span class="circle-arrow" aria-hidden="true">↗</span></div>
     </a>
-    <a class="project-card" href="{{ '/a2.html' | relative_url }}">
-      <div class="card-top"><span class="card-number">02</span><span class="status-tag">M2 DRAFT PUBLISHED</span></div>
+    <a class="project-card featured" href="{{ '/a2.html' | relative_url }}">
+      <div class="card-top"><span class="card-number">02</span><span class="status-tag dark-tag"><i class="live-dot"></i>FINAL PUBLISHED</span></div>
       <div class="project-icon icon-grid" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-      <span class="eyebrow">TRASHCAN-MATERIAL / SEMANTIC SEGMENTATION</span><h3>Underwater debris.<br>Pixel-level understanding.</h3><p>7,212 images. A video-disjoint split. U-Net and SegFormer-B0 progress, report and artifacts.</p>
-      <div class="card-bottom"><span>Read the A2 M2 draft</span><span class="circle-arrow" aria-hidden="true">↗</span></div>
+      <span class="eyebrow">TRASHCAN-MATERIAL / SEMANTIC SEGMENTATION</span><h3>Underwater debris.<br>Pixel-level understanding.</h3><p>7,212 images. Zero-leakage video-disjoint split. 9 runs over 3 seeds: U-Net vs. SegFormer-B0 with color augmentation ablation. Report, presentation video, and verified checkpoints.</p>
+      <div class="card-bottom"><span>Explore Assignment 2</span><span class="circle-arrow" aria-hidden="true">↗</span></div>
     </a>
     <a class="project-card" href="{{ '/a3.html' | relative_url }}">
       <div class="card-top"><span class="card-number">03</span><span class="status-tag">PLANNED</span></div>
@@ -65,8 +65,8 @@ description: Five neural architectures. One shared protocol. Exploring the trade
 </div></section>
 
 <section class="section container">
-  <div class="section-heading"><div><span class="eyebrow">03 / CURRENT FOCUS</span><h2>Building the evidence.</h2></div><p>Assignment 1 is complete and its report, presentation, checkpoints, and reproducibility evidence are published.</p></div>
-  <div class="progress-grid"><div class="progress-card"><span class="eyebrow">COMPLETED</span><h3>The experiment’s foundations</h3><ul class="check-list"><li>Fashion-MNIST as the main dataset</li><li>Team responsibilities and model ownership</li><li>Split seed 36 and three training seeds</li></ul><a class="text-link" href="{{ '/a1.html' | relative_url }}">See the full study ↗</a></div><div class="progress-card"><span class="eyebrow">PUBLISHED</span><h3>From pipeline to comparison</h3><p>Data preparation, five model families, training, validation, experiment logging, and final analysis are complete.</p><div class="release-note"><span class="live-dot"></span><span>Report, slides, video, and checkpoints are available.</span></div></div></div>
+  <div class="section-heading"><div><span class="eyebrow">03 / CURRENT FOCUS</span><h2>Building the evidence.</h2></div><p>Assignments 1 and 2 are fully completed; reports, presentations, videos, checkpoints, and reproducibility evidence are published.</p></div>
+  <div class="progress-grid"><div class="progress-card"><span class="eyebrow">ASSIGNMENT 1 · COMPLETED</span><h3>Fashion-MNIST Classification</h3><ul class="check-list"><li>5 architecture families (Linear to Transformer)</li><li>15 verified runs across 3 seeds</li><li>Full report, slides, and defense video</li></ul><a class="text-link" href="{{ '/a1.html' | relative_url }}">See the A1 benchmark ↗</a></div><div class="progress-card"><span class="eyebrow">ASSIGNMENT 2 · COMPLETED</span><h3>TrashCan Semantic Segmentation</h3><p>Video-disjoint split (seed 36), U-Net baseline vs. pretrained SegFormer-B0, color jitter ablation across 9 runs, comprehensive error taxonomy, and oral defense video.</p><div class="release-note"><span class="live-dot"></span><span>Report, video, and checkpoints published.</span></div><a class="text-link" href="{{ '/a2.html' | relative_url }}" style="margin-top: 8px; display: inline-block;">See the A2 benchmark ↗</a></div></div>
 </section>
 
 <section class="team-section section container" id="team">

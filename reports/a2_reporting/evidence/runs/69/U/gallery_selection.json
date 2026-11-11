@@ -1,0 +1,19 @@
+{
+  "test_indices": [
+    0,
+    215,
+    430,
+    646,
+    861,
+    1077
+  ],
+  "image_ids": [
+    15,
+    1503,
+    2923,
+    4394,
+    5721,
+    7212
+  ],
+  "selection": "Six evenly spaced manifest-order test examples fixed for every model/seed; not a frequency estimate."
+}

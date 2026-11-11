@@ -1,0 +1,391 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{microtype}
+\usepackage{hyperref}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!50!black,
+  urlcolor=blue!50!black,
+  citecolor=blue!50!black
+}
+
+\definecolor{codebg}{RGB}{246,247,249}
+\definecolor{codeframe}{RGB}{210,214,220}
+\definecolor{codecomment}{RGB}{90,105,90}
+\definecolor{codekeyword}{RGB}{45,74,145}
+\definecolor{codestring}{RGB}{145,70,45}
+
+\lstdefinestyle{pythonstyle}{
+  language=Python,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{codekeyword}\bfseries,
+  commentstyle=\color{codecomment}\itshape,
+  stringstyle=\color{codestring},
+  backgroundcolor=\color{codebg},
+  frame=single,
+  rulecolor=\color{codeframe},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  numbersep=8pt,
+  showstringspaces=false,
+  breaklines=true,
+  breakatwhitespace=false,
+  tabsize=4,
+  columns=fullflexible,
+  keepspaces=true,
+  captionpos=b
+}
+\lstset{style=pythonstyle}
+
+\title{Assignment 1 Methodology}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The methodology uses a shared PyTorch pipeline to train and evaluate a multilayer perceptron and a configurable recurrent classifier on Fashion-MNIST. The MLP operates on flattened pixels, while the recurrent model processes rows or columns with a GRU or LSTM and supports stacked, unidirectional, and bidirectional configurations. Both models use a common logit interface, cross-entropy objective, validation metrics, and checkpoint-selection procedure. \textbf{TODO: Final run-specific configurations and measured results are pending completion of the main experiments.}
+\end{abstract}
+
+\setcounter{section}{1}
+\section{Methodology}
+
+\subsection{End-to-End Pipeline and Data Loading}
+
+The training and evaluation code is organized into distinct responsibilities. The data subsystem prepares Fashion-MNIST samples and loaders; the models implement architecture-specific transformations; the one-epoch engine performs gradient updates or evaluation; and the trainer coordinates initialization, validation, checkpoint decisions, history, and resumption. Keeping these roles separate means the same optimization and evaluation logic can be used for the MLP and recurrent classifier.
+
+\begin{lstlisting}[caption={Conceptual end-to-end data and training flow.},label={lst:pipeline}]
+Fashion-MNIST source
+    -> fixed train / validation / test loaders
+    -> normalized image batches and integer class labels
+    -> MLP or recurrent image classifier
+    -> ten raw class logits
+    -> cross-entropy loss and optimizer update (training only)
+    -> validation metrics and checkpoint selection
+    -> explicit final evaluation of the selected checkpoint
+\end{lstlisting}
+
+The loaders supply batches in the shared contract described in Section~2.2. Training batches are shuffled using a dedicated generator initialized from the run seed; validation and test loaders are not shuffled and do not discard incomplete final batches. Stochastic augmentation is applied only to training samples, while validation and test samples use deterministic transforms. Dataset provenance, split construction, and normalization statistics are described in Section~1.
+
+The trainer first validates the run configuration and seeds the random number generators. It then builds the loaders and model, resolves the compute device, and constructs the loss, optimizer, and optional scheduler. Within each epoch it calls the shared training function once, followed by a validation pass. The test loader is not part of this epoch loop. The multi-epoch orchestration is therefore separate from both the model's \texttt{forward} method and the one-epoch mechanics.
+
+\subsection{Shared Model Interface and Input Representations}
+
+The shared batch contract keeps model-specific representation choices inside the model classes:
+
+\begin{table}[ht]
+\centering
+\capt\begin{tabular}{p{1.35in}p{2.2in}p{3.15in}}
+\toprule
+Field & Shape and type & Interpretation \\
+\midrule
+\texttt{images} & \texttt{float32 [B,1,28,28]} & Batch of normalized grayscale images \\
+\texttt{labels} & \texttt{int64 [B]} & Integer class indices in \(0,\ldots,9\) \\
+\texttt{sample\_ids} & list of \(B\) strings & Stable identifiers for the examples \\
+Model output & \texttt{[B,10]} & One raw logit per class for each image \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Here, \(B\) denotes the batch size. A logit is an unnormalized class score: the predicted class is \(\arg\max_{c} z_c\). The ten logits are not probabilities and need not sum to one. The training criterion consumes these logits directly. If probabilities are needed for inspection or export, softmax is applied after inference; it is not an input to cross-entropy.ion{Batch fields and common model output.}
+\label{tab:batch-contract}
+
+
+The MLP and recurrent classifier use different internal representations:
+\begin{itemize}[leftmargin=*]
+  \item The MLP flattens the spatial dimensions of each image into one \(784\)-element feature vector.
+  \item The RNN removes the single channel dimension and interprets either image rows or image columns as sequential feature vectors. Its sequence length and per-step input width follow from this choice.
+\end{itemize}
+These conversions occur inside each model so that callers continue to pass the same image shape regardless of the selected architecture.
+
+\subsection{Model Architectures}
+
+The methodology examines a multilayer perceptron and a configurable recurrent classifier, with emphasis on their distinct representations of Fashion-MNIST images.
+
+\setcounter{subsubsection}{1}
+\subsubsection{Multilayer Perceptron}
+\label{sec:mlp-method}
+
+\paragraph{Architecture.} The MLP is a fully connected feed-forward classifier. Its configurable topology is
+\[
+\text{Flatten} \rightarrow \left[\text{Linear}\rightarrow\text{Activation} \rightarrow\text{Dropout (optional)}\right]^n \rightarrow\text{Linear}\rightarrow 10\text{ logits}.
+\]
+For a \(28\times28\) grayscale input \(X\), flattening gives \(x\in\mathbb{R}^{784}\). Let the hidden layer widths be \(d_1,\ldots,d_n\), with \(d_0=784\). For hidden layer \(i\),
+\[
+a_i=W_i h_{i-1}+b_i,\qquad h_i=\sigma(a_i),
+\]
+where \(h_0=x\), \(W_i\) is a learned weight matrix, \(b_i\) is a learned bias, and \(\sigma\) is the selected activation. The classification head is
+\[
+z=W_{n+1}h_n+b_{n+1},\qquad z\in\mathbb{R}^{10}.
+\]
+The final layer emits raw logits and has no softmax.
+
+The model is assembled from a configuration containing the input dimension, number of classes, a non-empty list of hidden widths, the activation name, and a dropout rate. Each hidden width must be positive. The supported activation registry contains ReLU, GELU, tanh, sigmoid, and Leaky ReLU. Dropout is added after each hidden activation only when its configured probability is positive.
+
+\begin{lstlisting}[caption={MLP construction pattern used by the configurable classifier.},label={lst:mlp-build}]
+layers = [nn.Flatten(start_dim=1)]
+previous_width = input_dim
+
+for hidden_width in hidden_dims:
+    layers.append(nn.Linear(previous_width, hidden_width))
+    layers.append(activation_class())
+    if dropout_rate > 0:
+        layers.append(nn.Dropout(dropout_rate))
+    previous_width = hidden_width
+
+layers.append(nn.Linear(previous_width, num_classes))
+network = nn.Sequential(*layers)
+\end{lstlisting}
+
+\paragraph{Meaning of the hidden nonlinearity.} ReLU is defined by
+\[
+\operatorname{ReLU}(u)=\max(0,u).
+\]
+It leaves positive responses unchanged and maps negative responses to zero. GELU smoothly weights values according to their magnitude; tanh and sigmoid bound the activation range; Leaky ReLU uses a non-zero slope for negative inputs. The activation is applied elementwise to each hidden-layer pre-activation.
+
+Without a nonlinear activation, any number of consecutive affine layers could be composed into a single affine transformation. Hidden nonlinearities are what enable the MLP to construct a hierarchy of input-dependent features. Earlier units can respond to combinations of pixel values, and later layers can combine those responses conditionally. The resulting decision boundaries in the original pixel space are not restricted to one global hyperplane.
+
+\paragraph{Dropout regularization.} During training, dropout randomly masks hidden activations with probability \(p\); the retained activations are scaled according to the dropout implementation. This reduces reliance on particular hidden units or co-activation patterns and can regularize a dense model. Dropout is active in training mode and disabled in evaluation mode. A dropout rate of zero omits dropout layers. The configuration example currently uses ReLU, hidden widths \([256,128]\), and \(p=0.1\), but those values remain configuration choices rather than architectural requirements.
+
+\paragraph{Example parameter count and representational limitation.} For the example topology
+\[
+784\rightarrow256\rightarrow128\rightarrow10,
+\]
+the trainable parameter count is
+\begin{align*}
+P_{\mathrm{MLP}}
+&=(784\cdot256+256)
+ +(256\cdot128+128)
+ +(128\cdot10+10)\\
+&=235{,}146.
+\end{align*}
+Each parenthesized term counts a layer's weights and biases. Flattening allows each dense unit to use information from every pixel, but it removes the explicit two-dimensional neighborhood structure. The network does not automatically treat adjacent pixels as related or share one feature detector across different spatial positions. This flexibility distinguishes the MLP from convolutional models but may require more parameters to learn spatial regularities from data.
+
+\setcounter{subsubsection}{3}
+\subsubsection{GRU-Based Image Classifier}
+\label{sec:rnn-method}
+
+\paragraph{Recurrent model family.} The recurrent classifier is configurable as a GRU or an LSTM and supports row- or column-wise image sequences, multiple recurrent layers, and unidirectional or bidirectional processing. The equations and state-selection description below apply to these supported options; the exact configuration used in each reported experiment is recorded separately.
+
+\paragraph{Image sequence construction.} For a grayscale image \(X\in\mathbb{R}^{H\times W}\), the row representation is
+\[
+x_t=X_{t,:}\in\mathbb{R}^{W},\quad t=1,\ldots,H,
+\]
+and the column representation is
+\[
+x_t=X_{:,t}\in\mathbb{R}^{H},\quad t=1,\ldots,W.
+\]
+Thus, row-wise processing has sequence length \(T=H\) and input width \(D=W\); column-wise processing has \(T=W\) and \(D=H\). In either case, each timestep is one complete row or column, not one pixel. For Fashion-MNIST, \(H=W=28\), so both representations produce 28 timesteps with 28 values per timestep, but they scan the image along different spatial axes.
+
+\begin{lstlisting}[caption={Image-to-sequence conversion for row or column processing.},label={lst:rnn-input}]
+# images: [B, 1, H, W]
+sequence = images.squeeze(1)          # [B, H, W], rows
+if representation == "columns":
+    sequence = sequence.permute(0, 2, 1).contiguous()
+                                        # [B, W, H], columns
+sequence_output, hidden_state = rnn(sequence)
+\end{lstlisting}
+
+The recurrent layer uses a batch-first convention, so its input shape is \([B,T,D]\). The configuration's \texttt{input\_size} must equal the feature width \(D\) for the chosen image orientation. This sequence representation introduces an explicit traversal order: the state at each step can carry information from the rows or columns processed before it.
+
+\paragraph{GRU cell.} A GRU maintains a hidden state \(h_t\). The reset gate controls how the previous hidden state contributes to a candidate state, and the update gate controls the blend between prior state and candidate. One common mathematical convention is
+\begin{align}
+r_t &= \sigma(W_r x_t+U_r h_{t-1}+b_r),\\
+z_t &= \sigma(W_z x_t+U_z h_{t-1}+b_z),\\
+\widetilde{h}_t
+&=\tanh\!\left(W_hx_t+U_h(r_t\odot h_{t-1})+b_h\right),\\
+h_t &= z_t\odot h_{t-1}
+ +(1-z_t)\odot\widetilde{h}_t,
+\end{align}
+where \(\sigma\) is the sigmoid function and \(\odot\) denotes elementwise multiplication. The reset gate \(r_t\) changes how much past context contributes to the candidate; the update gate \(z_t\) controls retention versus replacement. Gate naming and exact equation conventions can differ between references and libraries, while the underlying idea is learned gating of state information. In the project implementation, the cell is provided by PyTorch's \texttt{nn.GRU}.
+
+\paragraph{LSTM cell option.} The implementation can instead construct an LSTM. An LSTM carries a hidden state \(h_t\) and a cell state \(c_t\). The hidden state is the exposed representation; the cell state is the additional memory path. Its gates control what information is written, forgotten, and exposed:
+\begin{align}
+i_t &= \sigma(W_i x_t+U_i h_{t-1}+b_i),\\
+f_t &= \sigma(W_f x_t+U_f h_{t-1}+b_f),\\
+o_t &= \sigma(W_o x_t+U_o h_{t-1}+b_o),\\
+\widetilde{c}_t &= \tanh(W_c x_t+U_c h_{t-1}+b_c),\\
+c_t &= f_t\odot c_{t-1}+i_t\odot\widetilde{c}_t,\\
+h_t &= o_t\odot\tanh(c_t).
+\end{align}
+The input gate \(i_t\) controls candidate information written to memory, the forget gate \(f_t\) controls retained prior memory, and the output gate \(o_t\) controls the hidden representation exposed to later computation. When using an LSTM, the classifier uses \(h_t\), not \(c_t\). The project selects the recurrent class from configuration and handles the different PyTorch return structures: an LSTM returns \((h_n,c_n)\), while a GRU returns \(h_n\).
+
+\paragraph{Stacked and bidirectional variants.} The recurrent configuration exposes the cell type, input size, hidden size, number of layers, directionality, sequence representation, and dropout. A stacked model passes timestep outputs from one recurrent layer to the next. Classification uses the final hidden state of the top layer.
+
+A unidirectional RNN processes the sequence in its supplied order. A bidirectional RNN processes it in both forward and reverse orders. Let \(H_d\) be the hidden width per direction. For a unidirectional model, the top-layer classifier representation has width \(H_d\). For a bidirectional model, the top-layer forward and reverse final hidden states are concatenated, producing width \(2H_d\). The output layer is constructed with this direction-dependent input width:
+\[
+D_{\mathrm{head}}=
+\begin{cases}
+H_d, & \text{unidirectional},\\
+2H_d, & \text{bidirectional}.
+\end{cases}
+\]
+For the bidirectional case, the implementation selects the final-layer forward and reverse states from the hidden-state tensor and concatenates them. It does not use the LSTM cell state or average all timestep outputs for the classification head.
+
+The recurrent dropout setting is passed to the PyTorch recurrent module and applies between recurrent layers. Consequently, a single-layer recurrent network has no inter-layer transition on which recurrent dropout can act. This is separate from MLP dropout, which is explicitly inserted after each hidden activation.
+
+\paragraph{Current configuration.} The current RNN configuration specifies a GRU with row-wise input, input size 28, hidden size 128, one recurrent layer, and unidirectional processing. \textbf{TODO: Final recurrent configuration for each main run (cell, sequence orientation, hidden size, layer count, directionality, and dropout).}
+
+\subsection{Loss Function and Evaluation Metrics}
+
+\paragraph{Cross-entropy objective.} For a batch of \(B\) examples, let \(z_{i,c}\) be the logit for example \(i\) and class \(c\), and let \(y_i\) be its integer target. The cross-entropy objective for one example is
+\[
+\ell_i=-\log \left( \frac{\exp(z_{i,y_i})}{\sum_{c=0}^{9}\exp(z_{i,c})} \right),
+\]
+and the default mean-reduced batch loss is
+\[
+\mathcal{L}_{B}=\frac{1}{B}\sum_{i=1}^{B}\ell_i.
+\]
+The loss implementation uses numerically stable log-softmax internally. The model therefore returns logits directly; explicitly applying softmax before the criterion is unnecessary and is not done.
+
+\paragraph{Accuracy and macro-F1.} For \(N\) examples, accuracy is
+\[
+\operatorname{Accuracy} =\frac{1}{N}\sum_{i=1}^{N} \mathbb{1}[\widehat{y}_i=y_i],
+\]
+where \(\widehat{y}_i=\arg\max_c z_{i,c}\) and \(\mathbb{1}\) is the indicator function. For class \(c\), precision \(P_c\) and recall \(R_c\) are computed from the full set of targets and predictions, and
+\[
+F1_c=\frac{2P_cR_c}{P_c+R_c},\qquad \operatorname{MacroF1}=\frac{1}{10}\sum_{c=0}^{9}F1_c.
+\]
+The label set is explicitly fixed to all ten class indices. With \texttt{zero\_division=0}, a class for which precision/recall yields an undefined F1 contributes zero. Accuracy gives equal weight to examples; macro-F1 gives equal weight to classes. This makes macro-F1 informative about class-specific performance even when class frequencies differ.
+
+Metrics are calculated from all targets and predictions accumulated over the entire epoch or evaluation split. They are not obtained by averaging per-batch F1 values, since batch class composition and a smaller final batch would make that statistic depend on batch boundaries. Mean loss is also aggregated with sample weighting:
+\[
+\overline{\mathcal{L}} =\frac{\sum_{b=1}^{M} n_b\mathcal{L}_b} {\sum_{b=1}^{M} n_b},
+\]
+where batch \(b\) contains \(n_b\) examples and has mean loss \(\mathcal{L}_b\). This gives each example equal influence on the reported split loss.
+
+\paragraph{Parameter counts and structured outputs.} The parameter-count function returns total parameters and trainable parameters by summing the scalar element count of each model parameter; the trainable count includes only tensors whose \texttt{requires\_grad} flag is true. It is an exact count for the instantiated architecture, not a runtime or compute estimate.
+
+An epoch result contains mean loss, accuracy, macro-F1, and sample count. An evaluation result also contains a prediction record with aligned sample IDs, targets, predicted labels, and per-class probabilities. Probabilities are computed as \(\operatorname{softmax}(z)\) for interpretation and downstream error analysis; they are not used to compute cross-entropy.
+
+\subsection{Training, Hyperparameter Selection and Checkpointing}
+
+\paragraph{Single-epoch training.} The training function places the model in training mode, iterates over batches, transfers images and labels to the selected device, clears gradients, performs the forward pass, computes cross-entropy, backpropagates the loss, and updates the parameters. MLP dropout is active because the model is in training mode. Predictions for training metrics are \(\arg\max\) over the batch logits.
+
+\begin{lstlisting}[caption={Essential update sequence for one training batch.},label={lst:train-step}]
+model.train()
+for batch in train_loader:
+    images = batch["images"].to(device)
+    labels = batch["labels"].to(device)
+
+    optimizer.zero_grad()
+    logits = model(images)
+    loss = criterion(logits, labels)
+    loss.backward()
+    optimizer.step()
+
+    predicted = logits.argmax(dim=1)
+    # Append labels/predictions and add loss * batch_size.
+\end{lstlisting}
+
+The model's prediction pass and the optimizer update are deliberately separate: the logits used for the batch predictions are produced during the forward pass, and the optimizer then updates the model using the cross-entropy gradients. At epoch end, all batch predictions are combined before computing accuracy and macro-F1.
+
+\paragraph{Multi-epoch trainer and configurable optimization.} The run-level trainer owns the epoch loop. It applies the configured seed before model construction, validates the configuration (strictly for main runs), creates a unique run directory, saves the effective configuration and environment metadata, and then constructs the loaders and model. The model is placed on the resolved device. Automatic device selection checks CUDA first, then Apple MPS, then CPU; a specific device can be configured explicitly.
+
+Optimizer choice is supplied by configuration. The implementation supports Adam, AdamW, SGD (with optional momentum), RMSprop, Adagrad, Adadelta, Adamax, and NAdam. Learning rate and weight decay are common fields; optimizers may also read their own settings, such as momentum, epsilon, or beta values. An optional scheduler can be configured as step, exponential, cosine annealing, reduce-on-plateau, or polynomial decay. The scheduler is stepped after the epoch's training and validation metrics are obtained. Reduce-on-plateau receives a selected validation metric; other supported schedulers advance according to their own epoch schedule. \textbf{TODO: Final optimizer, scheduler, and effective hyperparameters for each main run.}
+
+The run history records the epoch index, train and validation losses, train and validation accuracy, train and validation macro-F1, learning rate, and epoch duration. The timing interval for an epoch includes the training and validation passes and excludes history writing, scheduler stepping, and checkpoint persistence; it is therefore distinct from total wall-clock run time.
+
+\paragraph{Configuration and smoke-run distinctions.} The maximum epoch count, batch size, optimizer, learning rate, weight decay, scheduler, early-stopping monitor, patience, and \texttt{min\_delta} are controlled by the effective configuration. A smoke run is a correctness check, not a benchmark run: its epoch cap is limited to ten and batch size to sixteen, and it uses a separate run mode and run directory. Main runs use strict configuration validation and the approved experiment budget. Smoke results are kept separate from the main comparison.
+
+\paragraph{Validation checkpoint ranking.} After every epoch, the model is evaluated on validation data, without gradient updates. The best checkpoint is selected by this lexicographic order:
+\begin{enumerate}[leftmargin=*]
+  \item maximize validation macro-F1;
+  \item when macro-F1 ties, minimize validation loss;
+  \item when both tie, choose the earlier epoch.
+\end{enumerate}
+Candidates with non-finite macro-F1 or loss are rejected. This checkpoint ranking is distinct from early stopping. Early stopping can monitor either validation macro-F1 or validation loss. An improvement must exceed \texttt{min\_delta}; otherwise the no-improvement counter increases. If patience is positive and the counter reaches that threshold, training terminates. Thus, early stopping determines when to end optimization, whereas the checkpoint comparator determines which epoch's model is retained as best.
+
+\paragraph{Checkpoint contents and resumption.} \texttt{best.pt} stores the selected model state, epoch, resolved configuration, validation metrics, run seed, schema version, source revision, and split/normalization provenance hashes. \texttt{last.pt} is the resumable state saved at the configured frequency, at the final epoch, or when early stopping occurs. It includes model, optimizer, and scheduler states, random-number-generator states, the training-loader generator state, and early-stopping counters. Checkpoint writes use a temporary file followed by an atomic replacement, and checkpoint loading checks required payload fields.
+
+On resume, the trainer verifies that split and normalization hashes and relevant configuration sections match the saved run. It restores the model, optimizer, scheduler, random states, and training DataLoader generator, then continues from the next epoch. Existing history is validated and truncated to the saved epoch before new rows are appended. This prevents a resumed run from silently mixing incompatible data or configuration states.
+
+\subsection{Experimental Design and Fairness Controls}
+
+The model comparison uses a shared data partition and the same class definitions, loss, metric functions, checkpoint-selection order, and test-set isolation policy. The shared protocol records split seed \(36\) and run seeds \(69420\), \(67\), and \(69\). The split seed defines the saved train/validation partition; run seeds initialize model training and loader shuffling and do not regenerate that partition. The protocol specifies one initial configuration trial per model. \textbf{TODO: Completed per-seed results and corresponding effective configurations.}
+
+\begin{lstlisting}[caption={Fair-comparison outline: reuse one split, vary run seeds, and keep selection on validation.},label={lst:fairness}]
+split_file = "configs/a1/splits/fashion_mnist_split.json"
+run_seeds = [69420, 67, 69]
+
+for seed in run_seeds:
+    run_config = deepcopy(base_config)
+    run_config["data"]["split_file"] = split_file
+    run_config["run"]["seed"] = seed
+    fit(run_config)  # train and select using validation only
+\end{lstlisting}
+
+The pseudocode shows repeated runs starting from the same base configuration and split manifest, with the run seed varied between runs. Tuning configurations are selected using validation data under the declared budget; test results are not used to select configurations or seeds.
+
+\begin{lstlisting}[language={},caption={Explicit final-test evaluation after model selection is frozen.},label={lst:test-command}]
+python -m dlbench.a1.cli evaluate --config CONFIG.py \
+    --checkpoint best.pt --split test --allow-test
+\end{lstlisting}
+
+The command-line interface rejects a test request without \texttt{--allow-test} and rejects test evaluation in smoke mode. This gate makes final-test use an explicit action instead of an accidental consequence of the training loop.
+
+Fairness is maintained through a common split, evaluation procedure, checkpoint criterion, and validation-only model selection. Model-specific optimizer settings may differ, but their effective values and tuning budget are recorded with each run. Smoke runs, incomplete runs, and runs using different splits or preprocessing are distinguished from the main comparison.
+
+The official test set is reserved for final evaluation after model and hyperparameter decisions are fixed. Checkpoint evaluation defaults to validation. Test evaluation requires explicit \texttt{--allow-test} acknowledgement in the command-line interface and is not permitted in smoke mode. This ensures that test performance cannot influence checkpoint selection, early stopping, or configuration selection.
+
+\subsection{Environment, Timing and Reproduction Protocol}
+
+\paragraph{Run provenance.} Each run receives a unique identifier and a new output directory; existing run directories are not reused. Before training, the effective configuration, environment information, source configuration snapshots, and data-provenance records are saved. Environment records include software versions, operating system, device/GPU information, precision flags, CPU thread count where relevant, and deterministic-algorithm settings. Metadata records the Git revision and whether the worktree was dirty, alongside hashes for the split and normalization statistics. These records link each result to the code, configuration, environment, and data identity that produced it.
+
+Python, NumPy, and PyTorch random states are initialized from the run seed; DataLoader workers are seeded from their PyTorch worker seeds. The trainer captures the Python, NumPy, CPU PyTorch, and available CUDA RNG states in resumable checkpoints. Deterministic settings improve repeatability, but do not guarantee bitwise-identical results across different hardware, operating systems, or library versions.
+
+\begin{lstlisting}[caption={Representative run-provenance fields saved alongside an experiment.},label={lst:provenance}]
+metadata = {
+    "protocol_id": config["protocol"]["id"],
+    "run_seed": config["run"]["seed"],
+    "git_revision": git_revision,
+    "git_dirty": git_dirty,
+    "split": {"sha256": split_sha256},
+    "normalization": {"sha256": normalization_sha256},
+}
+\end{lstlisting}
+
+The artifact writer records the effective configuration, environment, source configuration snapshots, and data hashes with each run. The excerpt shows the principal provenance fields; the saved metadata also includes schema and source records.
+
+\paragraph{Training and inference timing.} The epoch timer surrounds the training pass and validation pass; it excludes history-file writing, scheduler stepping, and checkpoint writes. It therefore measures epoch computation rather than total run wall-clock time. Tuning time is separate from the selected main runs. \textbf{TODO: Measured per-epoch and total training times, completed epoch counts, and tuning time.}
+
+Inference timing uses the dedicated forward-only benchmark. The model is placed in evaluation mode, input is already resident on the timing device, and inference runs without gradient tracking or mixed precision. The configured timing preset specifies CUDA, batch size \(64\), float32 precision, 20 warm-up steps, and 100 measurement steps. CUDA is synchronized around each timed forward pass to account for asynchronous execution. The benchmark reports device, software version, batch shape, warm-up and measurement counts, median batch time, throughput, and amortized time per image. \textbf{TODO: Verified timing results and actual measurement environment for the completed runs.}
+
+The timing scope excludes data loading, host-to-device transfer, model loading, and checkpoint I/O. Amortized time per image for a multi-example batch is not batch-one request latency. CPU or CUDA are supported timing devices by the benchmark implementation; the recorded device is part of each timing result.
+
+\begin{lstlisting}[caption={Core of the forward-only inference timing loop.},label={lst:timing}]
+model.eval()
+with torch.inference_mode():
+    for _ in range(warmup_steps):
+        model(sample_batch)
+    synchronize_if_cuda(device)
+
+    measurements_ms = []
+    for _ in range(measurement_steps):
+        synchronize_if_cuda(device)
+        start = time.perf_counter()
+        model(sample_batch)
+        synchronize_if_cuda(device)
+        measurements_ms.append(
+            1000 * (time.perf_counter() - start)
+        )
+
+median_batch_ms = statistics.median(measurements_ms)
+\end{lstlisting}
+
+This excerpt shows the warm-up, device synchronization, timed forward pass, and median aggregation used by the benchmark. The implementation also validates the requested device, batch size, float32 input/model, and timing scope, and records each measurement with its device and software metadata.
+
+\paragraph{Reproduction boundary.} Each reported result is associated with its model configuration, run seed, protocol identifier, split identity, run directory, checkpoint, history, evaluation split, Git revision, and environment metadata. Configuration validation alone does not verify that data, hardware, or training results exist; completed run artifacts provide the evidence for reported values. \textbf{TODO: Reproduction commands and references to completed run artifacts, checkpoints, and environment records.}
+
+\end{document}

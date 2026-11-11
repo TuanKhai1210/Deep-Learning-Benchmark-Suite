@@ -16,14 +16,14 @@
 \makeatother
 \deptname{Faculty of Computer Science and Engineering}
 \coursename{Deep Learning and Its Applications (CO3133)}
-\reporttype{ASSIGNMENT 2 -- M2 DRAFT}
+\reporttype{ASSIGNMENT 2 -- FINAL REPORT}
 \title{Video-Disjoint Semantic Segmentation of Marine Debris in TrashCan}
 \advisor{Dr. Le Thanh Sach}
 \groupname{Tiki-taka}
 \reportplace{Ho Chi Minh City}
-\reporttime{28 October 2026}
+\reporttime{8 November 2026}
 \logofile{hcmut.png}
-\hypersetup{pdftitle={Tiki-taka A2 M2 Draft: Completed U-Net and Partial SegFormer Progress},pdfauthor={Nguyen Anh Khoa; Nguyen Hao Thien; Ta Tuan Khai}}
+\hypersetup{pdftitle={Tiki-taka A2 Final: Video-Disjoint Semantic Segmentation},pdfauthor={Nguyen Anh Khoa; Nguyen Hao Thien; Ta Tuan Khai}}
 
 \begin{document}
 \hypersetup{pageanchor=false}
@@ -38,18 +38,18 @@ FACULTY OF COMPUTER SCIENCE AND ENGINEERING\par}
 {\bfseries\fontsize{17}{21}\selectfont DEEP LEARNING AND ITS APPLICATIONS\par}
 {\bfseries CO3133 -- SEMESTER-261\par}
 \vspace{0.5 cm}
-{\bfseries\fontsize{16}{20}\selectfont ASSIGNMENT 2 -- M2 DRAFT\par}
+{\bfseries\fontsize{16}{20}\selectfont ASSIGNMENT 2 -- FINAL REPORT\par}
 \vspace{0.5 cm}
 {\bfseries\fontsize{20}{24}\selectfont Video-Disjoint Semantic Segmentation\par of Marine Debris in TrashCan\par}
 \vspace{0.4 cm}
-{\large Completed U-Net evaluation and partial SegFormer-B0 training\par}
+{\large Video-disjoint evaluation of U-Net and SegFormer-B0\par}
 \vspace{0.7 cm}
 \begin{tabular}{rl}
 \textbf{Class:} & CC01\\
 \textbf{Instructor:} & Dr. Le Thanh Sach\\
 \textbf{Group:} & Tiki-taka\\
-\textbf{Milestone:} & M2 Draft\\
-\textbf{Evidence cutoff:} & 28 October 2026
+\textbf{Milestone:} & Final\\
+\textbf{Evidence cutoff:} & 8 November 2026
 \end{tabular}\par
 \vspace{0.5 cm}
 \begin{tabular}{clc}\toprule
@@ -59,23 +59,26 @@ No. & Group member & Student ID\\\midrule
 3 & Ta Tuan Khai & 2452515\\\bottomrule
 \end{tabular}
 \vfill
-{\bfseries Ho Chi Minh City, 28 October 2026}
+{\bfseries Ho Chi Minh City, 8 November 2026}
 \end{center}
 \clearpage
 \hypersetup{pageanchor=true}
 \pagenumbering{roman}
 \section*{Abstract}
 \addcontentsline{toc}{section}{Abstract}
-The project has completed a scratch U-Net experiment on a video-disjoint TrashCan-Material split and has progressed to pretrained SegFormer-B0: S0 has 15 completed main-training epochs, while S1 has completed its GPU pilot only.
+We compare scratch U-Net and two pretrained SegFormer-B0 configurations on a video-disjoint TrashCan-Material split. The SegFormer configurations differ in training color augmentation. We report nine runs over three seeds on the same 1,078 held-out images.
 
-The validation-selected U-Net checkpoint obtains test foreground mean intersection over union (mIoU) 0.035627 and foreground Dice 0.058519. The partial S0 run reaches best-so-far validation foreground mIoU 0.195336 at epoch 15; this is a validation progress result, not a SegFormer test result or a final model ranking.
+Mean test foreground mean intersection over union (mIoU) is 4.52\% for U-Net, 15.86\% for SegFormer without augmentation and 15.41\% for SegFormer with augmentation. Both SegFormer configurations exceed U-Net at each measured seed. The augmentation difference changes sign across seeds. The augmented model assigns more true trash pixels to background at each seed. Matched qualitative cases show thin-object recovery, foreground omissions and material confusion.
 
-The next stage is to complete S0, train the paired S1 configuration with color augmentation, and compare the two completed runs using the fixed validation rule before interpreting their test results. The current evidence does not establish the effect of augmentation or variability across seeds.
+We report inference cost under one T4 batch protocol and keep the seed-level outcomes visible. The results describe one fixed split and recorded Kaggle and Colab execution profiles.
 
 \vspace{0.4 cm}
-\textbf{Keywords:} semantic segmentation; marine debris; TrashCan; U-Net; SegFormer; video-disjoint evaluation; progress report.
+\textbf{Keywords:} semantic segmentation, marine debris, TrashCan, U-Net, SegFormer, video-disjoint evaluation.
 \clearpage
+\begingroup
+\setstretch{1.0}
 \tableofcontents
+\endgroup
 \clearpage
 \pagenumbering{arabic}
 \input{sections/01-data}
@@ -85,4 +88,7 @@ The next stage is to complete S0, train the paired S1 configuration with color a
 \input{sections/03-results}
 \clearpage
 \input{sections/04-supporting}
+\clearpage
+\appendix
+\input{sections/05-appendices}
 \end{document}
