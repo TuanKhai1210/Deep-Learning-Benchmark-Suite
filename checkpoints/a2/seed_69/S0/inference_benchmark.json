@@ -1,0 +1,114 @@
+{
+  "identity": {
+    "checkpoint_sha256": "64f1f8cf41ed6b1b43f1b540aac48569ce7a4a17e44ec5418e6893e42039aaf9",
+    "run_identity_sha256": "2921787ca7a0c08eaaaa957877d24cfbd288ff140634f1a10c34f0f9e02983a5",
+    "protocol": {
+      "batch_size": 4,
+      "warmup": 10,
+      "repeats": 50,
+      "gallery_count": 6,
+      "precision": "float32",
+      "device": "cuda:0"
+    }
+  },
+  "environment": {
+    "python_version": "3.13.16",
+    "torch_version": "2.11.0+cu130",
+    "numpy_version": "2.1.3",
+    "deterministic_algorithms": true,
+    "cuda_available": true,
+    "torch_cuda_version": "13.0",
+    "os": "Linux",
+    "os_release": "6.6.159+",
+    "machine": "x86_64",
+    "processor": "x86_64",
+    "torchvision_version": "0.26.0+cu130",
+    "gpus": [
+      {
+        "index": 0,
+        "name": "Tesla T4",
+        "total_memory_bytes": 15637086208,
+        "total_memory_gb": 14.56,
+        "compute_capability": "7.5",
+        "multi_processor_count": 40
+      }
+    ],
+    "system_ram": {
+      "total_bytes": 13605810176,
+      "total_gb": 12.67
+    },
+    "precision": {
+      "float32_matmul_precision": "highest",
+      "cuda_matmul_allow_tf32": false
+    },
+    "cudnn": {
+      "available": true,
+      "enabled": true,
+      "version": 92700,
+      "allow_tf32": false,
+      "benchmark": false,
+      "deterministic": true
+    }
+  },
+  "parameter_counts": {
+    "total_params": 3718513,
+    "trainable_params": 3718513,
+    "frozen_params": 0
+  },
+  "batch_ms_samples": [
+    110.24845200154232,
+    112.86449500039453,
+    110.94551800124464,
+    111.78606700195814,
+    110.04046399830258,
+    111.73663299996406,
+    109.75791999953799,
+    111.48019499887596,
+    109.99784899831866,
+    112.18847399868537,
+    109.70862700196449,
+    111.92469900197466,
+    109.83726099948399,
+    111.5693760002614,
+    109.76023100010934,
+    110.77761300111888,
+    110.67452199858963,
+    110.05211400333792,
+    111.3956720000715,
+    110.87340300218784,
+    112.92831200262299,
+    110.51403500096058,
+    111.60244799975771,
+    110.29281800074386,
+    112.25780400127405,
+    110.61165999853984,
+    110.85289599941461,
+    110.22650800077827,
+    112.44407599951955,
+    110.82482799974969,
+    113.1262950002565,
+    111.02026899970951,
+    111.19116699774168,
+    110.27652200209559,
+    112.33146499944269,
+    116.93847700007609,
+    108.88680400239537,
+    111.09088699959102,
+    110.27148400171427,
+    110.53809000077308,
+    111.22954299935373,
+    109.98789700170164,
+    112.61773599835578,
+    110.94452700126567,
+    111.83061499832547,
+    111.2403400002222,
+    112.63214300197433,
+    111.42274000303587,
+    110.94181799853686,
+    110.5994700010342
+  ],
+  "median_batch_ms": 110.94502250125515,
+  "median_batch_ms_per_image": 27.736255625313788,
+  "peak_allocated_bytes": 784665600,
+  "note": "FP32 cuda:0 forward-only, batch4, excludes data loading/transfers/postprocessing; amortized batch time per image, NOT batch-one latency."
+}

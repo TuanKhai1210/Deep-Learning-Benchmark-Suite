@@ -1,0 +1,9 @@
+{
+  "output": "/kaggle/working/dlbench_a2_kaggle/A2_kaggle_remaining_67_69_v3/seed_67/U/run",
+  "best": {
+    "epoch": 15,
+    "foreground_miou": 0.061365475793676225,
+    "loss": 1.3117609592905703
+  },
+  "epochs_completed": 23
+}

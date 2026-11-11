@@ -1,0 +1,9 @@
+{
+  "output": "/content/drive/MyDrive/dlbench_a2_colab_resume/A2_kaggle_remaining_67_69_v3/seed_67/S0/continuations/20261104T042625Z_f97db701/run",
+  "best": {
+    "epoch": 20,
+    "foreground_miou": 0.1912501380529825,
+    "loss": 1.0426473010558464
+  },
+  "epochs_completed": 28
+}

@@ -1,0 +1,9 @@
+{
+  "best": {
+    "epoch": 14,
+    "foreground_miou": 0.17580315550999756,
+    "loss": 1.1385585871832808
+  },
+  "epochs_completed": 22,
+  "kind": "main"
+}

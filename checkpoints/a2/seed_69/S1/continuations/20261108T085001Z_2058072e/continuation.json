@@ -1,0 +1,36 @@
+{
+  "kind": "documented_platform_continuation",
+  "origin_root": "/content/drive/MyDrive/dlbench_a2_colab_resume/A2_kaggle_remaining_67_69_v3/seed_69/S1",
+  "parent_run": "/content/drive/MyDrive/dlbench_a2_colab_resume/A2_kaggle_remaining_67_69_v3/seed_69/S1/continuations/20261108T030940Z_94e24cbd/run",
+  "parent_run_id": "e34141a5-5b49-4c74-9483-705bade49663",
+  "parent_identity_sha256": "ce9fff3f2d36f863c8d74d00f08411220ed73b7f836b5221d282397498dc9e9e",
+  "current_identity_sha256": "b9240687a141138fa6c364267247680b4a0aa43e3e26c62b6bb1510394a41fd5",
+  "resumed_epoch": 28,
+  "differences": [
+    {
+      "field": "environment.system_ram.total_bytes",
+      "saved": 13605818368,
+      "current": 13605810176
+    }
+  ],
+  "source_platform": "Colab",
+  "target_platform": "Colab",
+  "cuda_rng_mapping": {
+    "active_source_index": 0,
+    "active_target_index": 0,
+    "old_count": 1,
+    "new_count": 1,
+    "dropped_unused_source_indices": [],
+    "active_rng_sha256": "f4787ce458405d810d9413e7a6f3137fe73b92f16053ddda2668856a8b8d1871"
+  },
+  "original_input_sha256": {
+    "metadata.json": "fc48085405c081ea3ed7795d2a20830b0ff1e755b50cba6438126f16285e4899",
+    "last.pt": "04992caa59b40d4482c01121017e96bad8fa644a0265e67626eb7678daeb2f9b",
+    "best.pt": "6a4e69f2356e02b591c2960c1051b3482604836516447876211eff1e24ccc2ad",
+    "effective_config.json": "96bb0a1686ada51d94bff09e218968078defb336e8af068b5a3f5ae48224446b",
+    "history.json": "cf53fd984acde479f2a97422bb82ef8d764ac02a35d2a650a75f3c9fd2bf6264"
+  },
+  "created_utc": "2026-11-08T08:50:11.615622+00:00",
+  "migration_helper_sha256": "d67feaa8020ddd26c38b66d1248d18b76a9f9d390412bf78e8081355a84ca56d",
+  "note": "Same model/optimizer/history/best/patience/config/source/tensor libraries and active T4 GPU0. Unused GPU RNG states may be dropped; Python patch/host/memory/topology differences recorded. A continuation of the same seed, not an independent repeat; no cross-platform bitwise guarantee."
+}

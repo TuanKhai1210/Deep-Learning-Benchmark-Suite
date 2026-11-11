@@ -1,0 +1,79 @@
+{
+  "kind": "documented_platform_continuation",
+  "origin_root": "/content/drive/MyDrive/dlbench_a2_colab_resume/A2_kaggle_remaining_67_69_v3/seed_67/S0",
+  "parent_run": "/content/drive/MyDrive/dlbench_a2_colab_resume/A2_kaggle_remaining_67_69_v3/seed_67/S0/run",
+  "parent_run_id": "28808f02-7056-4007-b4de-4a7b0e16d0b4",
+  "parent_identity_sha256": "da45b8ba648db651b0c9210494e3e8352d5c7de20750e2382f349d2a3fa0e080",
+  "current_identity_sha256": "7297dde0b0112852ba77593d8c81c12f2c1142ffe50e6cda60bbc3f08ccbd17b",
+  "resumed_epoch": 7,
+  "differences": [
+    {
+      "field": "environment.gpus",
+      "saved": [
+        {
+          "index": 0,
+          "name": "Tesla T4",
+          "total_memory_bytes": 15636037632,
+          "total_memory_gb": 14.56,
+          "compute_capability": "7.5",
+          "multi_processor_count": 40
+        },
+        {
+          "index": 1,
+          "name": "Tesla T4",
+          "total_memory_bytes": 15636037632,
+          "total_memory_gb": 14.56,
+          "compute_capability": "7.5",
+          "multi_processor_count": 40
+        }
+      ],
+      "current": [
+        {
+          "index": 0,
+          "name": "Tesla T4",
+          "total_memory_bytes": 15637086208,
+          "total_memory_gb": 14.56,
+          "compute_capability": "7.5",
+          "multi_processor_count": 40
+        }
+      ]
+    },
+    {
+      "field": "environment.os_release",
+      "saved": "6.18.55+",
+      "current": "6.6.159+"
+    },
+    {
+      "field": "environment.system_ram.total_bytes",
+      "saved": 33658159104,
+      "current": 13605818368
+    },
+    {
+      "field": "environment.system_ram.total_gb",
+      "saved": 31.35,
+      "current": 12.67
+    }
+  ],
+  "source_platform": "Kaggle",
+  "target_platform": "Colab",
+  "cuda_rng_mapping": {
+    "active_source_index": 0,
+    "active_target_index": 0,
+    "old_count": 2,
+    "new_count": 1,
+    "dropped_unused_source_indices": [
+      1
+    ],
+    "active_rng_sha256": "3f3bb376d887990eb0868f1fe81c07686c9da99bd646bccbea62f3be6e9545ca"
+  },
+  "original_input_sha256": {
+    "metadata.json": "150900b869d5d8f24e96dfaf50865e5934788d745455c16c7375ff90cbe8bcc4",
+    "last.pt": "ab774e6c1ebbd3f20b0203198977402f604c0c4391f56593c5d2ab7c63253bbb",
+    "best.pt": "be99dfe2217ed626fa0717eafa41cf51a60ef173ccc9a82a1c2f5b31d4ff364e",
+    "effective_config.json": "d88ab1f5bca4c350c5a8a1c5cbf3478cca4aec848320a8f084cba327a15a43c1",
+    "history.json": "c150037cefd282e2a47aade2e2819955146dd9af968b856ac6c5d40348cd3c17"
+  },
+  "created_utc": "2026-11-04T04:26:25.913546+00:00",
+  "migration_helper_sha256": "d67feaa8020ddd26c38b66d1248d18b76a9f9d390412bf78e8081355a84ca56d",
+  "note": "Same model/optimizer/history/best/patience/config/source/tensor libraries and active T4 GPU0. Unused GPU RNG states may be dropped; Python patch/host/memory/topology differences recorded. A continuation of the same seed, not an independent repeat; no cross-platform bitwise guarantee."
+}

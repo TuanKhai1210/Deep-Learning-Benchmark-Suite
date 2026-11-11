@@ -1,0 +1,4 @@
+{"phase": "train", "seconds": 1057.022617011, "loss": 0.1858955524942425, "foreground_miou": 0.8028467025315937}
+{"phase": "validation", "seconds": 64.23886909600014, "loss": 1.1915080938520934, "foreground_miou": 0.1566396849220583}
+{"phase": "train", "seconds": 1053.9244453919998, "loss": 0.18255477604772222, "foreground_miou": 0.8050857363493005}
+{"phase": "validation", "seconds": 64.4454933500001, "loss": 1.1824019005521733, "foreground_miou": 0.140773013349469}

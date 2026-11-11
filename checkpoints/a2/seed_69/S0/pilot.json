@@ -1,0 +1,122 @@
+{
+  "kind": "real_batch_gpu_pilot",
+  "device": "cuda",
+  "passed": true,
+  "config_sha256": "7174e6506547c559c4c37dec1e7ecdd8bfaf9cb1592f9f753bac4128ef18239c",
+  "code_revision": "7df323698d1ae4d5122850a54eb38b01609d80f1",
+  "steps": 20,
+  "cuda_determinism": {
+    "deterministic_algorithms": true,
+    "warn_only": true,
+    "reason": "CUDA bilinear interpolation backward has no strict deterministic implementation"
+  },
+  "batch_size": 4,
+  "canvas": [
+    512,
+    512
+  ],
+  "image_ids": [
+    2578,
+    512,
+    931,
+    5706
+  ],
+  "losses": [
+    3.792193651199341,
+    3.708505153656006,
+    3.6741461753845215,
+    3.5811243057250977,
+    3.522817611694336,
+    3.5039920806884766,
+    3.4312736988067627,
+    3.452073574066162,
+    3.288313388824463,
+    3.2904396057128906,
+    3.208831310272217,
+    3.3429784774780273,
+    3.1646783351898193,
+    3.0510740280151367,
+    3.14020037651062,
+    3.0761337280273438,
+    2.9995641708374023,
+    3.003699541091919,
+    3.0514466762542725,
+    2.879509687423706
+  ],
+  "train_step_seconds_excluding_io": [
+    0.6595507199999702,
+    0.6551106059999938,
+    0.6570980409999834,
+    0.658815465000032,
+    0.6585938220000003,
+    0.6565160619999801,
+    0.6591936720000149,
+    0.6573061720000055,
+    0.6590423789999704,
+    0.6577693709999721,
+    0.6607130020000227,
+    0.6673210390000008,
+    0.6577086470000495,
+    0.6622723250000035,
+    0.6578750730000138,
+    0.6632462110000006,
+    0.6584750360000271,
+    0.6625071099999786
+  ],
+  "peak_allocated_bytes": 2122587136,
+  "peak_reserved_bytes": 2927624192,
+  "gpu_total_bytes": 15636037632,
+  "environment": {
+    "python_version": "3.13.16",
+    "torch_version": "2.11.0+cu130",
+    "numpy_version": "2.1.3",
+    "deterministic_algorithms": true,
+    "cuda_available": true,
+    "torch_cuda_version": "13.0",
+    "os": "Linux",
+    "os_release": "6.18.55+",
+    "machine": "x86_64",
+    "processor": "x86_64",
+    "torchvision_version": "0.26.0+cu130",
+    "gpus": [
+      {
+        "index": 0,
+        "name": "Tesla T4",
+        "total_memory_bytes": 15636037632,
+        "total_memory_gb": 14.56,
+        "compute_capability": "7.5",
+        "multi_processor_count": 40
+      },
+      {
+        "index": 1,
+        "name": "Tesla T4",
+        "total_memory_bytes": 15636037632,
+        "total_memory_gb": 14.56,
+        "compute_capability": "7.5",
+        "multi_processor_count": 40
+      }
+    ],
+    "system_ram": {
+      "total_bytes": 33658159104,
+      "total_gb": 31.35
+    },
+    "precision": {
+      "float32_matmul_precision": "highest",
+      "cuda_matmul_allow_tf32": false
+    },
+    "cudnn": {
+      "available": true,
+      "enabled": true,
+      "version": 92700,
+      "allow_tf32": false,
+      "benchmark": false,
+      "deterministic": true
+    }
+  },
+  "parameter_counts": {
+    "total_params": 3718513,
+    "trainable_params": 3718513,
+    "frozen_params": 0
+  },
+  "note": "Fixed-batch loss decrease and capacity check, not full-data overfit or benchmark quality"
+}

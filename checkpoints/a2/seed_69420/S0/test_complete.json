@@ -1,0 +1,8 @@
+{
+  "identity": {
+    "checkpoint_sha256": "1dfcd83afce22f1883aecf1299bfaa631b527f1b88f133a8323842ef685b5493",
+    "run_identity_sha256": "b90018f42b5ed8fb8c3d0c4e85fc36c885c275d9e19fd21054a279b92c92c04b",
+    "membership_sha256": "738b95e533e0dc479c247f5a0c62d1298dec6a0d15cc65b88a71b689f1c7e147"
+  },
+  "output_sha256": "c6a8d1e775579cff408368934b468f4d3be9c060943dbe871994ab8077f4cb4e"
+}

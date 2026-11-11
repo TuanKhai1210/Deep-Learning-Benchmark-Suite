@@ -1,0 +1,189 @@
+{
+  "payload": {
+    "created_utc": "2026-11-03T15:42:56.930991+00:00",
+    "code_revision": "7df323698d1ae4d5122850a54eb38b01609d80f1",
+    "base_sha256": "9411df4e1f7e8ee9df97c85b2e8079c28b975639a2274b30ca37bde9b0345f6c",
+    "helper_sha256": "ed2a3ed646e39c2790c45314d732d021a16f82ca9195173c38820010d0c78c0b",
+    "pilot": {
+      "kind": "real_batch_gpu_pilot",
+      "device": "cuda",
+      "passed": true,
+      "config_sha256": "9411df4e1f7e8ee9df97c85b2e8079c28b975639a2274b30ca37bde9b0345f6c",
+      "code_revision": "7df323698d1ae4d5122850a54eb38b01609d80f1",
+      "steps": 20,
+      "cuda_determinism": {
+        "deterministic_algorithms": true,
+        "warn_only": true,
+        "reason": "CUDA bilinear interpolation backward has no strict deterministic implementation"
+      },
+      "batch_size": 4,
+      "canvas": [
+        512,
+        512
+      ],
+      "image_ids": [
+        2578,
+        512,
+        931,
+        5706
+      ],
+      "losses": [
+        3.7930188179016113,
+        3.710162401199341,
+        3.673553466796875,
+        3.5795838832855225,
+        3.524796962738037,
+        3.5004618167877197,
+        3.4295008182525635,
+        3.4538917541503906,
+        3.2889609336853027,
+        3.2869155406951904,
+        3.2109527587890625,
+        3.3429291248321533,
+        3.1700592041015625,
+        3.045962333679199,
+        3.1340346336364746,
+        3.0739493370056152,
+        2.9962105751037598,
+        2.9975152015686035,
+        3.0507826805114746,
+        2.868668556213379
+      ],
+      "train_step_seconds_excluding_io": [
+        0.6611833400000364,
+        0.6589852309999742,
+        0.6654633879999778,
+        0.6676357919999987,
+        0.6613595219999979,
+        0.6610228800000186,
+        0.664473269000041,
+        0.664680154999985,
+        0.6631439619999924,
+        0.6624709960000246,
+        0.6665565490000063,
+        0.6558381559999589,
+        0.665038772999992,
+        0.6696612719999848,
+        0.6701594939999609,
+        0.6695771590000277,
+        0.6711398169999825,
+        0.6708783220000214
+      ],
+      "peak_allocated_bytes": 2122587136,
+      "peak_reserved_bytes": 2927624192,
+      "gpu_total_bytes": 15636037632,
+      "environment": {
+        "python_version": "3.13.16",
+        "torch_version": "2.11.0+cu130",
+        "numpy_version": "2.1.3",
+        "deterministic_algorithms": true,
+        "cuda_available": true,
+        "torch_cuda_version": "13.0",
+        "os": "Linux",
+        "os_release": "6.18.55+",
+        "machine": "x86_64",
+        "processor": "x86_64",
+        "torchvision_version": "0.26.0+cu130",
+        "gpus": [
+          {
+            "index": 0,
+            "name": "Tesla T4",
+            "total_memory_bytes": 15636037632,
+            "total_memory_gb": 14.56,
+            "compute_capability": "7.5",
+            "multi_processor_count": 40
+          },
+          {
+            "index": 1,
+            "name": "Tesla T4",
+            "total_memory_bytes": 15636037632,
+            "total_memory_gb": 14.56,
+            "compute_capability": "7.5",
+            "multi_processor_count": 40
+          }
+        ],
+        "system_ram": {
+          "total_bytes": 33658159104,
+          "total_gb": 31.35
+        },
+        "precision": {
+          "float32_matmul_precision": "highest",
+          "cuda_matmul_allow_tf32": false
+        },
+        "cudnn": {
+          "available": true,
+          "enabled": true,
+          "version": 92700,
+          "allow_tf32": false,
+          "benchmark": false,
+          "deterministic": true
+        }
+      },
+      "parameter_counts": {
+        "total_params": 3718513,
+        "trainable_params": 3718513,
+        "frozen_params": 0
+      },
+      "note": "Fixed-batch loss decrease and capacity check, not full-data overfit or benchmark quality"
+    },
+    "config": {
+      "protocol": {
+        "version": "a2-initial-v1",
+        "status": "frozen",
+        "approval_reference": "User confirmed instructor approval on 2026-10-26 (Asia/Bangkok)",
+        "pilot_reference": "sha256:0859ebd258fccb9208377482ac5c6d1ef4a1a7857b6813d786c8dcb92b1abbc7",
+        "cuda_determinism": {
+          "deterministic_algorithms": true,
+          "warn_only": true,
+          "reason": "CUDA bilinear interpolation backward has no strict deterministic implementation"
+        }
+      },
+      "data": {
+        "split_seed": 36,
+        "manifest_sha256": "87905f1a97dd2c04194e049ca61d1a7f3bbe2942e9fe17dc2d737c371cdce943",
+        "num_classes": 17,
+        "ignore_id": 255,
+        "converter": "pillow_native_polygon_union_crossclass_ignore_v1",
+        "pillow_version": "12.3.0"
+      },
+      "preprocessing": {
+        "size": 512,
+        "mean": [
+          0.485,
+          0.456,
+          0.406
+        ],
+        "std": [
+          0.229,
+          0.224,
+          0.225
+        ]
+      },
+      "loss": {
+        "ce_weight": 1.0,
+        "dice_weight": 1.0
+      },
+      "budget": {
+        "batch_size": 4,
+        "epochs": 40,
+        "patience": 8
+      },
+      "model": {
+        "name": "segformer",
+        "checkpoint": "nvidia/segformer-b0-finetuned-ade-512-512",
+        "revision": "489d5cd81a0b59fab9b7ea758d3548ebe99677da"
+      },
+      "training": {
+        "optimizer": "adamw",
+        "lr": 6e-05,
+        "weight_decay": 0.01
+      },
+      "run": {
+        "name": "S1",
+        "seed": 69,
+        "color_jitter": true
+      }
+    }
+  },
+  "sha256": "b57dc4bd9f61a613e078b02fcc85bc771c6839922430a6bd83d4639cea3a5079"
+}

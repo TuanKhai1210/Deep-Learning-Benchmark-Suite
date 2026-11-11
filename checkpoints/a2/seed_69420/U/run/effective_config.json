@@ -1,0 +1,57 @@
+{
+  "protocol": {
+    "version": "a2-initial-v1",
+    "status": "frozen",
+    "approval_reference": "User confirmed instructor approval on 2026-10-26 (Asia/Bangkok)",
+    "pilot_reference": "sha256:cffaafdfdbcb295b25c019515e70498c86c2cc0315b6de84c57e54baa118000c",
+    "cuda_determinism": {
+      "deterministic_algorithms": true,
+      "warn_only": true,
+      "reason": "CUDA bilinear interpolation backward has no strict deterministic implementation"
+    }
+  },
+  "data": {
+    "split_seed": 36,
+    "manifest_sha256": "87905f1a97dd2c04194e049ca61d1a7f3bbe2942e9fe17dc2d737c371cdce943",
+    "num_classes": 17,
+    "ignore_id": 255,
+    "converter": "pillow_native_polygon_union_crossclass_ignore_v1",
+    "pillow_version": "12.3.0"
+  },
+  "preprocessing": {
+    "size": 512,
+    "mean": [
+      0.485,
+      0.456,
+      0.406
+    ],
+    "std": [
+      0.229,
+      0.224,
+      0.225
+    ]
+  },
+  "loss": {
+    "ce_weight": 1.0,
+    "dice_weight": 1.0
+  },
+  "budget": {
+    "batch_size": 4,
+    "epochs": 40,
+    "patience": 8
+  },
+  "model": {
+    "name": "unet",
+    "base_channels": 16
+  },
+  "training": {
+    "optimizer": "adamw",
+    "lr": 0.001,
+    "weight_decay": 0.01
+  },
+  "run": {
+    "name": "U",
+    "seed": 69420,
+    "color_jitter": false
+  }
+}

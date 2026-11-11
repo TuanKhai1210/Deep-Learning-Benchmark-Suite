@@ -1,0 +1,24 @@
+{
+  "policy": "Specific U69 cache from supplied 7-11 snapshot verified by SHA-256",
+  "selected_epoch": 12,
+  "checked_file_sha256": {
+    "run/metadata.json": "5de77489f657c6c4755fc32b7a269bf5aaaaa5333c7ea122ae4f1935d83b7fdf",
+    "run/effective_config.json": "b2b3a566da4fe337e6aac3ab8a06d0e449c7bc8f1024e0f5f23b0f7f616fc138",
+    "run/history.json": "e9074110a2e54f1104b4ec1edc5f7e9b91adb8ea30bfe344e946174dbb0d484f",
+    "run/best.pt": "aaf72e433d33531039a8acfda3444b6577a1782e038519489547c5fe4afc6b2c",
+    "run/last.pt": "a6c5827ee27365863cd66cbbf25a4586936e7ff01ac3d1c66af9d00d034076fa",
+    "manifest.json": "5ee6745c85aebfbd0e5bc51c8b7cca62f40b4c5dbcacaf6dfe27fa52fdc712c8",
+    "validation_best.json": "728f9fa9e570d09904759bf6ffc2c25668c24cceb4770d55e285a7f48f87c7af",
+    "validation_complete.json": "db47b1599df8302734e73b709928d320cb21b0b800684718f1a815a917cadf44"
+  },
+  "difference": {
+    "minimum_changed_predictions": 5,
+    "valid_pixels": 176765049,
+    "metric_delta": {
+      "foreground_miou": -1.1863879045836967e-08,
+      "foreground_dice": -1.3831174761058662e-08,
+      "trash_miou": -1.3523466527165517e-08,
+      "loss": 2.8414848252111824e-10
+    }
+  }
+}
