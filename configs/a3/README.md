@@ -84,3 +84,27 @@ restart a failed run. Run the test command after the validation protocol is
 locked. It verifies checkpoint, manifest and cache identity and writes held-out
 metrics and predictions by ID in a new test directory. Epoch timing covers cached-head training and
 validation. Encoder timing is recorded in cache metadata.
+
+## Run the matched fusion experiments
+
+Use the same reviewed manifest, encoder caches, head budget and device across
+concat, product fusion and mean ablation. Choose the seed list before training.
+The following example uses the three project run seeds.
+
+```sh
+dlbench-a3 train-fusion --manifest data/abo/manifest.csv --image-cache data/abo/image.npz --title-cache data/abo/title.npz --config configs/a3/head.py --seeds 69420 67 69 --output runs/a3/fusion-v1
+dlbench-a3 test-fusion --manifest data/abo/manifest.csv --image-cache data/abo/image.npz --title-cache data/abo/title.npz --output runs/a3/fusion-v1
+```
+
+Training writes a copy of the manifest, the individual runs and a suite
+index with input and training artifact digests. Start a failed training suite
+in a fresh output directory. Review validation results before running the test
+command. The test command checks all training artifacts before scoring,
+reuses completed test directories on the requested device and recomputes
+metrics from the predictions before writing `comparison.json`. The comparison
+contains the per-seed macro-F1 and accuracy, plus paired macro-F1 differences
+for product versus concat and product versus the matched mean ablation.
+A single seed has no sample standard deviation.
+
+For the team handoff, retain the encoder NPZ files alongside the suite output.
+Keep images, caches and model checkpoints in the experiment storage.

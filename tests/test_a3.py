@@ -14,6 +14,7 @@ from dlbench.a3.data import CLASSES, SPLITS, assign_splits, load_manifest, valid
 from dlbench.a3.engine import classification_metrics, evaluate_test
 from dlbench.a3.features import load_cache, mask_titles, save_cache
 from dlbench.a3.model import MODALITIES
+from dlbench.a3.fusion_suite import train_suite, test_suite as evaluate_fusion_suite
 
 
 class A3Tests(unittest.TestCase):
@@ -89,3 +90,23 @@ class A3Tests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "differ from the training run"):
                 evaluate_test(root / "manifest.csv", {"image": root / "changed.npz"},
                               root / "image-only", torch.device("cpu"))
+
+            device = torch.device("cpu")
+            manifest = root / "manifest.csv"
+            caches = {modality: root / f"{modality}.npz" for modality in ("image", "title")}
+            output = root / "fusion"
+            config = {"batch_size": 5, "epochs": 2, "projection": 8, "learning_rate": 0.001}
+            train_suite(manifest, caches, config, [67, 69], output, device)
+            self.assertFalse(any(output.glob("*/test")))
+            report = evaluate_fusion_suite(manifest, caches, output, device)
+            summary = json.loads(report.read_text(encoding="utf-8"))
+            self.assertEqual(len(summary["runs"]), 6)
+            self.assertEqual([item["seed"] for item in summary["paired"]["product_vs_mean"]["by_seed"]],
+                             [67, 69])
+            previous = report.read_bytes()
+            evaluate_fusion_suite(manifest, caches, output, device)
+            self.assertEqual(previous, report.read_bytes())
+            selected = output / "concat-67" / "validation.json"
+            selected.write_text("{}", encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "Training artifacts changed"):
+                evaluate_fusion_suite(manifest, caches, output, device)

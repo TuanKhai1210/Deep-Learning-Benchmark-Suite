@@ -127,6 +127,16 @@ def _parser():
             run.add_argument("--run-id", required=True)
         else:
             run.add_argument("--run-dir", type=Path, required=True)
+    for name in ("train-fusion", "test-fusion"):
+        suite = commands.add_parser(name, help="run all three matched fusion variants")
+        suite.add_argument("--manifest", type=Path, required=True)
+        suite.add_argument("--image-cache", type=Path, required=True)
+        suite.add_argument("--title-cache", type=Path, required=True)
+        suite.add_argument("--output", type=Path, required=True)
+        suite.add_argument("--device", choices=("auto", "cpu", "cuda"), default="auto")
+        if name == "train-fusion":
+            suite.add_argument("--config", type=Path, required=True)
+            suite.add_argument("--seeds", nargs="+", type=int, required=True)
     smoke = commands.add_parser("smoke", help="run all five variants on synthetic CPU inputs")
     smoke.add_argument("--output", type=Path, required=True)
     return parser
@@ -166,6 +176,21 @@ def main(argv=None):
                                                     raw=args.raw_titles, phrases=phrases)
             save_cache(args.output, rows, args.modality, vectors, provenance)
             print(args.output)
+        elif args.command in {"train-fusion", "test-fusion"}:
+            from .fusion_suite import test_suite, train_suite
+
+            caches = {"image": args.image_cache, "title": args.title_cache}
+            device = _device(args.device)
+            if args.command == "train-fusion":
+                if len(set(args.seeds)) != len(args.seeds):
+                    raise ValueError("Suite seeds must be distinct")
+                config = _config(args.config, "concat", args.seeds[0])
+                del config["model"], config["seed"]
+                if any(not 0 <= seed < 2**32 for seed in args.seeds):
+                    raise ValueError("Run seeds must be between 0 and 2**32 - 1")
+                print(train_suite(args.manifest, caches, config, args.seeds, args.output, device))
+            else:
+                print(test_suite(args.manifest, caches, args.output, device))
         elif args.command == "smoke":
             _smoke(args.output)
         else:

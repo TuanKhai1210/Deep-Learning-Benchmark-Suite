@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import csv
+import hashlib
+import io
 import json
 import math
 import os
@@ -164,7 +166,8 @@ def evaluate_test(manifest, cache_paths, run_dir, device):
     if (manifest_digest(rows) != identity["manifest_sha256"] or cache_info != identity["caches"]
             or list(CLASSES) != identity["classes"]):
         raise ValueError("Test inputs differ from the training run")
-    checkpoint = torch.load(run_dir / "best.pt", map_location="cpu", weights_only=True)
+    checkpoint_bytes = (run_dir / "best.pt").read_bytes()
+    checkpoint = torch.load(io.BytesIO(checkpoint_bytes), map_location="cpu", weights_only=True)
     if checkpoint["identity"] != identity or checkpoint["epoch"] != selected["epoch"]:
         raise ValueError("Checkpoint does not match the selected run")
     model = ProductClassifier(variant, WIDTHS, len(CLASSES), config["projection"]).to(device)
@@ -172,7 +175,10 @@ def evaluate_test(manifest, cache_paths, run_dir, device):
     indices = _partition(rows, "test")
     targets = torch.tensor([LABEL_IDS[row["label"]] for row in rows])
     metrics, predictions = _score(model, indices, features, targets, config["batch_size"], device)
-    metrics.update({"best_epoch": checkpoint["epoch"], "split": "test", "device": str(device)})
+    metrics.update({
+        "best_epoch": checkpoint["epoch"], "split": "test", "device": str(device),
+        "checkpoint_sha256": hashlib.sha256(checkpoint_bytes).hexdigest(),
+    })
     test_dir = run_dir / "test"
     with TemporaryDirectory(dir=run_dir) as staging:
         result = Path(staging) / "test"
