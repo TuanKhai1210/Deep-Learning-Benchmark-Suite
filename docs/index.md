@@ -50,10 +50,10 @@ description: Five neural architectures. One shared protocol. Exploring the trade
       <div class="card-bottom"><span>Explore Assignment 2</span><span class="circle-arrow" aria-hidden="true">↗</span></div>
     </a>
     <a class="project-card" href="{{ '/a3.html' | relative_url }}">
-      <div class="card-top"><span class="card-number">03</span><span class="status-tag">PLANNED</span></div>
+      <div class="card-top"><span class="card-number">03</span><span class="status-tag"><i class="live-dot"></i>M1 PROPOSAL SUBMITTED</span></div>
       <div class="project-icon icon-fusion" aria-hidden="true"><i></i><i></i></div>
-      <span class="eyebrow">MULTIMODAL / PROPOSAL PENDING</span><h3>Multiple signals.<br>Shared understanding.</h3><p>Explore how combining different modalities changes what a model can learn.</p>
-      <div class="card-bottom"><span>View research scope</span><span class="circle-arrow" aria-hidden="true">↗</span></div>
+      <span class="eyebrow">AMAZON BERKELEY OBJECTS / MULTIMODAL</span><h3>Product images &amp; titles.<br>Cross-modal fusion.</h3><p>7,221 paired samples. Product-group disjoint split. Unimodal baselines vs. Concat, Product fusion, and Mean ablation.</p>
+      <div class="card-bottom"><span>Explore Assignment 3</span><span class="circle-arrow" aria-hidden="true">↗</span></div>
     </a>
   </div>
 </section>
@@ -65,8 +65,8 @@ description: Five neural architectures. One shared protocol. Exploring the trade
 </div></section>
 
 <section class="section container">
-  <div class="section-heading"><div><span class="eyebrow">03 / CURRENT FOCUS</span><h2>Building the evidence.</h2></div><p>Assignments 1 and 2 are fully completed; reports, presentations, videos, checkpoints, and reproducibility evidence are published.</p></div>
-  <div class="progress-grid"><div class="progress-card"><span class="eyebrow">ASSIGNMENT 1 · COMPLETED</span><h3>Fashion-MNIST Classification</h3><ul class="check-list"><li>5 architecture families (Linear to Transformer)</li><li>15 verified runs across 3 seeds</li><li>Full report, slides, and defense video</li></ul><a class="text-link" href="{{ '/a1.html' | relative_url }}">See the A1 benchmark ↗</a></div><div class="progress-card"><span class="eyebrow">ASSIGNMENT 2 · COMPLETED</span><h3>TrashCan Semantic Segmentation</h3><p>Video-disjoint split (seed 36), U-Net baseline vs. pretrained SegFormer-B0, color jitter ablation across 9 runs, comprehensive error taxonomy, and oral defense video.</p><div class="release-note"><span class="live-dot"></span><span>Report, video, and checkpoints published.</span></div><a class="text-link" href="{{ '/a2.html' | relative_url }}" style="margin-top: 8px; display: inline-block;">See the A2 benchmark ↗</a></div></div>
+  <div class="section-heading"><div><span class="eyebrow">03 / CURRENT FOCUS</span><h2>Building the evidence.</h2></div><p>Assignments 1 and 2 are fully completed; Assignment 3 Dataset Proposal is submitted for instructor review.</p></div>
+  <div class="progress-grid" style="grid-template-columns: repeat(3, 1fr);"><div class="progress-card"><span class="eyebrow">ASSIGNMENT 1 · COMPLETED</span><h3>Fashion-MNIST Classification</h3><ul class="check-list"><li>5 architecture families (Linear to ViT)</li><li>15 verified runs across 3 seeds</li><li>Full report, slides, and defense video</li></ul><a class="text-link" href="{{ '/a1.html' | relative_url }}">See A1 benchmark ↗</a></div><div class="progress-card"><span class="eyebrow">ASSIGNMENT 2 · COMPLETED</span><h3>TrashCan Segmentation</h3><p>Video-disjoint split (seed 36), U-Net baseline vs. SegFormer-B0, color jitter ablation across 9 runs, error taxonomy, and defense video.</p><div class="release-note"><span class="live-dot"></span><span>Report, video, checkpoints published.</span></div><a class="text-link" href="{{ '/a2.html' | relative_url }}" style="margin-top: 8px; display: inline-block;">See A2 benchmark ↗</a></div><div class="progress-card"><span class="eyebrow">ASSIGNMENT 3 · M1 PROPOSAL</span><h3>ABO Multimodal Classification</h3><p>7,221 image–title pairs, product-group split, ResNet-18 + DistilBERT encoders, title masking, Concat vs. Product fusion vs. Mean ablation.</p><div class="release-note"><span class="live-dot"></span><span>Proposal PDF &amp; pilot complete.</span></div><a class="text-link" href="{{ '/a3.html' | relative_url }}" style="margin-top: 8px; display: inline-block;">See A3 proposal ↗</a></div></div>
 </section>
 
 <section class="team-section section container" id="team">
