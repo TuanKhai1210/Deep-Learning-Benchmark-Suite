@@ -379,3 +379,30 @@
 - Verified: 259 tests, OK (3 existing skips), including 30 A2 tests; partial/all freezing, shared parameters, buffers, smoke fields and fixture run metadata. Measured U-Net 1,964,369 total/trainable; B0 3,718,513 total/trainable; both frozen counts zero.
 - An initial full-suite invocation from the context directory failed existing A1 relative-path/config-import tests; rerunning from the required repository root passed. No code changes were needed for those invocation errors.
 - No real-data training, GPU/Colab run, A1 change, commit/push/merge or report-result editing. Prior initial-code evidence remains dated and preserved.
+
+## 2026-11-13 — A3 ABO base code
+
+- Requested by Tạ Tuấn Khải and implemented with OpenAI Codex.
+- Scope includes the ABO manifest and split contracts, frozen feature adapters, five head configurations, shared evaluation, CLI, and integration tests.
+- Verification on Windows CPU covered 7,221 official metadata candidates, both frozen encoders on 30 real pairs, and synthetic training/test for all five configurations. The full suite ran 264 tests with 3 skips. Final dataset curation, team review, and benchmark results remain project work.
+
+## 2026-11-13 — A3 matched fusion experiments
+
+- OpenAI Codex added the three-variant suite, comparisons, provenance checks, and report and Pages drafts for Khải's assigned work.
+- Verification included nine CPU pilot runs on 300 ABO pairs from a provisional image-ID split. The final benchmark requires the reviewed manifest, frozen caches and team baselines.
+
+
+## 2026-11-20 — A3 team workflow and notebooks
+
+- Tạ Tuấn Khải requested implementation for all three A3 workstreams. OpenAI Codex extended data review and grouping, train-only masking checks, the five-model suite, offline analysis and four notebooks.
+- The team reviews the pair and variant decisions, title policy, final split and validation before the final held-out evaluation. Keep development artifacts separate from the final cohort.
+
+
+- Follow-up on 20/11: Codex added a shared benchmark lock, selective model/seed batches and validated consolidation before held-out testing.
+
+
+## 2026-11-22 — A3 official benchmark and report
+
+- OpenAI Codex assisted with rule-based curation and recording the group's review decisions, verifying the official experiment artifacts, report drafting, and documentation of reproducibility.
+- The team ran the locked ABO benchmark. Verification covered 15 model–seed summaries, their shared test size of 1,081, the recorded hash chain, and the paired macro-F1 differences. Report examples use held-out predictions and source images checked against the frozen inventory.
+- See the [benchmark record](configs/a3/benchmark-results.md) for measured scores and compute scope. Group review of the report and individual contribution attribution is pending.

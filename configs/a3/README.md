@@ -5,6 +5,12 @@ The pipeline compares five classifier heads on shared frozen features. The confi
 in [head.py](head.py) uses the proposal budget of eight epochs, batch size 128,
 learning rate 0.001 and a 128-dimensional projection.
 
+## Verified benchmark
+
+The official run is `abo-v1-main`. See the [benchmark record](benchmark-results.md)
+for held-out results, inputs, fingerprints, and instructions for replaying the run
+with the team artifacts.
+
 ## Team workflow
 
 Run the notebooks in order using a common workspace and run ID.
