@@ -88,6 +88,14 @@ def _smoke(output):
         print(test_dir / "metrics.json")
 
 
+def _model_seed(value):
+    model, _, raw_seed = value.partition(":")
+    try:
+        return model, int(raw_seed)
+    except ValueError:
+        raise argparse.ArgumentTypeError("expected MODEL:SEED, for example product:67") from None
+
+
 def _parser():
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
@@ -127,16 +135,46 @@ def _parser():
             run.add_argument("--run-id", required=True)
         else:
             run.add_argument("--run-dir", type=Path, required=True)
-    for name in ("train-fusion", "test-fusion"):
-        suite = commands.add_parser(name, help="run all three matched fusion variants")
+    prepare = commands.add_parser("prepare-data", help="fetch official ABO metadata and candidate images")
+    prepare.add_argument("--work", type=Path, required=True)
+    prepare.add_argument("--workers", type=_positive_int, default=12)
+    audit = commands.add_parser("audit-data", help="produce image QA inventory and review decisions")
+    audit.add_argument("--candidates", type=Path, required=True)
+    audit.add_argument("--image-root", type=Path, required=True)
+    audit.add_argument("--output", type=Path, required=True)
+    audit.add_argument("--sample-per-class", type=_positive_int, default=10)
+    freeze = commands.add_parser("freeze-data", help="apply human review and freeze product-group split")
+    freeze.add_argument("--audit-dir", type=Path, required=True)
+    freeze.add_argument("--image-root", type=Path, required=True)
+    freeze.add_argument("--reviewer", required=True)
+    freeze.add_argument("--output", type=Path, required=True)
+    analysis = commands.add_parser("analyze", help="verify saved test artifacts and export report tables and plots")
+    analysis.add_argument("--suite", type=Path, required=True)
+    analysis.add_argument("--output", type=Path, required=True)
+    for name in ("train-fusion", "test-fusion", "train-team", "test-team"):
+        suite = commands.add_parser(name, help="run matched variants on the same cohort")
         suite.add_argument("--manifest", type=Path, required=True)
         suite.add_argument("--image-cache", type=Path, required=True)
         suite.add_argument("--title-cache", type=Path, required=True)
         suite.add_argument("--output", type=Path, required=True)
         suite.add_argument("--device", choices=("auto", "cpu", "cuda"), default="auto")
-        if name == "train-fusion":
+        if name.startswith("train"):
             suite.add_argument("--config", type=Path, required=True)
             suite.add_argument("--seeds", nargs="+", type=int, required=True)
+    for name in ("lock-team", "train-batch", "collect-team"):
+        part = commands.add_parser(name, help="divide and assemble a shared team benchmark")
+        part.add_argument("--manifest", type=Path, required=True)
+        part.add_argument("--image-cache", type=Path, required=True)
+        part.add_argument("--title-cache", type=Path, required=True)
+        part.add_argument("--config", type=Path, required=True)
+        part.add_argument("--lock", type=Path, required=True)
+        if name == "train-batch":
+            part.add_argument("--pairs", nargs="+", type=_model_seed, required=True)
+            part.add_argument("--device", choices=("auto", "cpu", "cuda"), default="auto")
+        if name == "collect-team":
+            part.add_argument("--batches", nargs="+", type=Path, required=True)
+        if name != "lock-team":
+            part.add_argument("--output", type=Path, required=True)
     smoke = commands.add_parser("smoke", help="run all five variants on synthetic CPU inputs")
     smoke.add_argument("--output", type=Path, required=True)
     return parser
@@ -146,7 +184,24 @@ def main(argv=None):
     parser = _parser()
     args = parser.parse_args(argv)
     try:
-        if args.command == "candidates":
+        if args.command == "prepare-data":
+            from .curation import prepare_candidates
+
+            print(prepare_candidates(args.work, workers=args.workers))
+        elif args.command == "audit-data":
+            from .curation import audit_candidates
+
+            print(audit_candidates(args.candidates, args.image_root, args.output,
+                                   sample_per_class=args.sample_per_class))
+        elif args.command == "freeze-data":
+            from .curation import freeze_manifest
+
+            print(freeze_manifest(args.audit_dir, args.image_root, args.output, reviewer=args.reviewer))
+        elif args.command == "analyze":
+            from .analysis import analyze
+
+            print(analyze(args.suite, args.output))
+        elif args.command == "candidates":
             rows = discover_candidates(args.listings, args.image_index)
             write_csv(args.output, FIELDS, rows)
             print(json.dumps(dict(Counter(row["label"] for row in rows)), indent=2))
@@ -176,21 +231,35 @@ def main(argv=None):
                                                     raw=args.raw_titles, phrases=phrases)
             save_cache(args.output, rows, args.modality, vectors, provenance)
             print(args.output)
-        elif args.command in {"train-fusion", "test-fusion"}:
+        elif args.command in {"train-fusion", "test-fusion", "train-team", "test-team"}:
             from .fusion_suite import test_suite, train_suite
 
             caches = {"image": args.image_cache, "title": args.title_cache}
             device = _device(args.device)
-            if args.command == "train-fusion":
+            team = args.command.endswith("-team")
+            if args.command.startswith("train"):
                 if len(set(args.seeds)) != len(args.seeds):
                     raise ValueError("Suite seeds must be distinct")
                 config = _config(args.config, "concat", args.seeds[0])
                 del config["model"], config["seed"]
                 if any(not 0 <= seed < 2**32 for seed in args.seeds):
                     raise ValueError("Run seeds must be between 0 and 2**32 - 1")
-                print(train_suite(args.manifest, caches, config, args.seeds, args.output, device))
+                print(train_suite(args.manifest, caches, config, args.seeds, args.output, device, team=team))
             else:
-                print(test_suite(args.manifest, caches, args.output, device))
+                print(test_suite(args.manifest, caches, args.output, device, team=team))
+        elif args.command in {"lock-team", "train-batch", "collect-team"}:
+            from .team_batches import collect_batches, lock_benchmark, train_batch
+
+            caches = {"image": args.image_cache, "title": args.title_cache}
+            config = _config(args.config, "concat", 67)
+            del config["model"], config["seed"]
+            shared = (args.manifest, caches, args.config, config, args.lock)
+            if args.command == "lock-team":
+                print(lock_benchmark(*shared))
+            elif args.command == "train-batch":
+                print(train_batch(*shared, args.pairs, args.output, _device(args.device)))
+            else:
+                print(collect_batches(*shared, args.batches, args.output))
         elif args.command == "smoke":
             _smoke(args.output)
         else:

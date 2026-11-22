@@ -1,8 +1,67 @@
-# A3 Amazon Berkeley Objects base code
+# A3 Amazon Berkeley Objects
 
 ABO product-type classification uses one product image and one English listing title.
-The base provides five configurations over cached frozen features. The shared head
-budget in [head.py](head.py) is a starting point for the pilot.
+The pipeline compares five classifier heads on shared frozen features. The configuration
+in [head.py](head.py) uses the proposal budget of eight epochs, batch size 128,
+learning rate 0.001 and a 128-dimensional projection.
+
+## Team workflow
+
+Run the notebooks in order using a common workspace and run ID.
+
+| Notebook | Owner and output |
+|---|---|
+| [01 Prepare](../../notebooks/a3_01_prepare.ipynb) | Thiên audits and reviews pairs, duplicates and variants. Khoa reviews train-derived mask additions. Outputs the group-disjoint manifest, QA receipt and two caches. |
+| [02 Train](../../notebooks/a3_02_train.ipynb) | Trains image-only, title-only, concat, product and mean-ablation for seeds 69420, 67 and 69. Saves checkpoint and validation for each run. |
+| [03 Test](../../notebooks/a3_03_test.ipynb) | After validation review, scores the locked checkpoints on the shared held-out test split. |
+| [04 Analysis](../../notebooks/a3_04_analysis.ipynb) | Rechecks checkpoints, predictions and membership. Exports score tables, matched errors, per-class F1, confusion matrices and learning curves. |
+
+### Divide training across team members
+
+After Notebook 01, one coordinator uses Notebook 02's **lock** mode to write
+`benchmark_lock.json` in the cohort folder. Every participant uses the same
+frozen cohort, the original two NPZ cache files, and the same source bundle.
+The lock checks the manifest digest, both cache fingerprints, effective head
+settings, config-file fingerprint and A3/common source fingerprints.
+
+In **batch** mode, give each assignment a distinct BATCH_ID. Set MODELS and
+SEEDS to run their Cartesian product in a single execution. Set PAIRS instead
+to list exact assignments such as `[("image-only", 67), ("concat", 69)]`.
+Rerun the same batch ID and assignment after interruption to reuse verified
+completed runs. Batch folders can be copied to the coordinator under
+`WORK/batches`. Select **collect** and list their IDs to assemble the complete
+five-model, three-seed validation suite. The collector reports missing or
+duplicate pairs and never chooses between duplicate results. Test and analysis
+operate on the assembled suite. Analysis retains per-run fit times and
+hardware details rather than pooling training times across participants.
+
+Notebook 01 retrieves the pinned listings/index and only the selected ABO small
+images. Run through the audit first, edit the decisions CSV in UTF-8, then rerun
+the freeze cell with a reviewer name. The audit queues 10 readable pairs per
+class, near-image pairs, brand/model and title-stem matches, and exact-pixel
+label conflicts.
+Exact RGB pixel duplicates share a group. Reviewers can add manual exclusions
+and links. For a two-ID case, merge joins the groups, separate requires different groups,
+and keep retains both samples without adding either constraint. The frozen
+split is versioned and records exclusions and class
+counts. Set ENCODE to True after selecting any train-derived extra phrases.
+The classifier heads use the same two caches. Unimodal variants open only their
+required cache.
+
+The suite locks the stronger of image-only and title-only by mean validation
+macro-F1 across seeds. An exact tie selects image-only. Test reports the
+paired per-seed differences for concat versus that reference, product versus
+concat, and product versus mean-ablation. Analysis computes sample SD across
+seeds and uses a common color scale for row-normalized confusion matrices.
+Timing records encoder extraction, train plus validation epochs, and held-out
+scoring with cached vectors. The last measurement includes batching, transfer,
+loss and metrics and can be reported alongside the encoder costs.
+
+For a shared handoff keep the cohort and decisions, image inventory, two caches,
+the source ZIP, and the complete run folder. Analysis needs the run folder.
+Images are optional for displaying error examples. Cite the
+[official ABO data release](https://amazon-berkeley-objects.s3.us-east-1.amazonaws.com/index.html)
+when reproducing the dataset or sharing examples.
 
 ## Install and run a synthetic check
 

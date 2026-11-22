@@ -21,6 +21,9 @@
   runs; the source-checkout cell also makes the editable `src/` package visible
   to the current notebook kernel.
 
+- [A3 data, train, test and analysis notebooks](../configs/a3/README.md#team-workflow)
+  run the ABO benchmark from the reviewed cohort through report tables and plots.
+
 Keep reusable model, data, training, evaluation and analysis logic in
 `src/dlbench/`. The package CLI remains independently usable and testable;
 the notebook is an orchestration interface, not the sole implementation.

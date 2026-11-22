@@ -128,28 +128,33 @@ def assign_splits(rows, seed=36):
     return sorted(result, key=lambda row: row["sample_id"])
 
 
-def discover_candidates(listings, image_index):
-    """Select the proposed cohort from the official archives without extracting TAR members."""
-    with gzip.open(image_index, "rt", encoding="utf-8", newline="") as stream:
-        images = {row["image_id"]: row["path"] for row in csv.DictReader(stream)}
-    by_image = defaultdict(list)
+def iter_listings(listings):
+    """Stream listing records without extracting archive members."""
     with tarfile.open(listings) as archive:
         for member in archive:
             if not member.isfile() or not member.name.endswith(".json.gz"):
                 continue
             with gzip.GzipFile(fileobj=archive.extractfile(member)) as stream:
                 for line in stream:
-                    listing = json.loads(line)
-                    image = listing.get("main_image_id")
-                    if listing.get("domain_name") != "amazon.com" or image not in images:
-                        continue
-                    labels = {item["value"] for item in listing.get("product_type", []) if item.get("value")}
-                    title = next((
-                        item["value"].strip() for item in listing.get("item_name", [])
-                        if item.get("language_tag") == "en_US" and item.get("value", "").strip()
-                    ), "")
-                    if title and len(labels) == 1:
-                        by_image[image].append((listing["item_id"], next(iter(labels)), title))
+                    yield json.loads(line)
+
+
+def discover_candidates(listings, image_index):
+    """Select the proposed cohort from the official archives without extracting TAR members."""
+    with gzip.open(image_index, "rt", encoding="utf-8", newline="") as stream:
+        images = {row["image_id"]: row["path"] for row in csv.DictReader(stream)}
+    by_image = defaultdict(list)
+    for listing in iter_listings(listings):
+        image = listing.get("main_image_id")
+        if listing.get("domain_name") != "amazon.com" or image not in images:
+            continue
+        labels = {item["value"] for item in listing.get("product_type", []) if item.get("value")}
+        title = next((
+            item["value"].strip() for item in listing.get("item_name", [])
+            if item.get("language_tag") == "en_US" and item.get("value", "").strip()
+        ), "")
+        if title and len(labels) == 1:
+            by_image[image].append((listing["item_id"], next(iter(labels)), title))
     rows = []
     for image, listings_for_image in by_image.items():
         if len({label for _, label, _ in listings_for_image}) != 1:

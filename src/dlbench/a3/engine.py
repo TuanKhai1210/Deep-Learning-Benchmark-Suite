@@ -174,8 +174,11 @@ def evaluate_test(manifest, cache_paths, run_dir, device):
     model.load_state_dict(checkpoint["state_dict"])
     indices = _partition(rows, "test")
     targets = torch.tensor([LABEL_IDS[row["label"]] for row in rows])
+    started = perf_counter()
     metrics, predictions = _score(model, indices, features, targets, config["batch_size"], device)
+    elapsed = perf_counter() - started
     metrics.update({
+        "cached_test_seconds": elapsed, "cached_test_samples_per_second": len(indices) / elapsed,
         "best_epoch": checkpoint["epoch"], "split": "test", "device": str(device),
         "checkpoint_sha256": hashlib.sha256(checkpoint_bytes).hexdigest(),
     })

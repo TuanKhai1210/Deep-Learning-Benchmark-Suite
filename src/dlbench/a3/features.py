@@ -6,6 +6,7 @@ import hashlib
 import io
 import json
 import re
+import unicodedata
 from pathlib import Path
 from time import perf_counter
 
@@ -29,6 +30,41 @@ def mask_titles(titles, phrases=()):
         r"[^a-z0-9]+".join(term) for term in options
     ) + r")(?![a-z0-9])", flags=re.IGNORECASE | re.ASCII)
     return [pattern.sub("[MASK]", title) for title in titles]
+
+
+def normalize_title(title):
+    return " ".join(unicodedata.normalize("NFKC", title).split())
+
+
+def inspect_title_policy(rows, phrases=()):
+    """Record train support for extras and coverage of the shared masking policy."""
+    from .data import SPLITS
+
+    titles = [normalize_title(row["title"]) for row in rows]
+    train_titles = [title for row, title in zip(rows, titles) if row["split"] == "train"]
+    extras = {}
+    for phrase in phrases:
+        phrase = normalize_title(phrase).lower()
+        terms = re.findall(r"[a-z0-9]+", phrase)
+        if not terms:
+            continue
+        pattern = re.compile(r"(?<![a-z0-9])" + r"[^a-z0-9]+".join(terms) + r"(?![a-z0-9])")
+        count = sum(bool(pattern.search(title.lower())) for title in train_titles)
+        if not count:
+            raise ValueError(f"Additional mask phrase is absent from train: {phrase!r}")
+        extras[phrase] = count
+    masked = mask_titles(titles, extras)
+    return {
+        "normalization": "NFKC and collapsed whitespace",
+        "train_support": extras,
+        "masked_by_split": {
+            split: {
+                "titles": sum(row["split"] == split for row in rows),
+                "changed": sum(row["split"] == split and title != replacement
+                               for row, title, replacement in zip(rows, titles, masked)),
+            } for split in SPLITS
+        },
+    }
 
 
 def _validate_features(ids, vectors, rows, modality):
@@ -118,8 +154,9 @@ def encode_titles(rows, batch_size, device, *, raw=False, phrases=()):
     model = transformers.AutoModel.from_pretrained(
         TEXT_MODEL, revision=TEXT_REVISION, use_safetensors=True,
     ).requires_grad_(False).eval().to(device)
-    titles = [row["title"] for row in rows]
-    inputs = titles if raw else mask_titles(titles, phrases)
+    titles = [normalize_title(row["title"]) for row in rows]
+    policy = None if raw else inspect_title_policy(rows, phrases)
+    inputs = titles if raw else mask_titles(titles, policy["train_support"])
     started = perf_counter()
     vectors = []
     for start in range(0, len(rows), batch_size):
@@ -129,7 +166,8 @@ def encode_titles(rows, batch_size, device, *, raw=False, phrases=()):
     return np.concatenate(vectors), {
         "model": TEXT_MODEL, "revision": TEXT_REVISION, "max_length": 64,
         "title_policy": "raw" if raw else "masked",
-        "additional_phrases": list(phrases),
+        "additional_phrases": list(policy["train_support"]) if policy else [],
+        "mask_policy": policy, "normalization": "NFKC and collapsed whitespace",
         "titles_changed": sum(a != b for a, b in zip(titles, inputs)),
         "transformers": transformers.__version__, "device": str(device),
         "batch_size": batch_size, "seconds": perf_counter() - started,
