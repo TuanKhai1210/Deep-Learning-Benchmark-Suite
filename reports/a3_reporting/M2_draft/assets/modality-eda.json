@@ -1,0 +1,179 @@
+{
+  "schema": 1,
+  "date_verified": "2026-11-23",
+  "manifest_sha256": "9742854841e0b0d1afe752dc080a990707b47ba82a109a0180b5abb90a158d1a",
+  "cache_sha256": {
+    "image": "b6747e111149dfe0b68c0b883a5151a6278e8a37d0847f4af391730be8cabbbb",
+    "title": "ab68abf2968d0eea57a8a946655bb125480507c224caa76db8711ce27a5e9c52"
+  },
+  "tokenizer_revision": "12040accade4e8a0f71eabdb258fecc2e7e948be",
+  "transformers": "4.57.6",
+  "token_length_includes_special_tokens": true,
+  "token_cap": 64,
+  "image_retention_formula": "(224/256)^2 * min(width,height)/max(width,height)",
+  "joint_retention_threshold": 0.5,
+  "by_split": {
+    "train": {
+      "listings": 5052,
+      "image_median_retention_pct": 72.076416015625,
+      "image_below_half": 1244,
+      "image_norm_quartiles": [
+        24.243214657333592,
+        26.750849008608682,
+        29.437110614824345
+      ],
+      "title_norm_quartiles": [
+        11.559820614554921,
+        11.968130427281938,
+        12.154126754007615
+      ],
+      "title_token_median": 22.0,
+      "title_token_p95": 31,
+      "title_token_max": 53,
+      "title_over_64": 0,
+      "title_changed": 2365,
+      "joint_neither": 1686,
+      "joint_mask_only": 2122,
+      "joint_low_crop_only": 1001,
+      "joint_both": 243,
+      "paired_finite_cache_rows": 5052
+    },
+    "validation": {
+      "listings": 1083,
+      "image_median_retention_pct": 73.870849609375,
+      "image_below_half": 257,
+      "image_norm_quartiles": [
+        23.66798870595661,
+        26.578486099516827,
+        29.3468841028863
+      ],
+      "title_norm_quartiles": [
+        11.62276910060415,
+        11.987814424727008,
+        12.20022029316714
+      ],
+      "title_token_median": 21.0,
+      "title_token_p95": 32,
+      "title_token_max": 46,
+      "title_over_64": 0,
+      "title_changed": 493,
+      "joint_neither": 385,
+      "joint_mask_only": 441,
+      "joint_low_crop_only": 205,
+      "joint_both": 52,
+      "paired_finite_cache_rows": 1083
+    },
+    "test": {
+      "listings": 1081,
+      "image_median_retention_pct": 70.880126953125,
+      "image_below_half": 256,
+      "image_norm_quartiles": [
+        23.92605188011784,
+        26.486660828271,
+        29.27291922875433
+      ],
+      "title_norm_quartiles": [
+        11.654272293676453,
+        11.99079376093237,
+        12.17950115472522
+      ],
+      "title_token_median": 21.0,
+      "title_token_p95": 31,
+      "title_token_max": 45,
+      "title_over_64": 0,
+      "title_changed": 479,
+      "joint_neither": 398,
+      "joint_mask_only": 427,
+      "joint_low_crop_only": 204,
+      "joint_both": 52,
+      "paired_finite_cache_rows": 1081
+    },
+    "all": {
+      "listings": 7216,
+      "image_median_retention_pct": 72.37548828125,
+      "image_below_half": 1757,
+      "image_norm_quartiles": [
+        24.106697102755692,
+        26.69993879339388,
+        29.40917023694081
+      ],
+      "title_norm_quartiles": [
+        11.581016780520295,
+        11.975025692478045,
+        12.163854771485962
+      ],
+      "title_token_median": 22.0,
+      "title_token_p95": 31,
+      "title_token_max": 53,
+      "title_over_64": 0,
+      "title_changed": 3337,
+      "joint_neither": 2469,
+      "joint_mask_only": 2990,
+      "joint_low_crop_only": 1410,
+      "joint_both": 347,
+      "paired_finite_cache_rows": 7216
+    }
+  },
+  "joint_by_class": {
+    "CHAIR": {
+      "n": 1278,
+      "mask": 905,
+      "low": 69,
+      "both": 53
+    },
+    "GROCERY": {
+      "n": 1794,
+      "mask": 1,
+      "low": 975,
+      "both": 0
+    },
+    "LAMP": {
+      "n": 366,
+      "mask": 361,
+      "low": 22,
+      "both": 22
+    },
+    "LIGHT_FIXTURE": {
+      "n": 402,
+      "mask": 23,
+      "low": 24,
+      "both": 0
+    },
+    "RUG": {
+      "n": 757,
+      "mask": 752,
+      "low": 7,
+      "both": 6
+    },
+    "SHOES": {
+      "n": 636,
+      "mask": 31,
+      "low": 273,
+      "both": 7
+    },
+    "SOFA": {
+      "n": 728,
+      "mask": 559,
+      "low": 235,
+      "both": 200
+    },
+    "STOOL_SEATING": {
+      "n": 327,
+      "mask": 10,
+      "low": 83,
+      "both": 5
+    },
+    "TABLE": {
+      "n": 474,
+      "mask": 403,
+      "low": 66,
+      "both": 53
+    },
+    "WALL_ART": {
+      "n": 454,
+      "mask": 292,
+      "low": 3,
+      "both": 1
+    }
+  }
+}
